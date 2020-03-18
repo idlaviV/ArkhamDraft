@@ -12,6 +12,7 @@ public class Main {
         Gson gson = new Gson();
         File jsonCards = new File("data/cards.json");
         FileReader fileReader = new FileReader(jsonCards);
-        Card[] box = gson.fromJson(fileReader, Card[].class);
+        CardBox cardBox = new CardBox(gson.fromJson(fileReader, Card[].class));
+        System.out.println("finished");
     }
 }
