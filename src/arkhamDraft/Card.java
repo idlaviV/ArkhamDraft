@@ -31,4 +31,8 @@ public class Card {
             return Arrays.asList(faction_code, faction2_code);
         }
     }
+
+    public Integer getXp() {
+        return xp;
+    }
 }
