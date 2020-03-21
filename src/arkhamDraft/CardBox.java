@@ -1,6 +1,7 @@
 package arkhamDraft;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -31,8 +32,20 @@ public class CardBox {
         switch (attribute){
             case "trait":
                 return (it) -> relator.apply(it.getTraits(),value);
+            case "pack":
+                return (it) -> relator.apply(Collections.singletonList(it.getPack()),value);
+            case "type":
+                return (it) -> relator.apply(Collections.singletonList(it.getType()),value);
             default:
                 return null;
+        }
+    }
+
+    public static Function<Card, Boolean> generateCardFilter(String attribute, String value){
+        if (attribute == "text"){
+            return (it) -> it.getText().contains(value);
+        } else {
+            return null;
         }
     }
 
@@ -42,5 +55,9 @@ public class CardBox {
 
     public Card getCard(int position) {
         return cards[position];
+    }
+
+    public Card[] getCards() {
+        return cards;
     }
 }

@@ -23,6 +23,28 @@ public class Card {
     private String traits;
     private List<String> traitsList;
     private Integer xp;
+    private String text;
+    private String real_text;
+
+    public boolean compareTexts() {
+        if (text == null && real_text == null){
+            return true;
+        } else if (text != null && real_text != null) {
+            if (!text.equals(real_text)){
+                System.out.println(text);
+                System.out.println(real_text);
+            }
+            return text.equals(real_text);
+        } else {
+            System.out.println(name+" is seminull");
+            return false;
+        }
+
+    }
+
+    public String getText() {
+        return text;
+    }
 
     public List<String> getTraits() {
         if (traitsList == null) {
@@ -45,5 +67,25 @@ public class Card {
 
     public Integer getXp() {
         return xp;
+    }
+
+    public String getPack() {
+        return pack_code;
+    }
+
+    public String getType() {
+        return type_code;
+    }
+
+    public boolean isExceptional() {
+        return exceptional;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public int getDeck_limit() {
+        return deck_limit;
     }
 }
