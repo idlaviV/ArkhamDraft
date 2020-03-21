@@ -1,6 +1,5 @@
 package arkhamDraft;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +21,19 @@ public class Card {
     private int quantity;
     private int deck_limit;
     private String traits;
+    private List<String> traitsList;
     private Integer xp;
+
+    public List<String> getTraits() {
+        if (traitsList == null) {
+            if(!traits.isEmpty() && traits.substring(traits.length()-1).equals(".")){
+                traits = traits.substring(0,traits.length()-1);
+            }
+            String[] traitsArray = traits.split(". ");
+            traitsList = Arrays.asList(traitsArray);
+        }
+        return traitsList;
+    }
 
     public List<Faction> getFaction_code() {
         if (faction2_code == null) {

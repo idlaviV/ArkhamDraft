@@ -26,11 +26,11 @@ public class Relator {
         return (i1,i2) -> i1 <= i2;
     }
 
-    public static <T> BiFunction<T, List<T> ,Boolean> containsRelator() {
-        return (value,list) -> list.contains(value);
+    public static <T> BiFunction<List<T>, T ,Boolean> containsRelator() {
+        return (list,value) -> list.contains(value);
     }
 
-    public static <T> BiFunction<T, List<T> ,Boolean> containsNotRelator() {
-        return (value,list) -> !list.contains(value);
+    public static <T> BiFunction<List<T>, T, Boolean> containsNotRelator() {
+        return (list,value) -> !list.contains(value);
     }
 }

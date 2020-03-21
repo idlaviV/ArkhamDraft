@@ -14,6 +14,7 @@ public class Main {
         File jsonCards = new File("data/cards.json");
         FileReader fileReader = new FileReader(jsonCards);
         CardBox cardBox = new CardBox(gson.fromJson(fileReader, Card[].class));
+        System.out.println(cardBox.getCard(32).getTraits());
         System.out.println("finished");
         System.out.println(CardBox.generateCardFilter("xp",Relator.equalRelator(),0).apply(cardBox.getCard(32)));
         System.out.println(CardBox.generateCardFilter("xp",Relator.equalRelator(),1).apply(cardBox.getCard(32)));
