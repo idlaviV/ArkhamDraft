@@ -1,63 +1,35 @@
 package arkhamDraft;
 
-
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CardBox {
-    private Card[] cards;
+    private List<Card> cards;
 
-    public static Function<Card, Boolean> generateCardFilter(String attribute, BiFunction<Integer,Integer,Boolean> relator, int value) {
-        switch (attribute){
-            case "xp":
-                return (it) -> relator.apply(it.getXp(),value);
-            default:
-                return null;
-        }
-    }
-
-    public static Function<Card, Boolean> generateCardFilter(String attribute, BiFunction<List<Faction>, Faction, Boolean> relator,
-                                                             Faction value) {
-        if (attribute.equals("faction")) {
-            return (it) -> relator.apply(it.getFaction_code(),value);
-        } else {
-            return null;
-        }
-    }
-
-    public static Function<Card, Boolean> generateCardFilter(String attribute, BiFunction<List<String>, String, Boolean> relator,
-                                                             String value) {
-        switch (attribute){
-            case "trait":
-                return (it) -> relator.apply(it.getTraits(),value);
-            case "pack":
-                return (it) -> relator.apply(Collections.singletonList(it.getPack()),value);
-            case "type":
-                return (it) -> relator.apply(Collections.singletonList(it.getType()),value);
-            default:
-                return null;
-        }
-    }
-
-    public static Function<Card, Boolean> generateCardFilter(String attribute, String value){
-        if (attribute == "text"){
-            return (it) -> it.getText().contains(value);
-        } else {
-            return null;
-        }
-    }
-
-    public CardBox(Card[] cards) {
+    public CardBox(List<Card> cards) {
         this.cards = cards;
     }
 
-    public Card getCard(int position) {
-        return cards[position];
+    public CardBox(Card[] cards){
+        this.cards = Arrays.asList(cards);
     }
 
-    public Card[] getCards() {
+    public CardBox(CardBox cardBox) {
+        this.cards=new ArrayList<>(cardBox.getCards());
+    }
+
+    public void filter(Function<Card, Boolean> filter) {
+        cards = cards.stream().filter(filter::apply).collect(Collectors.toList());
+    }
+
+    public Card getCard(int position) {
+        return cards.get(position);
+    }
+
+    public List<Card> getCards() {
         return cards;
     }
 }

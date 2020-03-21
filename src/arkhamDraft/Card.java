@@ -3,6 +3,8 @@ package arkhamDraft;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Card {
     private String pack_code;
@@ -25,6 +27,7 @@ public class Card {
     private Integer xp;
     private String text;
     private String real_text;
+    private static Function<Card, Boolean> nullFilter = (card) -> true;
 
     public boolean compareTexts() {
         if (text == null && real_text == null){
@@ -87,5 +90,45 @@ public class Card {
 
     public int getDeck_limit() {
         return deck_limit;
+    }
+
+    public static Function<Card, Boolean> generateCardFilter(String attribute, BiFunction<Integer,Integer,Boolean> relator, int value) {
+        switch (attribute){
+            case "xp":
+                return (it) -> relator.apply(it.getXp(),value);
+            default:
+                return nullFilter;
+        }
+    }
+
+    public static Function<Card, Boolean> generateCardFilter(String attribute, BiFunction<List<Faction>, Faction, Boolean> relator,
+                                                             Faction value) {
+        if (attribute.equals("faction")) {
+            return (it) -> relator.apply(it.getFaction_code(),value);
+        } else {
+            return nullFilter;
+        }
+    }
+
+    public static Function<Card, Boolean> generateCardFilter(String attribute, BiFunction<List<String>, String, Boolean> relator,
+                                                             String value) {
+        switch (attribute){
+            case "trait":
+                return (it) -> relator.apply(it.getTraits(),value);
+            case "pack":
+                return (it) -> relator.apply(Collections.singletonList(it.getPack()),value);
+            case "type":
+                return (it) -> relator.apply(Collections.singletonList(it.getType()),value);
+            default:
+                return nullFilter;
+        }
+    }
+
+    public static Function<Card, Boolean> generateCardFilter(String attribute, String value){
+        if (attribute.equals("text")){
+            return (it) -> it.getText().contains(value);
+        } else {
+            return nullFilter;
+        }
     }
 }

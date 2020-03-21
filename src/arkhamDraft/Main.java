@@ -14,6 +14,10 @@ public class Main {
         Gson gson = new Gson();
         File jsonCards = new File("data/cards.json");
         FileReader fileReader = new FileReader(jsonCards);
-        CardBox cardBox = new CardBox(gson.fromJson(fileReader, Card[].class));
+        CardBox masterCardBox = new CardBox(gson.fromJson(fileReader, Card[].class));
+        Face face = new Face(masterCardBox);
+        face.watch();
+        masterCardBox.filter(Card.generateCardFilter("xp", Relator.equalRelator(),0));
+        System.out.println("finished");
     }
 }
