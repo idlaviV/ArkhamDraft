@@ -6,7 +6,7 @@ import java.util.List;
 public class DraftingBox extends CardBox {
 
     public DraftingBox() {
-        super(new ArrayList<>());
+        super(new Card[0]);
     }
 
     public void addCards(CardBox filteredCardBox) {

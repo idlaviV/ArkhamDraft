@@ -28,4 +28,16 @@ public class Drafter {
         draftingBox.addCards(filteredCardBox);
         filteredCardBox = null;
     }
+
+    public int getFilteredBoxSize(){
+        if (filteredCardBox == null) {
+            return -1;
+        } else {
+            return filteredCardBox.getCards().size();
+        }
+    }
+
+    public void clear(){
+        filteredCardBox = new DraftingBox();
+    }
 }
