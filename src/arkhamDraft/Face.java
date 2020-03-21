@@ -25,6 +25,7 @@ public class Face {
                     break;
                 case "start draft":
                     drafter = new Drafter(masterCardBox);
+                    System.out.println("Empty draft deck created. Type 'increase draft deck' to start adding cards.");
                     break;
                 case "increase draft deck":
                     if (drafter == null) {
@@ -55,6 +56,7 @@ public class Face {
                     drafter.clear();
                     break;
                 case "add cards":
+                    quit = true;
                     break;
                 case "help":
                     break;
@@ -65,23 +67,39 @@ public class Face {
                     } else {
                         decryptFilter(input);
                     }
-                    System.out.println("Got lost? Type 'help' for help!");
             }
         }
-        System.out.println(String.format("%d cards added to draft deck.",drafter.getFilteredBoxSize()));
+        int preAdd = drafter.getDraftingBoxSize();
         drafter.addCards();
+        System.out.println(String.format("%d card(s) added to draft deck.",drafter.getDraftingBoxSize() - preAdd));
     }
 
-    private void decryptFilter(String input) {
+    private boolean decryptFilter(String input) {
         String[] inputParts = input.split(Relator.relatorRegex);
+        inputParts[0] = inputParts[0].trim();
+        inputParts[1] = inputParts[1].trim();
         Matcher matcher = Pattern.compile(Relator.relatorRegex).matcher(input);
         matcher.find();
         String relatorString = matcher.group();
-        if(Relator.isContainRelator(relatorString)) {
-            //BiFunction<String[],String, Boolean> relator = bla();
-        } else {
-            BiFunction<Integer, Integer, Boolean> relator = Relator.getNumericalRelator(relatorString);
+        boolean relatorIsNumerical = !Relator.isContainRelator(relatorString);
+        if (relatorIsNumerical) {
+            int value;
+            try {
+                value = Integer.parseInt(inputParts[1]);
+            } catch (NumberFormatException e) {
+                System.out.println("Error: value of filter is not an integer.");
+                return false;
+            }
+            drafter.filter(Card.generateCardFilter(inputParts[0],
+                    Relator.getNumericalRelator(relatorString),
+                    value));
+        } else{
+            drafter.filter(Card.generateCardFilter(inputParts[0],
+                    Relator.getContainRelator(relatorString),
+                    inputParts[1]));
         }
+        System.out.println(String.format("%d cards left.",drafter.getFilteredBoxSize()));
+        return true;
     }
 
     private void notWellFormatted() {

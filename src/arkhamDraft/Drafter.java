@@ -29,6 +29,10 @@ public class Drafter {
         filteredCardBox = null;
     }
 
+    public int getDraftingBoxSize() {
+        return draftingBox.getCards().size();
+    }
+
     public int getFilteredBoxSize(){
         if (filteredCardBox == null) {
             return -1;

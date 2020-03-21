@@ -10,23 +10,44 @@ public class Relator {
 
 
     private static BiFunction<Integer, Integer, Boolean> equalRelator() {
-           return (i1, i2) -> i1 == i2;
+           return (i1, i2) -> i2.equals(i1);
     }
 
     private static BiFunction<Integer, Integer, Boolean> greaterRelator() {
-        return (i1, i2) -> i1 > i2;
+        return (i1, i2) -> {
+            if (i1 == null || i2 == null){
+                return false;
+            }
+            return i1 > i2;
+        };
+
     }
 
     private static BiFunction<Integer, Integer, Boolean> smallerRelator() {
-        return (i1, i2) -> i1 < i2;
+        return (i1, i2) -> {
+            if (i1 == null || i2 == null){
+                return false;
+            }
+            return i1 < i2;
+        };
     }
 
     private static BiFunction<Integer, Integer, Boolean> greaterEqualRelator() {
-        return (i1, i2) -> i1 >= i2;
+        return (i1, i2) -> {
+            if (i1 == null || i2 == null){
+                return false;
+            }
+            return i1 >= i2;
+        };
     }
 
     private static BiFunction<Integer, Integer, Boolean> smallerEqualRelator() {
-        return (i1, i2) -> i1 <= i2;
+        return (i1, i2) -> {
+            if (i1 == null || i2 == null){
+                return false;
+            }
+            return i1 <= i2;
+        };
     }
 
     private static <T> BiFunction<List<T>, T, Boolean> containsRelator() {
@@ -39,6 +60,17 @@ public class Relator {
 
     public static boolean isContainRelator(String relatorString) {
         return relatorString.equals("!:") || relatorString.equals(":");
+    }
+
+    public static <T> BiFunction<List<T>,T,Boolean> getContainRelator(String relatorString){
+        switch (relatorString) {
+            case ":":
+                return containsRelator();
+            case "!:":
+                return containsNotRelator();
+            default:
+                return null;
+        }
     }
 
     public static BiFunction<Integer, Integer, Boolean> getNumericalRelator(String relatorString) {

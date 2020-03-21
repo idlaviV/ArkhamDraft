@@ -11,10 +11,10 @@ public class Card {
     private String pack_name;
     private String type_code;
     private String type_name;
-    private Faction faction_code;
+    private String faction_code;
     private String faction_name;
-    private Faction faction2_code;
-    private Faction faction2_name;
+    private String faction2_code;
+    private String faction2_name;
     private int position;
     private boolean exceptional;
     private String code;
@@ -60,7 +60,7 @@ public class Card {
         return traitsList;
     }
 
-    public List<Faction> getFaction_code() {
+    public List<String> getFaction_code() {
         if (faction2_code == null) {
             return Collections.singletonList(faction_code);
         } else {
@@ -101,18 +101,11 @@ public class Card {
         }
     }
 
-    public static Function<Card, Boolean> generateCardFilter(String attribute, BiFunction<List<Faction>, Faction, Boolean> relator,
-                                                             Faction value) {
-        if (attribute.equals("faction")) {
-            return (it) -> relator.apply(it.getFaction_code(),value);
-        } else {
-            return nullFilter;
-        }
-    }
-
     public static Function<Card, Boolean> generateCardFilter(String attribute, BiFunction<List<String>, String, Boolean> relator,
                                                              String value) {
         switch (attribute){
+            case "faction":
+                return (it) -> relator.apply(it.getFaction_code(),value);
             case "trait":
                 return (it) -> relator.apply(it.getTraits(),value);
             case "pack":
