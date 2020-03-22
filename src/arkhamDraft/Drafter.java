@@ -15,11 +15,11 @@ public class Drafter {
         filteredCardBox = new CardBox(masterCardBox);
     }
 
-    public boolean filter(Function<Card, Boolean> filter){
+    public boolean filter(CardFilter cardFilter){
         if (filteredCardBox == null) {
             return false;
         } else {
-            filteredCardBox.filter(filter);
+            filteredCardBox.filter(cardFilter);
             return true;
         }
     }

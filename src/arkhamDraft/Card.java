@@ -27,7 +27,8 @@ public class Card {
     private Integer xp;
     private String text;
     private String real_text;
-    private static Function<Card, Boolean> nullFilter = (card) -> true;
+
+    private static CardFilter nullFilter = new CardFilter((card)->true);
 
     public boolean compareTexts() {
         if (text == null && real_text == null){
@@ -92,34 +93,34 @@ public class Card {
         return deck_limit;
     }
 
-    public static Function<Card, Boolean> generateCardFilter(String attribute, BiFunction<Integer,Integer,Boolean> relator, int value) {
+    public static CardFilter generateCardFilter(String attribute, BiFunction<Integer,Integer,Boolean> relator, int value) {
         switch (attribute){
             case "xp":
-                return (it) -> relator.apply(it.getXp(),value);
+                return new CardFilter((it) -> relator.apply(it.getXp(),value));
             default:
                 return nullFilter;
         }
     }
 
-    public static Function<Card, Boolean> generateCardFilter(String attribute, BiFunction<List<String>, String, Boolean> relator,
+    public static CardFilter generateCardFilter(String attribute, BiFunction<List<String>, String, Boolean> relator,
                                                              String value) {
         switch (attribute){
             case "faction":
-                return (it) -> relator.apply(it.getFaction_code(),value);
+                return new CardFilter((it) -> relator.apply(it.getFaction_code(),value));
             case "trait":
-                return (it) -> relator.apply(it.getTraits(),value);
+                return new CardFilter((it) -> relator.apply(it.getTraits(),value));
             case "pack":
-                return (it) -> relator.apply(Collections.singletonList(it.getPack()),value);
+                return new CardFilter((it) -> relator.apply(Collections.singletonList(it.getPack()),value));
             case "type":
-                return (it) -> relator.apply(Collections.singletonList(it.getType()),value);
+                return new CardFilter((it) -> relator.apply(Collections.singletonList(it.getType()),value));
             default:
                 return nullFilter;
         }
     }
 
-    public static Function<Card, Boolean> generateCardFilter(String attribute, String value){
+    public static CardFilter generateCardFilter(String attribute, String value){
         if (attribute.equals("text")){
-            return (it) -> it.getText().contains(value);
+            return new CardFilter((it) -> it.getText().contains(value));
         } else {
             return nullFilter;
         }

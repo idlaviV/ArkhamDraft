@@ -15,8 +15,8 @@ public class CardBox {
         this.cards = new HashSet<>(cardBox.getCards());
     }
 
-    public void filter(Function<Card, Boolean> filter) {
-        cards = cards.stream().filter(filter::apply).collect(Collectors.toSet());
+    public void filter(CardFilter cardFilter) {
+        cards = cards.stream().filter(cardFilter::apply).collect(Collectors.toSet());
     }
 
     public Set<Card> getCards() {
