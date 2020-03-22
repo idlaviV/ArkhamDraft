@@ -27,8 +27,21 @@ public class Card {
     private Integer xp;
     private String text;
     private String real_text;
-
     private static CardFilter nullFilter = new CardFilter((card)->true);
+
+    public Card(String pack_name, String type_name, String faction_code, String faction2_code, boolean exceptional, String real_name, Integer xp) {
+        this.pack_name = pack_name;
+        this.type_name = type_name;
+        this.faction_code = faction_code;
+        this.faction2_code = faction2_code;
+        this.exceptional = exceptional;
+        this.real_name = real_name;
+        this.xp = xp;
+    }
+
+    public Card getPhysicalCard() {
+        return new Card(pack_name, type_name, faction_code, faction2_code, exceptional, real_name, xp);
+    }
 
     public boolean compareTexts() {
         if (text == null && real_text == null){
