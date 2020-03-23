@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class Card {
     private String pack_code;
@@ -106,6 +105,34 @@ public class Card {
         return deck_limit;
     }
 
+    public String getDraftInfo() {
+        //return String.format("%s [%d] (%s,%s)", real_name, xp, pack_name, getFaction_code());
+        return String.format("%s [%d] (%s)", real_name, xp, pack_name);
+    }
+
+    public String getFactionColor() {
+        if (getFaction_code().size() != 1 ) {
+            return Face.ANSI_MULTICLASS;
+        } else {
+            switch (getFaction_code().get(0)) {
+                case "guardian":
+                    return Face.ANSI_BLUE;
+                case "seeker":
+                    return Face.ANSI_YELLOW;
+                case "rogue":
+                    return Face.ANSI_GREEN;
+                case "survivor":
+                    return Face.ANSI_RED;
+                case "mystic":
+                    return Face.ANSI_PURPLE;
+                case "neutral":
+                    return Face.ANSI_WHITE;
+                default:
+                    return Face.ANSI_RESET;
+            }
+        }
+    }
+
     public static CardFilter generateCardFilter(String attribute, BiFunction<Integer,Integer,Boolean> relator, int value) {
         switch (attribute){
             case "xp":
@@ -119,13 +146,15 @@ public class Card {
                                                              String value) {
         switch (attribute){
             case "faction":
-                return new CardFilter((it) -> relator.apply(it.getFaction_code(),value));
+                return new CardFilter((card) -> relator.apply(card.getFaction_code(),value));
             case "trait":
-                return new CardFilter((it) -> relator.apply(it.getTraits(),value));
+                return new CardFilter((card) -> relator.apply(card.getTraits(),value));
             case "pack":
-                return new CardFilter((it) -> relator.apply(Collections.singletonList(it.getPack()),value));
+                return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getPack()),value));
             case "type":
-                return new CardFilter((it) -> relator.apply(Collections.singletonList(it.getType()),value));
+                return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getType()),value));
+            case "text":
+                return new CardFilter((card) -> (card.getText() != null && card.getText().contains(value)));
             default:
                 return nullFilter;
         }

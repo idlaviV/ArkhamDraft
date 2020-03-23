@@ -1,6 +1,7 @@
 package arkhamDraft;
 
-import java.util.function.Function;
+import java.util.ArrayList;
+
 
 public class Drafter {
     private DraftingBox draftingBox = new DraftingBox();
@@ -43,5 +44,13 @@ public class Drafter {
 
     public void clear(){
         filteredCardBox = new DraftingBox();
+    }
+
+    public ArrayList<Card> draftCards(int number) {
+        return draftingBox.draftCards(number);
+    }
+
+    public void finalizeDraft() {
+        draftingBox.finalizeDraft();
     }
 }

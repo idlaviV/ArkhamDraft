@@ -1,9 +1,7 @@
 package arkhamDraft;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class Relator {
     public static String relatorRegex = "!:|:|<=|>=|=|<|>";
@@ -51,7 +49,7 @@ public class Relator {
     }
 
     private static <T> BiFunction<List<T>, T, Boolean> containsRelator() {
-        return (list, value) -> list.contains(value);
+        return List::contains;
     }
 
     private static <T> BiFunction<List<T>, T, Boolean> containsNotRelator() {
