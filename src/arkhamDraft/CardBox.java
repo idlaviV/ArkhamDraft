@@ -14,6 +14,10 @@ public class CardBox {
         this.cards = new HashSet<>(cardBox.getCards());
     }
 
+    public CardBox(Set<Card> cards) {
+        this.cards = cards;
+    }
+
     public void filter(CardFilter cardFilter) {
         cards = cards.stream().filter(cardFilter::apply).collect(Collectors.toSet());
     }

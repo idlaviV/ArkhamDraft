@@ -5,15 +5,15 @@ import java.util.ArrayList;
 
 public class Drafter {
     private DraftingBox draftingBox = new DraftingBox();
-    private CardBox masterCardBox;
+    private CardBox ownedCardBox;
     private CardBox filteredCardBox;
 
-    public Drafter(CardBox masterCardBox) {
-        this.masterCardBox = masterCardBox;
+    public Drafter(CardBox ownedCardBox) {
+        this.ownedCardBox = ownedCardBox;
     }
 
     public void initializeCardAddition(){
-        filteredCardBox = new CardBox(masterCardBox);
+        filteredCardBox = new CardBox(ownedCardBox);
     }
 
     public boolean filter(CardFilter cardFilter){
@@ -52,5 +52,9 @@ public class Drafter {
 
     public void finalizeDraft() {
         draftingBox.finalizeDraft();
+    }
+
+    public void discardDraftingBox() {
+        draftingBox = new DraftingBox();
     }
 }
