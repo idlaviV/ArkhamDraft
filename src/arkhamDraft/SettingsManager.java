@@ -1,7 +1,13 @@
 package arkhamDraft;
 
+import com.google.gson.Gson;
+
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 public class SettingsManager {
@@ -11,9 +17,39 @@ public class SettingsManager {
     private boolean secondCore;
     private boolean useOnlyRegularCards;
 
-    public SettingsManager(Pack[] packArray) {
-        this.packs = Arrays.asList(packArray);
+    public SettingsManager() {
+    }
+
+    public boolean updateDatabaseFromAPI() throws MalformedURLException {
+        URL website = new URL("https://arkhamdb.com/api/public/cards/");
+        try (InputStream in = website.openStream()) {
+            Files.copy(in, Paths.get("data/cards.json"), StandardCopyOption.REPLACE_EXISTING);
+        } catch (java.io.IOException e) {
+            System.out.println(e);
+            return false;
+        }
+        website = new URL("https://arkhamdb.com/api/public/packs/");
+        try (InputStream in = website.openStream()) {
+            Files.copy(in, Paths.get("data/packs.json"), StandardCopyOption.REPLACE_EXISTING);
+        } catch (java.io.IOException e) {
+            System.out.println(e);
+            return false;
+        }
+        return true;
+    }
+
+    public CardBox updateDatabaseFromJSON() throws IOException {
+        Gson gson = new Gson();
+        File jsonCards = new File("data/cards.json");
+        FileReader fileReader = new FileReader(jsonCards);
+        CardBox masterCardBox = new CardBox(gson.fromJson(fileReader, Card[].class));
+        fileReader.close();
+        File jsonPacks = new File("data/packs.json");
+        FileReader fileReaderPacks = new FileReader(jsonPacks);
+        this.packs = Arrays.asList(gson.fromJson(fileReaderPacks, Pack[].class));
         Collections.sort(packs);
+        fileReaderPacks.close();
+        return masterCardBox;
     }
 
     public boolean toggleRegular(File file, boolean regular) {
@@ -26,6 +62,7 @@ public class SettingsManager {
                 FileWriter fw = new FileWriter(file);
                 fw.write(contentNew);
                 fw.close();
+                useOnlyRegularCards = regular;
                 return true;
             } catch (IOException e) {
                 System.out.println(e);
@@ -161,6 +198,7 @@ public class SettingsManager {
             }
             return true;
         } catch (IOException e) {
+            System.out.println(e);
             return false;
         }
     }
@@ -205,5 +243,13 @@ public class SettingsManager {
 
     public boolean getSecondCore() {
         return secondCore;
+    }
+
+    public static void generateDefaultSettings() throws IOException {
+        File settings = new File("data/packs.txt");
+        settings.delete();
+        settings.createNewFile();
+        String input = "core\ndwl\ntmm\ntece\nbota\nuau\nwda\nlitas\nptc\neotp\ntuo\napot\ntpm\nbsr\ndca\ntfa\ntof\ntbb\nhote\ntcoa\ntdoy\nsha\ntcu\ntsn\nwos\nfgg\nuad\nicc\nbbt\ntde\nsfk\ntsh\ndsm\npnr\nwgd\nwoc\nrtnotz\nrtdwl\nrtptc\ncotr\ncoh\nlol\nguardians\nhotel\nbooks\npromo\ncore2\nregular true\n";
+        Files.copy(new ByteArrayInputStream(input.getBytes()), settings.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 }

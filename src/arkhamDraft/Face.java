@@ -1,6 +1,7 @@
 package arkhamDraft;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -21,13 +22,11 @@ public class Face {
     public static final String ANSI_WHITE = "\u001B[37m";
 
 
-    public Face(CardBox masterCardBox, SettingsManager settingsManager) {
-        this.masterCardBox = masterCardBox;
+    public Face(SettingsManager settingsManager) {
         this.settingsManager = settingsManager;
-        updateSettingsFromFile();
     }
 
-    public void watch(){
+    public void watch() throws IOException {
         Scanner scanner = new Scanner(System.in);
         scanner.useDelimiter("\n");
         boolean quit = false;
@@ -64,7 +63,7 @@ public class Face {
                     }
                     break;
                 case "help":
-                    System.out.println("Usable commands are: 'start draft', 'increase draft deck','quit','settings'.");
+                    System.out.println("Usable commands are: 'start draft', 'increase draft deck', 'quit', 'settings'.");
                     break;//TODO: Update help
                 default:
                     System.out.println("Need help? Type 'help'.");
@@ -73,7 +72,7 @@ public class Face {
         scanner.close();
     }
 
-    private void watchSettingsManager(Scanner scanner) {
+    private void watchSettingsManager(Scanner scanner) throws IOException {
         boolean quit = false;
         while(!quit) {
             String input = scanner.next();
@@ -108,7 +107,10 @@ public class Face {
                 case "help":
                     System.out.println("Usable commands are: 'owned cards', 'regular cards' and 'quit'.");
                     break;
-                //TODO: UpdateDatabase is missing
+                case "update":
+                    try {settingsManager.updateDatabaseFromAPI();} catch (java.net.MalformedURLException e){System.out.println(e);}
+                    updateFromJson();
+                    break;
                 case "quit":
                     System.out.println("Back to the main menu.");
                     quit = true;
@@ -163,7 +165,9 @@ public class Face {
                     quit = true;
                     break;
                 case "help":
-                    //TODO: Help is missing
+                    System.out.println("Add a filter like 'faction:guardian' or 'xp=3'. Or add all those filtered cards" +
+                            "to the drafting deck via 'add cards'.");
+                    //TODO: Help should be improved.
                     break;
                 default :
                     String[] inputParts = input.split(Relator.relatorRegex);
@@ -176,7 +180,7 @@ public class Face {
         }
         int preAdd = drafter.getDraftingBoxSize();
         drafter.addCards();
-        System.out.println(String.format("%d card(s) added to draft deck.",drafter.getDraftingBoxSize() - preAdd));
+        System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.",drafter.getDraftingBoxSize() - preAdd));
     }
 
     private Integer decryptDraft(String input) {
@@ -240,5 +244,9 @@ public class Face {
         System.out.println("Filter not well formatted! Type 'help' to get help on filters \n" +
                 "or 'quit' to discard the selected cards \n" +
                 "or 'add cards' to add the selected cards to the draft deck.");
+    }
+
+    public void updateFromJson() throws IOException {
+        masterCardBox = settingsManager.updateDatabaseFromJSON();
     }
 }
