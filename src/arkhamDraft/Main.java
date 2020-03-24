@@ -16,8 +16,8 @@ public class Main {
         CardBox masterCardBox = new CardBox(gson.fromJson(fileReader, Card[].class));
         File jsonPacks = new File("data/packs.json");
         FileReader fileReaderPacks = new FileReader(jsonPacks);
-        PackManager packManager = new PackManager(gson.fromJson(fileReaderPacks, Pack[].class));
-        Face face = new Face(masterCardBox, packManager);
+        SettingsManager settingsManager = new SettingsManager(gson.fromJson(fileReaderPacks, Pack[].class));
+        Face face = new Face(masterCardBox, settingsManager);
         face.watch();
         System.out.println("finished");
     }

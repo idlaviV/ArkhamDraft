@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class Face {
     private Drafter drafter;
     private CardBox masterCardBox;
-    private PackManager packManager;
+    private SettingsManager settingsManager;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -21,10 +21,10 @@ public class Face {
     public static final String ANSI_WHITE = "\u001B[37m";
 
 
-    public Face(CardBox masterCardBox, PackManager packManager) {
+    public Face(CardBox masterCardBox, SettingsManager settingsManager) {
         this.masterCardBox = masterCardBox;
-        this.packManager = packManager;
-        updatePackManagerFromFile();
+        this.settingsManager = settingsManager;
+        updateSettingsFromFile();
     }
 
     public void watch(){
@@ -34,14 +34,14 @@ public class Face {
         while (!quit) {
             String input = scanner.next();
             switch (input) {
-                case "pack manager":
-                    watchPackManager(scanner);
+                case "settings":
+                    watchSettingsManager(scanner);
                     break;
                 case "quit":
                     quit = true;
                     break;
                 case "start draft":
-                    drafter = new Drafter(packManager.getOwnedCards(masterCardBox));
+                    drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox));
                     System.out.println("Empty draft deck created. Type 'increase draft deck' to start adding cards.");
                     break;
                 case "increase draft deck":
@@ -64,7 +64,7 @@ public class Face {
                     }
                     break;
                 case "help":
-                    System.out.println("Usable commands are: 'start draft', 'increase draft deck','quit'.");
+                    System.out.println("Usable commands are: 'start draft', 'increase draft deck','quit','settings'.");
                     break;//TODO: Update help
                 default:
                     System.out.println("Need help? Type 'help'.");
@@ -73,21 +73,44 @@ public class Face {
         scanner.close();
     }
 
-    private void watchPackManager(Scanner scanner) {
+    private void watchSettingsManager(Scanner scanner) {
         boolean quit = false;
         while(!quit) {
             String input = scanner.next();
             switch (input) {
-                case "set owned cards":
-                    if (packManager.setOwnedPacks(scanner, new File("data/packs.txt"))) {
+                case "owned cards":
+                    if (settingsManager.setOwnedPacks(scanner, new File("data/packs.txt"))) {
                         System.out.println("Owned packs updated.");
                     }
                     break;
                 case "regular cards":
-                    //TODO: toggle regular cards on/off
+                    System.out.println("Do you want to use only regular cards? (y/n)");
+                    boolean answered = false;
+                    while(!answered) {
+                        String input2 = scanner.next();
+                        switch (input2) {
+                            case "y":
+                                if (settingsManager.toggleRegular(new File("data/packs.txt"),true)) {
+                                    answered = true;
+                                    System.out.println("Using only regular cards now.");
+                                }
+                                break;
+                            case "n":
+                                if (settingsManager.toggleRegular(new File("data/packs.txt"),false)) {
+                                    answered = true;
+                                    System.out.println("Using all cards now.");
+                                }
+                            default:
+                        }
+                    }
+
                     break;
-                    //TODO: Help is missing
+                case "help":
+                    System.out.println("Usable commands are: 'owned cards', 'regular cards' and 'quit'.");
+                    break;
+                //TODO: UpdateDatabase is missing
                 case "quit":
+                    System.out.println("Back to the main menu.");
                     quit = true;
                     break;
                 default:
@@ -116,7 +139,7 @@ public class Face {
                         ArrayList<Card> draftedCards = drafter.draftCards(number);
                         if (draftedCards.isEmpty()) {
                             System.out.println("No cards drafted. Argument should be positive\n" +
-                                    "and smaller then amount of cards in draft deck.");
+                                    "and smaller than amount of cards in draft deck.");
                         } else {
                             for (Card card: draftedCards) {
                                 System.out.println(card.getFactionColor() + card.getDraftInfo() + ANSI_RESET);
@@ -209,8 +232,8 @@ public class Face {
         return true;
     }
 
-    private boolean updatePackManagerFromFile() {
-        return packManager.updateOwnedCards(new File("data/packs.txt"));
+    private boolean updateSettingsFromFile() {
+        return settingsManager.updateSettings(new File("data/packs.txt"));
     }
 
     private void notWellFormatted() {

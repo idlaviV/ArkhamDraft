@@ -1,5 +1,6 @@
 package arkhamDraft;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +11,7 @@ public class Card {
     private String pack_name;
     private String type_code;
     private String type_name;
+    private String subtype_code;
     private String faction_code;
     private String faction_name;
     private String faction2_code;
@@ -133,7 +135,23 @@ public class Card {
         }
     }
 
-    public static CardFilter generateCardFilter(String attribute, BiFunction<Integer,Integer,Boolean> relator, int value) {
+    public boolean isRegular() {
+        return xp != null;
+        /*try{
+        if (type_code.equals("skill") || type_code.equals("event") || type_code.equals("asset")) {
+            if (subtype_code == null || !(subtype_code.equals("weakness") || subtype_code.equals("basicweakness"))) {
+                if (!text.contains("deck only.")) {
+                    return true;
+                }
+            }
+        }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;*/
+    }
+
+    public static CardFilter generateCardFilter(String attribute, BiFunction<Integer, Integer, Boolean> relator, int value) {
         switch (attribute){
             case "xp":
                 return new CardFilter((it) -> relator.apply(it.getXp(),value));

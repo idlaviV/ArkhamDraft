@@ -1,17 +1,37 @@
 package arkhamDraft;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
-public class PackManager {
+public class SettingsManager {
 
     private List<Pack> packs;
     private List<Pack> ownedPacks;
     private boolean secondCore;
+    private boolean useOnlyRegularCards;
 
-    public PackManager(Pack[] packArray) {
+    public SettingsManager(Pack[] packArray) {
         this.packs = Arrays.asList(packArray);
         Collections.sort(packs);
+    }
+
+    public boolean toggleRegular(File file, boolean regular) {
+        if (file.exists() && file.isFile()) {
+            try {
+                String content = new String(Files.readAllBytes(file.toPath()));
+                file.delete();
+                file.createNewFile();
+                String contentNew = content.replaceAll("regular (false|true)\n",String.format("regular %b\n", regular));
+                FileWriter fw = new FileWriter(file);
+                fw.write(contentNew);
+                fw.close();
+                return true;
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+        }
+        return false;
     }
 
     public CardBox getOwnedCards(CardBox masterCardBox) {
@@ -19,7 +39,9 @@ public class PackManager {
         Set<Card> ownedCards = new HashSet<>();
         for (Card card : cards) {
             if (isThisPackOwned(card.getPack())) {
-                ownedCards.add(card);
+                if (!useOnlyRegularCards || card.isRegular()) {
+                    ownedCards.add(card);
+                }
             }
         }
         return new CardBox(ownedCards);
@@ -63,19 +85,20 @@ public class PackManager {
                         case "y":
                             secondCore = true;
                             answered = true;
-                            fileWriter.write("core2");
+                            fileWriter.write("core2\n");
                             break;
                         case "n":
                             secondCore = false;
-                            answered = false;
+                            answered = true;
                         default:
                     }
                 }
+                fileWriter.write(String.format("regular %b\n", useOnlyRegularCards));
                 fileWriter.close();
             } catch (IOException e) {
                 return false;
             }
-            updateOwnedCards(file);
+            updateSettings(file);
             return true;
         }
         return false;
@@ -118,7 +141,7 @@ public class PackManager {
         return ownedPacks;
     }
 
-    public boolean updateOwnedCards(File file) {
+    public boolean updateSettings(File file) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             ownedPacks = new ArrayList<>();
@@ -133,6 +156,8 @@ public class PackManager {
                 if (line.equals("core2")) {
                     secondCore = true;
                 }
+                if (line.equals("regular true")) useOnlyRegularCards = true;
+                if (line.equals("regular false")) useOnlyRegularCards = false;
             }
             return true;
         } catch (IOException e) {
@@ -176,5 +201,9 @@ public class PackManager {
                 }
         }
         return "";
+    }
+
+    public boolean getSecondCore() {
+        return secondCore;
     }
 }
