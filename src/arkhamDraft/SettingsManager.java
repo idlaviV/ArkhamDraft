@@ -122,12 +122,16 @@ public class PackManager {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             ownedPacks = new ArrayList<>();
+            secondCore = false;
             String line;
             while ((line = br.readLine()) != null) {
                 for (Pack pack : packs) {
                     if (pack.getCode().equals(line)) {
                         ownedPacks.add(pack);
                     }
+                }
+                if (line.equals("core2")) {
+                    secondCore = true;
                 }
             }
             return true;
