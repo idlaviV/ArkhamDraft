@@ -249,4 +249,8 @@ public class Face {
     public void updateFromJson() throws IOException {
         masterCardBox = settingsManager.updateDatabaseFromJSON();
     }
+
+    public CardBox getMasterCardBox() {
+        return masterCardBox;
+    }
 }

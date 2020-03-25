@@ -21,6 +21,7 @@ public class Card {
     private String code;
     private String name;
     private String real_name;
+    private String subname;
     private int quantity;
     private int deck_limit;
     private String traits;
@@ -30,18 +31,23 @@ public class Card {
     private String real_text;
     private static CardFilter nullFilter = new CardFilter((card)->true);
 
-    public Card(String pack_name, String type_name, String faction_code, String faction2_code, boolean exceptional, String real_name, Integer xp) {
+    public Card(String pack_name, String type_name, String faction_code, String faction2_code, boolean exceptional, String real_name, String subname, Integer xp) {
         this.pack_name = pack_name;
         this.type_name = type_name;
         this.faction_code = faction_code;
         this.faction2_code = faction2_code;
         this.exceptional = exceptional;
         this.real_name = real_name;
+        this.subname = subname;
         this.xp = xp;
     }
 
+    public String getSubname() {
+        return subname;
+    }
+
     public Card getPhysicalCard() {
-        return new Card(pack_name, type_name, faction_code, faction2_code, exceptional, real_name, xp);
+        return new Card(pack_name, type_name, faction_code, faction2_code, exceptional, real_name, subname, xp);
     }
 
     public boolean compareTexts() {
@@ -109,7 +115,18 @@ public class Card {
 
     public String getDraftInfo() {
         //return String.format("%s [%d] (%s,%s)", real_name, xp, pack_name, getFaction_code());
-        return String.format("%s [%d] (%s)", real_name, xp, pack_name);
+        String name = real_name;
+        if (subname != null) {
+            name = String.format("%s:%s",name,subname);
+        }
+        if (xp != null && xp != 0) {
+            name = String.format("%s [%d]", name, xp);
+        }
+        return String.format("%s (%s)", name, pack_name);
+    }
+
+    public String getReal_name() {
+        return real_name;
     }
 
     public String getFactionColor() {

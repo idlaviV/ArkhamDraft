@@ -45,4 +45,4 @@ hotel
 books
 promo
 core2
-regular true
+regular false
