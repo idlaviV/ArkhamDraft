@@ -7,6 +7,8 @@ public class Drafter {
     private DraftingBox draftingBox = new DraftingBox();
     private CardBox ownedCardBox;
     private CardBox filteredCardBox;
+    private ArrayList<Card> draftedCards = new ArrayList<>();
+    private Deck draftedDeck = new Deck();
 
     public Drafter(CardBox ownedCardBox) {
         this.ownedCardBox = ownedCardBox;
@@ -47,7 +49,21 @@ public class Drafter {
     }
 
     public ArrayList<Card> draftCards(int number) {
-        return draftingBox.draftCards(number);
+        draftedCards = draftingBox.draftCards(number);
+        return draftedCards;
+    }
+
+    public ArrayList<Card> redraftCard(int index) {
+        if (index <= draftedCards.size()) {
+            draftedCards.set(index, draftingBox.draftCards(1).get(0));
+        }
+        return draftedCards;
+    }
+
+    public boolean addCardToDeck(int index) {
+        draftedDeck.addCard(draftedCards.get(index));
+        draftedCards.set(index, null);
+        return true;
     }
 
     public void finalizeDraft() {

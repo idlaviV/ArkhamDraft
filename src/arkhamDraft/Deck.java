@@ -2,6 +2,7 @@ package arkhamDraft;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Deck  {
@@ -10,6 +11,10 @@ public class Deck  {
 
     public Deck() {
         physicalDeck = new ArrayList<>();
+    }
+
+    public Deck(ArrayList<Card> physicalDeck) {
+        this.physicalDeck = physicalDeck;
     }
 
     public Deck(File fileDeck, CardBox masterCardBox) throws IOException {
@@ -22,7 +27,15 @@ public class Deck  {
         }
     }
 
-    public List<Card> getCards() {
+    public void addCard(List<Card> cards) {
+        physicalDeck.addAll(cards);
+    }
+
+    public void addCard(Card card) {
+        addCard(Collections.singletonList(card));
+    }
+
+    public ArrayList<Card> getCards() {
         return physicalDeck;
     }
 }

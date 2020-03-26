@@ -143,11 +143,20 @@ public class Face {
                             System.out.println("No cards drafted. Argument should be positive\n" +
                                     "and smaller than amount of cards in draft deck.");
                         } else {
-                            for (Card card: draftedCards) {
-                                System.out.println(card.getFactionColor() + card.getDraftInfo() + ANSI_RESET);
-                            }
+                            printDraftedCards(draftedCards);
                         }
                     }
+            }
+        }
+    }
+
+    private void printDraftedCards(ArrayList<Card> draftedCards) {
+        for (int i = 0; i < draftedCards.size(); i++) {
+            Card card = draftedCards.get(i);
+            if (card != null) {
+                System.out.println(String.format("%d) %s%s%s", i, card.getFactionColor(), card.getDraftInfo(), ANSI_RESET));
+            } else {
+                System.out.println(String.format("%d)",i));
             }
         }
     }
