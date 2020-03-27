@@ -211,7 +211,7 @@ public class Face {
         for (int i = 0; i < draftedCards.size(); i++) {
             Card card = draftedCards.get(i);
             if (card != null) {
-                System.out.println(String.format("%d) %s%s%s", i, card.getFactionColor(), card.getDraftInfo(), ANSI_RESET));
+                System.out.println(String.format("%d) %s", i, card.getDraftInfo()));
             } else {
                 System.out.println(String.format("%d)",i));
             }

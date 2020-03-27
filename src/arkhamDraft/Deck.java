@@ -25,7 +25,7 @@ public class Deck  {
         }
     }
 
-    public ArrayList<String> getPrintInfo() {
+    public ArrayList<String> getPrintInfo2() {
         sortDeck();
         ArrayList<String> printInfo = new ArrayList<>();
         if (physicalDeck.size() == 0) {
@@ -41,13 +41,40 @@ public class Deck  {
                 cardinality++;
             } else {
                 if (current != null) {
-                    printInfo.add(String.format("%dx %s%s%s", cardinality, current.getFactionColor(), current.getDraftInfo(), Face.ANSI_RESET));
+                    printInfo.add(String.format("%dx %s", cardinality, current.getDraftInfo()));
                     cardinality = 1;
                 }
             }
         } while (deckIterator.hasNext());
         Card current = next;
-        printInfo.add(String.format("%dx %s%s%s", cardinality, current.getFactionColor(), current.getDraftInfo(), Face.ANSI_RESET));
+        printInfo.add(String.format("%dx %s", cardinality, current.getDraftInfo()));
+        return printInfo;
+    }
+
+    public ArrayList<String> getPrintInfo() {
+        sortDeck();
+        ArrayList<String> printInfo = new ArrayList<>();
+        if (physicalDeck.size() == 0) {
+            return printInfo;
+        }
+        Iterator<Card> deckIterator = physicalDeck.iterator();
+        Card before = null;
+        Card current = null;
+        int cardinality = 1;
+        while (deckIterator.hasNext()) {
+            before = current;
+            current = deckIterator.next();
+            if (current.equals(before)) {
+                cardinality++;
+            } else {
+                if (before != null) {
+                    printInfo.add(String.format("%dx %s", cardinality, before.getDraftInfo()));
+                }
+                cardinality = 1;
+            }
+        }
+        assert current != null;
+        printInfo.add(String.format("%dx %s", cardinality, current.getDraftInfo()));
         return printInfo;
     }
 

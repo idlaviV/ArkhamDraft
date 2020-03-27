@@ -1,6 +1,7 @@
 package arkhamDraft;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Drafter {
@@ -59,7 +60,12 @@ public class Drafter {
 
     public ArrayList<Card> redraftCard(int index) {
         if (index < draftedCards.size() && index >= 0) {
-            draftedCards.set(index, draftingBox.draftCards(1).get(0));
+            List<Card> cards = draftingBox.draftCards(1);
+            if (!cards.isEmpty()) {
+                draftedCards.set(index, cards.get(0));
+            } else {
+                System.out.println("There are no cards in the draft deck left for redraft.");
+            }
         }
         return draftedCards;
     }

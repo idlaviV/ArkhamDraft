@@ -118,7 +118,6 @@ public class Card {
     }
 
     public String getDraftInfo() {
-        //return String.format("%s [%d] (%s,%s)", real_name, xp, pack_name, getFaction_code());
         String name = real_name;
         if (subname != null) {
             name = String.format("%s:%s",name,subname);
@@ -126,7 +125,7 @@ public class Card {
         if (xp != null && xp != 0) {
             name = String.format("%s [%d]", name, xp);
         }
-        return String.format("%s (%s)", name, pack_name);
+        return String.format("%s%s (%s)%s", getFactionColor(), name, pack_name, Face.ANSI_RESET);
     }
 
     public String getReal_name() {
@@ -207,7 +206,7 @@ public class Card {
         }
     }
 
-    public Integer getFactionValue() {
+    private Integer getFactionValue() {
         if (faction_code == null) return null;
         switch (faction_code) {
             case "guardian":
@@ -227,7 +226,7 @@ public class Card {
         }
     }
 
-    public Integer getTypeValue() {
+    private Integer getTypeValue() {
         if (type_name == null) return null;
         switch (type_name) {
             case "Asset":
@@ -258,32 +257,28 @@ public class Card {
     }
 
 
-    public static Comparator<Card> typeC = new Comparator<Card>() {
+    private static Comparator<Card> typeC = new Comparator<Card>() {
         @Override
         public int compare(Card card1, Card card2) {
-            if (nullC(card1, card2) != null) return nullC(card1, card2);
             Integer type1 = card1.getTypeValue();
             Integer type2 = card2.getTypeValue();
-            if (nullC(type1, type2) != null) return nullC(type1, type2);
-            return type1 - type2;
+            return compareIntegers(type1, type2);
         }
     };
 
 
-    public static Comparator<Card> xpC = new Comparator<Card>() {
+    private static Comparator<Card> xpC = new Comparator<Card>() {
         @Override
         public int compare(Card card1, Card card2) {
-            if (nullC(card1, card2) != null) return nullC(card1, card2);
             Integer xp1 = card1.getXp();
             Integer xp2 = card2.getXp();
             return Integer.compare(xp1, xp2);
         }
     };
 
-    public static Comparator<Card> nameC = new Comparator<Card>() {
+    private static Comparator<Card> nameC = new Comparator<Card>() {
         @Override
         public int compare(Card card1, Card card2) {
-            if (nullC(card1, card2) != null) return nullC(card1, card2);
             String name1 = card1.getReal_name();
             String name2 = card2.getReal_name();
             if (card1.getSubname() != null) String.format("%s%s",name1, card1.getSubname());
@@ -293,25 +288,40 @@ public class Card {
         }
     };
 
-    public static Comparator<Card> factionC = new Comparator<Card>() {
+    private static Comparator<Card> factionC = new Comparator<Card>() {
         @Override
         public int compare(Card card1, Card card2) {
-            if (nullC(card1, card2) != null) return nullC(card1, card2);
             Integer faction1 = card1.getFactionValue();
             Integer faction2 = card2.getFactionValue();
-            if (nullC(faction1, faction2) != null) return nullC(faction1, faction2);
-            return faction1 - faction2;
+            return compareIntegers(faction1, faction2);
         }
     };
 
-    public static Comparator<Card> xpNameC = xpC.thenComparing(nameC);
-    public static Comparator<Card> factionXpNameC = factionC.thenComparing(xpC.thenComparing(nameC));
-    public static Comparator<Card> typeNameC = typeC.thenComparing(nameC);
 
-    public static Integer nullC(Object o1, Object o2) {
-        if (o1 == null && o2 == null) return 0;
-        if (o1 == null) return -1;
-        if (o2 == null) return 1;
-        return null;
+
+    private static Integer compareIntegers(Integer i1, Integer i2) {
+        if (i1 == null && i2 == null) return 0;
+        if (i1 == null) return -1;
+        if (i2 == null) return 1;
+        return i1-i2;
     }
+
+
+
+    /**
+     * Note: this comparator imposes orderings that are inconsistent with equals.
+     */
+    private static Comparator<Card> nullC = new Comparator<Card>() {
+        @Override
+        public int compare(Card o1, Card o2) {
+            if (o1 == null) return -1;
+            if (o2 == null) return 1;
+            return 0;
+        }
+    };
+
+    public static Comparator<Card> xpNameC = nullC.thenComparing(xpC.thenComparing(nameC));
+    public static Comparator<Card> factionXpNameC = nullC.thenComparing(factionC.thenComparing(xpC.thenComparing(nameC)));
+    public static Comparator<Card> typeNameC = nullC.thenComparing(typeC.thenComparing(nameC));
+
 }
