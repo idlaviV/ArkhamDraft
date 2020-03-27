@@ -1,9 +1,7 @@
 package arkhamDraft;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Deck  {
 
@@ -27,6 +25,32 @@ public class Deck  {
         }
     }
 
+    public ArrayList<String> getPrintInfo() {
+        sortDeck();
+        ArrayList<String> printInfo = new ArrayList<>();
+        if (physicalDeck.size() == 0) {
+            return printInfo;
+        }
+        Iterator<Card> deckIterator = physicalDeck.iterator();
+        Card next = null;
+        int cardinality = 1;
+        do {
+            Card current = next;
+            next = deckIterator.next();
+            if (next.equals(current)) {
+                cardinality++;
+            } else {
+                if (current != null) {
+                    printInfo.add(String.format("%dx %s%s%s", cardinality, current.getFactionColor(), current.getDraftInfo(), Face.ANSI_RESET));
+                    cardinality = 1;
+                }
+            }
+        } while (deckIterator.hasNext());
+        Card current = next;
+        printInfo.add(String.format("%dx %s%s%s", cardinality, current.getFactionColor(), current.getDraftInfo(), Face.ANSI_RESET));
+        return printInfo;
+    }
+
     public void addCard(List<Card> cards) {
         physicalDeck.addAll(cards);
     }
@@ -37,5 +61,9 @@ public class Deck  {
 
     public ArrayList<Card> getCards() {
         return physicalDeck;
+    }
+
+    private void sortDeck() {
+        Collections.sort(physicalDeck, Card.typeNameC);
     }
 }

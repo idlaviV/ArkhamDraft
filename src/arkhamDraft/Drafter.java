@@ -36,6 +36,10 @@ public class Drafter {
         return draftingBox.getCards().size();
     }
 
+    public int getPhysicalDraftingBoxSize() {
+        return draftingBox.getPhysicalDraftingBoxSize();
+    }
+
     public int getFilteredBoxSize(){
         if (filteredCardBox == null) {
             return -1;
@@ -54,16 +58,19 @@ public class Drafter {
     }
 
     public ArrayList<Card> redraftCard(int index) {
-        if (index <= draftedCards.size()) {
+        if (index < draftedCards.size() && index >= 0) {
             draftedCards.set(index, draftingBox.draftCards(1).get(0));
         }
         return draftedCards;
     }
 
     public boolean addCardToDeck(int index) {
-        draftedDeck.addCard(draftedCards.get(index));
-        draftedCards.set(index, null);
-        return true;
+        if (index < draftedCards.size() && index >= 0 && draftedCards.get(index) != null) {
+            draftedDeck.addCard(draftedCards.get(index));
+            draftedCards.set(index, null);
+            return true;
+        }
+        return false;
     }
 
     public void finalizeDraft() {
@@ -72,5 +79,13 @@ public class Drafter {
 
     public void discardDraftingBox() {
         draftingBox = new DraftingBox();
+    }
+
+    public ArrayList<Card> getDraftedCards() {
+        return draftedCards;
+    }
+
+    public Deck getDraftedDeck() {
+        return draftedDeck;
     }
 }

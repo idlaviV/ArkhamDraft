@@ -43,6 +43,16 @@ public class Face {
                     drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox));
                     System.out.println("Empty draft deck created. Type 'increase draft deck' to start adding cards.");
                     break;
+                case "test draft":
+                    drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox));
+                    drafter.initializeCardAddition();
+                    drafter.filter(Card.generateCardFilter("faction", Relator.getContainRelator(":"),"guardian"));
+                    drafter.filter(Card.generateCardFilter("xp", Relator.getNumericalRelator("="), 0));
+                    drafter.addCards();
+                    drafter.finalizeDraft();
+                    System.out.println(String.format("Added all faction:guardian, xp=0 cards. There are %d of them.", drafter.getPhysicalDraftingBoxSize()));
+                    watchDraft(scanner);
+                    break;
                 case "increase draft deck":
                     if (drafter == null) {
                         System.out.println("Start your draft first with 'start draft'!");
@@ -127,18 +137,45 @@ public class Face {
             String input = scanner.next();
             switch(input) {
                 //TODO: Help is missing
+                case "reset draft":
+                    drafter.discardDraftingBox();
+                    drafter.finalizeDraft();
+                    System.out.println(String.format("Draft deck now has %d cards again.", drafter.getPhysicalDraftingBoxSize()));
+                    break;
                 case "discard":
                     drafter.discardDraftingBox();
                     System.out.println("Draft deck discarded.");
                 case "quit":
                     quit = true;
                     break;
+                case "show deck":
+                    ArrayList<String> deckString = drafter.getDraftedDeck().getPrintInfo();//Todo print this
+                    for (String cardString : deckString) {
+                        System.out.println(cardString);
+                    }
+                    break;
                 default:
-                    Integer number = decryptDraft(input);
-                    if (number == null) {
-                        System.out.println("This is not a valid draft command. Try 'help' for help.");
+                    Integer draftSize = decryptDraft(input);
+                    if (draftSize == null) {
+                        Integer addCardIndex = decryptAddCardToDeck(input);
+                        if (addCardIndex == null) {
+                            Integer redraftIndex = decryptRedraft(input);
+                            if (redraftIndex == null) {
+                                System.out.println("This is not a valid draft command. Try 'help' for help.");
+                            } else {
+                                drafter.redraftCard(redraftIndex);
+                                printDraftedCards(drafter.getDraftedCards());
+                            }
+                        } else {
+                            if (drafter.addCardToDeck(addCardIndex)) {
+                                System.out.println(String.format("Card %d added to deck.", addCardIndex));
+                                printDraftedCards(drafter.getDraftedCards());
+                            } else {
+                                System.out.println("There is no card at the specified position.");
+                            }
+                        }
                     } else {
-                        ArrayList<Card> draftedCards = drafter.draftCards(number);
+                        ArrayList<Card> draftedCards = drafter.draftCards(draftSize);
                         if (draftedCards.isEmpty()) {
                             System.out.println("No cards drafted. Argument should be positive\n" +
                                     "and smaller than amount of cards in draft deck.");
@@ -189,10 +226,11 @@ public class Face {
         }
         int preAdd = drafter.getDraftingBoxSize();
         drafter.addCards();
-        System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.",drafter.getDraftingBoxSize() - preAdd));
+        System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.", drafter.getDraftingBoxSize() - preAdd));
     }
 
     private Integer decryptDraft(String input) {
+        input = input.replaceAll(" +"," ");
         String[] inputParts = input.split(":");
         if (inputParts.length != 2) {
             return null;
@@ -209,6 +247,48 @@ public class Face {
             return null;
         }
         return number;
+    }
+
+    private Integer decryptAddCardToDeck(String input) {
+        input = input.replaceAll(" +"," ");
+        input = input.trim();
+        String[] inputParts = input.split(" ");
+        if (inputParts.length != 2) {
+            return null;
+        }
+        inputParts[0] = inputParts[0].trim();
+        if (!inputParts[0].equals("add")) {
+            return null;
+        }
+        inputParts[1] = inputParts[1].trim();
+        int index;
+        try {
+            index = Integer.parseInt(inputParts[1]);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        return index;
+    }
+
+    private Integer decryptRedraft(String input) {
+        input = input.replaceAll(" +"," ");
+        input = input.trim();
+        String[] inputParts = input.split(" ");
+        if (inputParts.length != 2) {
+            return null;
+        }
+        inputParts[0] = inputParts[0].trim();
+        if (!inputParts[0].equals("redraft")) {
+            return null;
+        }
+        inputParts[1] = inputParts[1].trim();
+        int index;
+        try {
+            index = Integer.parseInt(inputParts[1]);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        return index;
     }
 
     private boolean decryptFilter(String input) {

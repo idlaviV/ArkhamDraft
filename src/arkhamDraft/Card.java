@@ -1,9 +1,6 @@
 package arkhamDraft;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public class Card {
@@ -64,6 +61,13 @@ public class Card {
             return false;
         }
 
+    }
+
+    public boolean equals(Card card) {
+        if (card != null && real_name.equals(card.getReal_name()) && (subname == null || subname.equals(card.getSubname())) && (xp == null || xp.equals(card.getXp()))) {
+            return true;
+        }
+        return false;
     }
 
     public String getText() {
@@ -201,5 +205,113 @@ public class Card {
         } else {
             return nullFilter;
         }
+    }
+
+    public Integer getFactionValue() {
+        if (faction_code == null) return null;
+        switch (faction_code) {
+            case "guardian":
+                return 1;
+            case "seeker":
+                return 2;
+            case "rogue":
+                return 3;
+            case "mystic":
+                return 4;
+            case "survivor":
+                return 5;
+            case "neutral":
+                return 6;
+            default:
+                return 0;
+        }
+    }
+
+    public Integer getTypeValue() {
+        if (type_name == null) return null;
+        switch (type_name) {
+            case "Asset":
+                return 1;
+            case "Event":
+                return 2;
+            case "Skill":
+                return 3;
+            case "Treachery":
+                return 4;
+            case "Investigator":
+                return 5;
+            case "Scenario":
+                return 6;
+            case "Act":
+                return 7;
+            case "Agenda":
+                return 8;
+            case "Location":
+                return 9;
+            case "Enemy":
+                return 10;
+            case "Story":
+                return 11;
+            default:
+                return 0;
+        }
+    }
+
+
+    public static Comparator<Card> typeC = new Comparator<Card>() {
+        @Override
+        public int compare(Card card1, Card card2) {
+            if (nullC(card1, card2) != null) return nullC(card1, card2);
+            Integer type1 = card1.getTypeValue();
+            Integer type2 = card2.getTypeValue();
+            if (nullC(type1, type2) != null) return nullC(type1, type2);
+            return type1 - type2;
+        }
+    };
+
+
+    public static Comparator<Card> xpC = new Comparator<Card>() {
+        @Override
+        public int compare(Card card1, Card card2) {
+            if (nullC(card1, card2) != null) return nullC(card1, card2);
+            Integer xp1 = card1.getXp();
+            Integer xp2 = card2.getXp();
+            return Integer.compare(xp1, xp2);
+        }
+    };
+
+    public static Comparator<Card> nameC = new Comparator<Card>() {
+        @Override
+        public int compare(Card card1, Card card2) {
+            if (nullC(card1, card2) != null) return nullC(card1, card2);
+            String name1 = card1.getReal_name();
+            String name2 = card2.getReal_name();
+            if (card1.getSubname() != null) String.format("%s%s",name1, card1.getSubname());
+            if (card2.getSubname() != null) String.format("%s%s",name2, card2.getSubname());
+            return name1.compareTo(name2);
+
+        }
+    };
+
+    public static Comparator<Card> factionC = new Comparator<Card>() {
+        @Override
+        public int compare(Card card1, Card card2) {
+            if (nullC(card1, card2) != null) return nullC(card1, card2);
+            Integer faction1 = card1.getFactionValue();
+            Integer faction2 = card2.getFactionValue();
+            if (nullC(faction1, faction2) != null) return nullC(faction1, faction2);
+            return faction1 - faction2;
+        }
+    };
+
+    public static Comparator<Card> xpNameC = xpC.thenComparing(nameC);
+    public static Comparator<Card> factionXpNameC = factionC.thenComparing(xpC.thenComparing(nameC));
+    public static Comparator<Card> typeNameC = typeC.thenComparing(nameC);
+
+    public static Integer nullC(Object o1, Object o2) {
+        if (o1 == null && o2 == null) return 0;
+        if (o1 == null) return -1;
+        if (o2 == null) return 1;
+        return null;
     }
 }

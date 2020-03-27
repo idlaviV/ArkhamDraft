@@ -22,6 +22,10 @@ public class DraftingBox extends CardBox {
         }
     }
 
+    public int getPhysicalDraftingBoxSize() {
+        return physicalDraftingBox.size();
+    }
+
     public ArrayList<Card> draftCards(int number) {
         ArrayList<Card> draftedCards = new ArrayList<>();
         if (number <= physicalDraftingBox.size()) {
