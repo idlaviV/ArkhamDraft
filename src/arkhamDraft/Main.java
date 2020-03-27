@@ -4,14 +4,21 @@ package arkhamDraft;
 import java.io.File;
 
 import java.io.IOException;
-
-
+import java.util.ArrayList;
 
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-
+        /*ArrayList<String> strings = new ArrayList<>();
+        strings.add("xp<=4");
+        strings.add("xp<==4");
+        strings.add("xp>=4");
+        strings.add("xp=4");
+        strings.add("xp!=4");
+        for (String string: strings) {
+            System.out.println(String.format("[%s]-->[%s]", string, getRelator(string)));
+        }*/
         File directory = new File("data");
         if (!directory.exists()) {
             directory.mkdir();
@@ -38,5 +45,11 @@ public class Main {
 
         face.watch();
         System.out.println("finished");
+    }
+
+    public static String getRelator(String input) {
+
+        return input.replaceFirst(".*(?=[<|>|!|[(?<!!)=]])","").replaceFirst(
+                "(?<=[=|[<(?!=)]|[>(?!=)]]).*","").trim();
     }
 }

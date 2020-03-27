@@ -64,6 +64,10 @@ public class Deck  {
     }
 
     private void sortDeck() {
-        Collections.sort(physicalDeck, Card.typeNameC);
+        sortDeck(Card.typeNameC);
+    }
+
+    private void sortDeck(Comparator<Card> comparator) {
+        Collections.sort(physicalDeck, comparator);
     }
 }

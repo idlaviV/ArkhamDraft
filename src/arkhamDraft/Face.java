@@ -149,42 +149,62 @@ public class Face {
                     quit = true;
                     break;
                 case "show deck":
-                    ArrayList<String> deckString = drafter.getDraftedDeck().getPrintInfo();//Todo print this
+                    ArrayList<String> deckString = drafter.getDraftedDeck().getPrintInfo();
                     for (String cardString : deckString) {
                         System.out.println(cardString);
                     }
                     break;
                 default:
-                    Integer draftSize = decryptDraft(input);
-                    if (draftSize == null) {
-                        Integer addCardIndex = decryptAddCardToDeck(input);
-                        if (addCardIndex == null) {
-                            Integer redraftIndex = decryptRedraft(input);
-                            if (redraftIndex == null) {
-                                System.out.println("This is not a valid draft command. Try 'help' for help.");
+                    ArrayList<String> arguments = watchDraftInputDecrypter(input);
+                    switch (arguments.get(0)) {
+                        case "draft":
+                            Integer draftSize = Integer.parseInt(arguments.get(1));
+                            ArrayList<Card> draftedCards = drafter.draftCards(draftSize);
+                            if (draftedCards.isEmpty()) {
+                                System.out.println("No cards drafted. Argument should be positive\n" +
+                                        "and smaller than amount of cards in draft deck.");
                             } else {
-                                drafter.redraftCard(redraftIndex);
-                                printDraftedCards(drafter.getDraftedCards());
+                                printDraftedCards(draftedCards);
                             }
-                        } else {
+                            break;
+                        case "add":
+                            Integer addCardIndex = Integer.parseInt(arguments.get(1));
                             if (drafter.addCardToDeck(addCardIndex)) {
                                 System.out.println(String.format("Card %d added to deck.", addCardIndex));
                                 printDraftedCards(drafter.getDraftedCards());
                             } else {
                                 System.out.println("There is no card at the specified position.");
                             }
-                        }
-                    } else {
-                        ArrayList<Card> draftedCards = drafter.draftCards(draftSize);
-                        if (draftedCards.isEmpty()) {
-                            System.out.println("No cards drafted. Argument should be positive\n" +
-                                    "and smaller than amount of cards in draft deck.");
-                        } else {
-                            printDraftedCards(draftedCards);
-                        }
+                            break;
+                        case "redraft":
+                            Integer redraftIndex = Integer.parseInt(arguments.get(1));
+                            drafter.redraftCard(redraftIndex);
+                            printDraftedCards(drafter.getDraftedCards());
+                            break;
+                        default:
+                            System.out.println("This is not a valid draft command. Try 'help' for help.");
                     }
             }
         }
+    }
+
+    private ArrayList<String> watchDraftInputDecrypter(String input) {
+        ArrayList<String> arguments = new ArrayList<>();
+        input = input.replaceAll(" +", " ").trim();
+        if (input.matches("draft *: *\\d+")) {
+            arguments.add("draft");
+            arguments.add(input.replaceFirst("draft *: *",""));
+        }
+        if (input.matches("add *\\d+")) {
+            arguments.add("add");
+            arguments.add(input.replaceFirst("add *",""));
+        }
+        if (input.matches("redraft *\\d+")) {
+            arguments.add("redraft");
+            arguments.add(input.replaceFirst("redraft *",""));
+        }
+        if (arguments.size() == 0) arguments.add("Could not decrypt draft command.");
+        return arguments;
     }
 
     private void printDraftedCards(ArrayList<Card> draftedCards) {
@@ -216,11 +236,23 @@ public class Face {
                     //TODO: Help should be improved.
                     break;
                 default :
-                    String[] inputParts = input.split(Relator.relatorRegex);
-                    if (inputParts.length != 2) {
-                        notWellFormatted();
-                    } else {
-                        decryptFilter(input);
+                    ArrayList<String> arguments = watchFilterInputDecrypter(input);
+                    switch (arguments.get(0)) {
+                        case "containsFilter":
+                            drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)),arguments.get(3)));
+                            System.out.println(String.format("%d cards left.",drafter.getFilteredBoxSize()));
+                            break;
+                        case "numericalFilter":
+                            try {
+                                int value = Integer.parseInt(arguments.get(3));
+                                drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getNumericalRelator(arguments.get(1)), value));
+                                System.out.println(String.format("%d cards left.", drafter.getFilteredBoxSize()));
+                            } catch (NumberFormatException e) {
+                                System.out.println("Error: value of filter is not an integer.");
+                            }
+                            break;
+                        default:
+                            notWellFormatted();
                     }
             }
         }
@@ -229,100 +261,33 @@ public class Face {
         System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.", drafter.getDraftingBoxSize() - preAdd));
     }
 
-    private Integer decryptDraft(String input) {
-        input = input.replaceAll(" +"," ");
-        String[] inputParts = input.split(":");
-        if (inputParts.length != 2) {
-            return null;
-        }
-        inputParts[0] = inputParts[0].trim();
-        if (!inputParts[0].equals("draft")) {
-            return null;
-        }
-        inputParts[1] = inputParts[1].trim();
-        int number;
-        try {
-            number = Integer.parseInt(inputParts[1]);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return number;
-    }
-
-    private Integer decryptAddCardToDeck(String input) {
-        input = input.replaceAll(" +"," ");
-        input = input.trim();
-        String[] inputParts = input.split(" ");
-        if (inputParts.length != 2) {
-            return null;
-        }
-        inputParts[0] = inputParts[0].trim();
-        if (!inputParts[0].equals("add")) {
-            return null;
-        }
-        inputParts[1] = inputParts[1].trim();
-        int index;
-        try {
-            index = Integer.parseInt(inputParts[1]);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return index;
-    }
-
-    private Integer decryptRedraft(String input) {
-        input = input.replaceAll(" +"," ");
-        input = input.trim();
-        String[] inputParts = input.split(" ");
-        if (inputParts.length != 2) {
-            return null;
-        }
-        inputParts[0] = inputParts[0].trim();
-        if (!inputParts[0].equals("redraft")) {
-            return null;
-        }
-        inputParts[1] = inputParts[1].trim();
-        int index;
-        try {
-            index = Integer.parseInt(inputParts[1]);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-        return index;
-    }
-
-    private boolean decryptFilter(String input) {
-        String[] inputParts = input.split(Relator.relatorRegex);
-        inputParts[0] = inputParts[0].trim();
-        inputParts[1] = inputParts[1].trim();
-        Matcher matcher = Pattern.compile(Relator.relatorRegex).matcher(input);
-        matcher.find();
-        String relatorString = matcher.group();
-        boolean relatorIsNumerical = !Relator.isContainRelator(relatorString);
-        if (relatorIsNumerical) {
-            int value;
-            try {
-                value = Integer.parseInt(inputParts[1]);
-            } catch (NumberFormatException e) {
-                System.out.println("Error: value of filter is not an integer.");
-                return false;
+    private ArrayList<String> watchFilterInputDecrypter(String input) {
+        ArrayList<String> arguments = new ArrayList<>();
+        input = input.replaceAll(" +", " ").trim();
+        if (input.matches(".*[^!]:.*")) {
+            arguments.add("containsFilter");
+            arguments.add(":");
+            arguments.add(input.replaceFirst(":.*","").trim());
+            arguments.add(input.replaceFirst(".*:","").trim());
+        } else if (input.matches(".*!:.*")) {
+            arguments.add("containsFilter");
+            arguments.add("!:");
+            arguments.add(input.replaceFirst("!:.*","").trim());
+            arguments.add(input.replaceFirst(".*!:","").trim());
+        } else if (input.matches(".*<.*|.*>.*|.*=.*")) {
+            String relatorString = input.replaceAll("[^<|>|=|!]","");
+            if (relatorString.matches(Relator.relatorRegex)) {
+                arguments.add("numericalFilter");
+                arguments.add(relatorString);
+                arguments.add(input.replaceFirst("<=.*|>=.*|=.*|<.*|>.*", "").trim());
+                arguments.add(input.replaceFirst(".*[<>=!]+", "").trim());
+            } else {
+                arguments.add("Could not decrypt filter.");
             }
-            drafter.filter(Card.generateCardFilter(inputParts[0],
-                    Relator.getNumericalRelator(relatorString),
-                    value));
-        } else{
-            /*if (inputParts[0].equals("text"))
-            {
-                drafter.filter(Card.generateCardFilter(inputParts[0],
-                        inputParts[1]));
-            } else {*/
-                drafter.filter(Card.generateCardFilter(inputParts[0],
-                        Relator.getContainRelator(relatorString),
-                        inputParts[1]));
-            //}
+        } else {
+            arguments.add("Could not decrypt filter.");
         }
-        System.out.println(String.format("%d cards left.",drafter.getFilteredBoxSize()));
-        return true;
+        return arguments;
     }
 
     private boolean updateSettingsFromFile() {

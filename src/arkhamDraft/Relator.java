@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public class Relator {
-    public static String relatorRegex = "!:|:|<=|>=|=|<|>";
+    //public static String relatorRegex = "[<>]{0,1}={0,1}|![=:]{0,1}";
+    public static String relatorRegex = "<|>|<=|>=|=|:|!:";
 
 
     private static BiFunction<Integer, Integer, Boolean> equalRelator() {
