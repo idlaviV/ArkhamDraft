@@ -37,12 +37,12 @@ public class Main {
         face.updateFromJson();
         settingsManager.updateSettings(settingsFile);
 
-        File deckFile = new File("data/deck.txt"); // This part reads the deck in "data/deck" and prints it
+        /*File deckFile = new File("data/deck.txt"); // This part reads the deck in "data/deck" and prints it
         Deck deck = new Deck(deckFile, face.getMasterCardBox());
         ArrayList<String> output = deck.getPrintInfo();
         for (String line: output) {
             System.out.println(line);
-        }
+        }*/
 
         face.watch();
         System.out.println("finished");
