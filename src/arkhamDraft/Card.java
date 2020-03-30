@@ -76,11 +76,15 @@ public class Card {
 
     public List<String> getTraits() {
         if (traitsList == null) {
-            if(!traits.isEmpty() && traits.substring(traits.length()-1).equals(".")){
-                traits = traits.substring(0,traits.length()-1);
+            if (traits != null && !traits.isEmpty()) {
+                if (traits.substring(traits.length() - 1).equals(".")) {
+                    traits = traits.substring(0, traits.length() - 1);
+                }
+                String[] traitsArray = traits.split(". ");
+                traitsList = Arrays.asList(traitsArray);
+            } else {
+                traitsList = new ArrayList<>();
             }
-            String[] traitsArray = traits.split(". ");
-            traitsList = Arrays.asList(traitsArray);
         }
         return traitsList;
     }
