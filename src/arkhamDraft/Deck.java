@@ -25,32 +25,6 @@ public class Deck  {
         }
     }
 
-    public ArrayList<String> getPrintInfo2() {
-        sortDeck();
-        ArrayList<String> printInfo = new ArrayList<>();
-        if (physicalDeck.size() == 0) {
-            return printInfo;
-        }
-        Iterator<Card> deckIterator = physicalDeck.iterator();
-        Card next = null;
-        int cardinality = 1;
-        do {
-            Card current = next;
-            next = deckIterator.next();
-            if (next.equals(current)) {
-                cardinality++;
-            } else {
-                if (current != null) {
-                    printInfo.add(String.format("%dx %s", cardinality, current.getDraftInfo()));
-                    cardinality = 1;
-                }
-            }
-        } while (deckIterator.hasNext());
-        Card current = next;
-        printInfo.add(String.format("%dx %s", cardinality, current.getDraftInfo()));
-        return printInfo;
-    }
-
     public ArrayList<String> getPrintInfo() {
         sortDeck();
         ArrayList<String> printInfo = new ArrayList<>();
@@ -58,7 +32,7 @@ public class Deck  {
             return printInfo;
         }
         Iterator<Card> deckIterator = physicalDeck.iterator();
-        Card before = null;
+        Card before;
         Card current = null;
         int cardinality = 1;
         while (deckIterator.hasNext()) {
@@ -95,6 +69,6 @@ public class Deck  {
     }
 
     private void sortDeck(Comparator<Card> comparator) {
-        Collections.sort(physicalDeck, comparator);
+        physicalDeck.sort(comparator);
     }
 }

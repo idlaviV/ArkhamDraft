@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Face {
     private Drafter drafter;
@@ -160,7 +157,7 @@ public class Face {
                     ArrayList<String> arguments = watchDraftInputDecrypter(input);
                     switch (arguments.get(0)) {
                         case "draft":
-                            Integer draftSize = Integer.parseInt(arguments.get(1));
+                            int draftSize = Integer.parseInt(arguments.get(1));
                             ArrayList<Card> draftedCards = drafter.draftCards(draftSize);
                             if (draftedCards.isEmpty()) {
                                 System.out.println("No cards drafted. Argument should be positive\n" +
@@ -170,7 +167,7 @@ public class Face {
                             }
                             break;
                         case "add":
-                            Integer addCardIndex = Integer.parseInt(arguments.get(1));
+                            int addCardIndex = Integer.parseInt(arguments.get(1));
                             if (drafter.addCardToDeck(addCardIndex)) {
                                 System.out.println(String.format("Card %d added to deck.", addCardIndex));
                                 printDraftedCards(drafter.getDraftedCards());
@@ -179,7 +176,7 @@ public class Face {
                             }
                             break;
                         case "redraft":
-                            Integer redraftIndex = Integer.parseInt(arguments.get(1));
+                            int redraftIndex = Integer.parseInt(arguments.get(1));
                             drafter.redraftCard(redraftIndex);
                             printDraftedCards(drafter.getDraftedCards());
                             break;
@@ -275,18 +272,18 @@ public class Face {
             }
             arguments.add(input.replaceFirst(":.*","").trim());
             String[] parameters = input.replaceFirst(".*:","").split(",");
-            for (int i = 0; i < parameters.length; i++) {
-                arguments.add(parameters[i].trim());
+            for (String parameter : parameters) {
+                arguments.add(parameter.trim());
             }
         } else if (input.matches(".*<.*|.*>.*|.*=.*")) {
-            String relatorString = input.replaceAll("[^<|>|=|!]","");
+            String relatorString = input.replaceAll("[^<>=!]","");
             if (relatorString.matches(Relator.relatorRegex)) {
                 arguments.add("numericalFilter");
                 arguments.add(relatorString);
                 arguments.add(input.replaceFirst("<=.*|>=.*|=.*|<.*|>.*", "").trim());
                 String[] parameters = input.replaceFirst(".*[<>=!]+", "").split(",");
-                for (int i = 0; i < parameters.length; i++) {
-                    arguments.add(parameters[i].trim());
+                for (String parameter : parameters) {
+                    arguments.add(parameter.trim());
                 }
             } else {
                 arguments.add("Could not decrypt filter.");
@@ -311,7 +308,4 @@ public class Face {
         masterCardBox = settingsManager.updateDatabaseFromJSON();
     }
 
-    public CardBox getMasterCardBox() {
-        return masterCardBox;
-    }
 }

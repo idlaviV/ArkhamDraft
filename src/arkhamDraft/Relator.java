@@ -55,12 +55,8 @@ public class Relator {
 
     private static BiFunction<List<String>, List<String>, Boolean> containsNotRelator() {
         return (list, listValue) -> (list.stream().noneMatch(s -> listValue.stream().anyMatch(v -> v.equalsIgnoreCase(s))));
-        //return (list, value) -> list.stream().noneMatch(s -> s.equalsIgnoreCase(value));
     }
 
-    public static boolean isContainRelator(String relatorString) {
-        return relatorString.equals("!:") || relatorString.equals(":");
-    }
 
     public static BiFunction<List<String>, List<String>, Boolean> getContainRelator(String relatorString){
         switch (relatorString) {
