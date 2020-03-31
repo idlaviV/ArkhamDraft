@@ -49,19 +49,20 @@ public class Relator {
         };
     }
 
-    private static BiFunction<List<String>, String, Boolean> containsRelator() {
-        return (list, value) -> list.stream().anyMatch(s -> s.equalsIgnoreCase(value));
+    private static BiFunction<List<String>, List<String>, Boolean> containsRelator() {
+        return (list, listValue) -> (list.stream().anyMatch(s -> listValue.stream().anyMatch(v -> v.equalsIgnoreCase(s))));
     }
 
-    private static BiFunction<List<String>, String, Boolean> containsNotRelator() {
-        return (list, value) -> list.stream().noneMatch(s -> s.equalsIgnoreCase(value));
+    private static BiFunction<List<String>, List<String>, Boolean> containsNotRelator() {
+        return (list, listValue) -> (list.stream().noneMatch(s -> listValue.stream().anyMatch(v -> v.equalsIgnoreCase(s))));
+        //return (list, value) -> list.stream().noneMatch(s -> s.equalsIgnoreCase(value));
     }
 
     public static boolean isContainRelator(String relatorString) {
         return relatorString.equals("!:") || relatorString.equals(":");
     }
 
-    public static BiFunction<List<String>,String,Boolean> getContainRelator(String relatorString){
+    public static BiFunction<List<String>, List<String>, Boolean> getContainRelator(String relatorString){
         switch (relatorString) {
             case ":":
                 return containsRelator();

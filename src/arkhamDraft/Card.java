@@ -184,29 +184,21 @@ public class Card {
         }
     }
 
-    public static CardFilter generateCardFilter(String attribute, BiFunction<List<String>, String, Boolean> relator,
-                                                             String value) {
+    public static CardFilter generateCardFilter(String attribute, BiFunction<List<String>, List<String>, Boolean> relator,
+                                                             List<String> values) {
         switch (attribute){
             case "faction":
-                return new CardFilter((card) -> relator.apply(card.getFaction_code(),value));
+                return new CardFilter((card) -> relator.apply(card.getFaction_code(),values));
             case "trait":
-                return new CardFilter((card) -> relator.apply(card.getTraits(),value));
+                return new CardFilter((card) -> relator.apply(card.getTraits(),values));
             case "pack":
-                return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getPack()),value));
+                return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getPack()),values));
             case "type":
-                return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getType()),value));
+                return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getType()),values));
             case "text":
-                return new CardFilter((card) -> (card.getText() != null && card.getText().contains(value)));
+                return new CardFilter((card) -> values.stream().anyMatch(value -> card.getText() != null && card.getText().contains(value)));
             default:
                 return nullFilter;
-        }
-    }
-
-    public static CardFilter generateCardFilter(String attribute, String value){
-        if (attribute.equals("text")){
-            return new CardFilter((it) -> it.getText().contains(value));
-        } else {
-            return nullFilter;
         }
     }
 

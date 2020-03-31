@@ -3,6 +3,8 @@ package arkhamDraft;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +48,7 @@ public class Face {
                 case "test draft":
                     drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox));
                     drafter.initializeCardAddition();
-                    drafter.filter(Card.generateCardFilter("faction", Relator.getContainRelator(":"),"guardian"));
+                    drafter.filter(Card.generateCardFilter("faction", Relator.getContainRelator(":"), Collections.singletonList("guardian")));
                     drafter.filter(Card.generateCardFilter("xp", Relator.getNumericalRelator("="), 0));
                     drafter.addCards();
                     drafter.finalizeDraft();
@@ -239,7 +241,7 @@ public class Face {
                     ArrayList<String> arguments = watchFilterInputDecrypter(input);
                     switch (arguments.get(0)) {
                         case "containsFilter":
-                            drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)),arguments.get(3)));
+                            drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size())));
                             System.out.println(String.format("%d cards left.",drafter.getFilteredBoxSize()));
                             break;
                         case "numericalFilter":
@@ -264,23 +266,28 @@ public class Face {
     private ArrayList<String> watchFilterInputDecrypter(String input) {
         ArrayList<String> arguments = new ArrayList<>();
         input = input.replaceAll(" +", " ").trim();
-        if (input.matches(".*[^!]:.*")) {
+        if (input.matches(".*[^!]:.*") || input.matches(".*!:.*")) {
             arguments.add("containsFilter");
-            arguments.add(":");
+            if (input.matches(".*[^!]:.*")) {
+                arguments.add(":");
+            } else {
+                arguments.add("!:");
+            }
             arguments.add(input.replaceFirst(":.*","").trim());
-            arguments.add(input.replaceFirst(".*:","").trim());
-        } else if (input.matches(".*!:.*")) {
-            arguments.add("containsFilter");
-            arguments.add("!:");
-            arguments.add(input.replaceFirst("!:.*","").trim());
-            arguments.add(input.replaceFirst(".*!:","").trim());
+            String[] parameters = input.replaceFirst(".*:","").split(",");
+            for (int i = 0; i < parameters.length; i++) {
+                arguments.add(parameters[i].trim());
+            }
         } else if (input.matches(".*<.*|.*>.*|.*=.*")) {
             String relatorString = input.replaceAll("[^<|>|=|!]","");
             if (relatorString.matches(Relator.relatorRegex)) {
                 arguments.add("numericalFilter");
                 arguments.add(relatorString);
                 arguments.add(input.replaceFirst("<=.*|>=.*|=.*|<.*|>.*", "").trim());
-                arguments.add(input.replaceFirst(".*[<>=!]+", "").trim());
+                String[] parameters = input.replaceFirst(".*[<>=!]+", "").split(",");
+                for (int i = 0; i < parameters.length; i++) {
+                    arguments.add(parameters[i].trim());
+                }
             } else {
                 arguments.add("Could not decrypt filter.");
             }
