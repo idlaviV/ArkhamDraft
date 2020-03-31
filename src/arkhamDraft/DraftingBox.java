@@ -15,9 +15,11 @@ public class DraftingBox extends CardBox {
         getCards().addAll(filteredCardBox.getCards());
     }
 
-    public void finalizeDraft() {
+    public void finalizeDraft(boolean secondCore) {
         for (Card card : this.getCards()) {
-            physicalDraftingBox.add(card.getPhysicalCard());
+            if (secondCore || !card.getPack().equals("core") || card.getQuantity() > 1) {
+                physicalDraftingBox.add(card.getPhysicalCard());
+            }
             physicalDraftingBox.add(card.getPhysicalCard());
         }
     }

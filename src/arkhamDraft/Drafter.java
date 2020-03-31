@@ -10,9 +10,11 @@ public class Drafter {
     private CardBox filteredCardBox;
     private ArrayList<Card> draftedCards = new ArrayList<>();
     private Deck draftedDeck = new Deck();
+    private boolean secondCore;
 
-    public Drafter(CardBox ownedCardBox) {
+    public Drafter(CardBox ownedCardBox, boolean secondCore) {
         this.ownedCardBox = ownedCardBox;
+        this.secondCore = secondCore;
     }
 
     public void initializeCardAddition(){
@@ -80,7 +82,7 @@ public class Drafter {
     }
 
     public void finalizeDraft() {
-        draftingBox.finalizeDraft();
+        draftingBox.finalizeDraft(secondCore);
     }
 
     public void discardDraftingBox() {

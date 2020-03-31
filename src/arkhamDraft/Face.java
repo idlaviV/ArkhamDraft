@@ -39,11 +39,11 @@ public class Face {
                     quit = true;
                     break;
                 case "start draft":
-                    drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox));
+                    drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox), settingsManager.getSecondCore());
                     System.out.println("Empty draft deck created. Type 'increase draft deck' to start adding cards.");
                     break;
                 case "test draft":
-                    drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox));
+                    drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox), settingsManager.getSecondCore());
                     drafter.initializeCardAddition();
                     drafter.filter(Card.generateCardFilter("faction", Relator.getContainRelator(":"), Collections.singletonList("guardian")));
                     drafter.filter(Card.generateCardFilter("xp", Relator.getNumericalRelator("="), 0));
@@ -68,6 +68,7 @@ public class Face {
                         drafter.finalizeDraft();
                         System.out.println("Draft deck finalized. You may now start to draft cards via 'draft:x',\n" +
                                 "where 'x' is the number of cards you want to draft.");
+                        System.out.println(String.format("The draft deck currently holds %d cards.", drafter.getPhysicalDraftingBoxSize()));
                         watchDraft(scanner);
                     }
                     break;
