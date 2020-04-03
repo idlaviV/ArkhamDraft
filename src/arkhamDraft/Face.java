@@ -27,10 +27,11 @@ public class Face {
 
     public void watch() throws IOException {
         Scanner scanner = new Scanner(System.in);
-        scanner.useDelimiter("\n");
+        //scanner.useDelimiter("\n");
         boolean quit = false;
         while (!quit) {
-            String input = scanner.next();
+            //String input = scanner.next();
+            String input = scanner.nextLine();
             switch (input) {
                 case "settings":
                     watchSettingsManager(scanner);
@@ -77,6 +78,7 @@ public class Face {
                     break;//TODO: Update help
                 default:
                     System.out.println("Need help? Type 'help'.");
+                    System.out.println(input);
             }
         }
         scanner.close();
