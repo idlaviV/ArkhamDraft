@@ -27,10 +27,8 @@ public class Face {
 
     public void watch() throws IOException {
         Scanner scanner = new Scanner(System.in);
-        //scanner.useDelimiter("\n");
         boolean quit = false;
         while (!quit) {
-            //String input = scanner.next();
             String input = scanner.nextLine();
             switch (input) {
                 case "settings":
@@ -78,7 +76,6 @@ public class Face {
                     break;//TODO: Update help
                 default:
                     System.out.println("Need help? Type 'help'.");
-                    System.out.println(input);
             }
         }
         scanner.close();
@@ -87,7 +84,7 @@ public class Face {
     private void watchSettingsManager(Scanner scanner) throws IOException {
         boolean quit = false;
         while(!quit) {
-            String input = scanner.next();
+            String input = scanner.nextLine();
             switch (input) {
                 case "owned cards":
                     if (settingsManager.setOwnedPacks(scanner, new File("data/packs.txt"))) {
@@ -98,7 +95,7 @@ public class Face {
                     System.out.println("Do you want to use only regular cards? (y/n)");
                     boolean answered = false;
                     while(!answered) {
-                        String input2 = scanner.next();
+                        String input2 = scanner.nextLine();
                         switch (input2) {
                             case "y":
                                 if (settingsManager.toggleRegular(new File("data/packs.txt"),true)) {
@@ -136,7 +133,7 @@ public class Face {
     private void watchDraft(Scanner scanner) {
         boolean quit = false;
         while(!quit) {
-            String input = scanner.next();
+            String input = scanner.nextLine();
             switch(input) {
                 //TODO: Help is missing
                 case "reset draft":
@@ -223,7 +220,7 @@ public class Face {
     private void watchFilter(Scanner scanner) {
         boolean quit = false;
         while(!quit) {
-            String input = scanner.next();
+            String input = scanner.nextLine();
             switch(input){
                 case "quit":
                     quit = true;

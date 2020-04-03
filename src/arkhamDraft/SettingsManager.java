@@ -100,7 +100,7 @@ public class SettingsManager {
                 file.createNewFile();
                 FileWriter fileWriter = new FileWriter(file);
                 System.out.println("Do you own all cycles? (y/n)");
-                String input = scanner.next();
+                String input = scanner.nextLine();
                 switch (input) {
                     case "y":
                         newOwnedPacks.addAll(packs);
@@ -117,7 +117,7 @@ public class SettingsManager {
                 System.out.println("Do you own a second core? (y/n)");
                 boolean answered = false;
                 while (!answered) {
-                    input = scanner.next();
+                    input = scanner.nextLine();
                     switch (input) {
                         case "y":
                             secondCore = true;
@@ -145,7 +145,7 @@ public class SettingsManager {
         System.out.println(String.format("Do you own the cycle %s? 'y' for 'yes', 'n' for 'no', 'p' for 'partially'.",getCycleName(cycle)));
         boolean answered = false;
         while (!answered) {
-            String input = scanner.next();
+            String input = scanner.nextLine();
             switch (input) {
                 case "n":
                     return new ArrayList<>();
@@ -161,7 +161,7 @@ public class SettingsManager {
         List<Pack> cyclePacks = listCycle(cycle);
         for (Pack pack : cyclePacks) {
             System.out.println(String.format("Do you own %s? (y/n)",pack.getName()));
-            String input = scanner.next();
+            String input = scanner.nextLine();
             answered = false;
             while(!answered) {
                 switch (input) {
