@@ -16,6 +16,7 @@ public class SettingsManager {
     private List<Pack> ownedPacks;
     private boolean secondCore;
     private boolean useOnlyRegularCards;
+    private CardBox blackList;
 
     public SettingsManager() {
     }
@@ -52,6 +53,22 @@ public class SettingsManager {
         return masterCardBox;
     }
 
+    private CardBox getBlackList(CardBox masterCardBox) {
+        if (blackList == null) {
+            File blackListFile = new File("data/blacklist.txt");
+            if (blackListFile.exists()) {
+                try {
+                    blackList = new CardBox(blackListFile, masterCardBox);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                blackList = new CardBox(Collections.emptySet());
+            }
+        }
+        return blackList;
+    }
+
     public boolean toggleRegular(File file, boolean regular) {
         if (file.exists() && file.isFile()) {
             try {
@@ -74,10 +91,13 @@ public class SettingsManager {
     public CardBox getOwnedCards(CardBox masterCardBox) {
         Set<Card> cards = masterCardBox.getCards();
         Set<Card> ownedCards = new HashSet<>();
+        CardBox realBlackList = getBlackList(masterCardBox);
         for (Card card : cards) {
             if (isThisPackOwned(card.getPack())) {
                 if (!useOnlyRegularCards || card.isRegular()) {
-                    ownedCards.add(card);
+                    if (!realBlackList.containsCard(card)) {
+                        ownedCards.add(card);
+                    }
                 }
             }
         }

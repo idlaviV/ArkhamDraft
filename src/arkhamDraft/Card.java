@@ -28,12 +28,13 @@ public class Card {
     private String real_text;
     private static CardFilter nullFilter = new CardFilter((card)->true);
 
-    public Card(String pack_name, String type_name, String faction_code, String faction2_code, boolean exceptional, String real_name, String subname, Integer xp) {
+    public Card(String pack_name, String type_name, String faction_code, String faction2_code, boolean exceptional, String code, String real_name, String subname, Integer xp) {
         this.pack_name = pack_name;
         this.type_name = type_name;
         this.faction_code = faction_code;
         this.faction2_code = faction2_code;
         this.exceptional = exceptional;
+        this.code = code;
         this.real_name = real_name;
         this.subname = subname;
         this.xp = xp;
@@ -44,7 +45,7 @@ public class Card {
     }
 
     public Card getPhysicalCard() {
-        return new Card(pack_name, type_name, faction_code, faction2_code, exceptional, real_name, subname, xp);
+        return new Card(pack_name, type_name, faction_code, faction2_code, exceptional, code, real_name, subname, xp);
     }
 
     public boolean compareTexts() {
@@ -202,6 +203,10 @@ public class Card {
         }
     }
 
+    private String getCode() {
+        return code;
+    }
+
     private Integer getFactionValue() {
         if (faction_code == null) return null;
         switch (faction_code) {
@@ -293,6 +298,14 @@ public class Card {
         }
     };
 
+    private static Comparator<Card> codeC = new Comparator<Card>() {
+        @Override
+        public int compare(Card card1, Card card2) {
+            Integer code1 = Integer.parseInt(card1.getCode());
+            Integer code2 = Integer.parseInt(card2.getCode());
+            return compareIntegers(code1, code2);
+        }
+    };
 
 
     private static Integer compareIntegers(Integer i1, Integer i2) {
@@ -319,5 +332,22 @@ public class Card {
     public static Comparator<Card> xpNameC = nullC.thenComparing(xpC.thenComparing(nameC));
     public static Comparator<Card> factionXpNameC = nullC.thenComparing(factionC.thenComparing(xpC.thenComparing(nameC)));
     public static Comparator<Card> typeNameC = nullC.thenComparing(typeC.thenComparing(nameC));
+
+    public boolean equals(Object o) {
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Card)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        Card c = (Card) o;
+        return codeC.compare(this, c) == 0;
+    }
 
 }

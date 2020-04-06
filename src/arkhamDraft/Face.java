@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class Face {
     private Drafter drafter;
     private CardBox masterCardBox;
+    private CardBox blackList;
     private SettingsManager settingsManager;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -207,10 +208,17 @@ public class Face {
     }
 
     private void printDraftedCards(ArrayList<Card> draftedCards) {
-        for (int i = 0; i < draftedCards.size(); i++) {
+        int length = draftedCards.size();
+        int numberLength;
+        if (length == 1) {
+            numberLength = 1;
+        } else {
+            numberLength = (int) (Math.log10(length - 1) + 1);
+        }
+        for (int i = 0; i < length; i++) {
             Card card = draftedCards.get(i);
             if (card != null) {
-                System.out.println(String.format("%d) %s", i, card.getDraftInfo()));
+                System.out.println(String.format("%s) %s", String.format("%1$" + numberLength + "d", i), card.getDraftInfo()));
             } else {
                 System.out.println(String.format("%d)",i));
             }
