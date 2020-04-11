@@ -137,7 +137,7 @@ public class Face {
             String input = scanner.nextLine();
             switch(input) {
                 //TODO: Help is missing
-                case "reset draft":
+                case "reset draft"://TODO: This command does nothing helpful
                     drafter.discardDraftingBox();
                     drafter.finalizeDraft();
                     System.out.println(String.format("Draft deck now has %d cards again.", drafter.getPhysicalDraftingBoxSize()));
@@ -154,6 +154,10 @@ public class Face {
                         System.out.println(cardString);
                     }
                     break;
+                case "show sideboard":
+                    printSideboard();
+                    watchSideboard(scanner);
+                    break;
                 default:
                     ArrayList<String> arguments = watchDraftInputDecrypter(input);
                     switch (arguments.get(0)) {
@@ -164,14 +168,14 @@ public class Face {
                                 System.out.println("No cards drafted. Argument should be positive\n" +
                                         "and smaller than amount of cards in draft deck.");
                             } else {
-                                printDraftedCards(draftedCards);
+                                printCardsEnumerated(draftedCards);
                             }
                             break;
                         case "add":
                             int addCardIndex = Integer.parseInt(arguments.get(1));
                             if (drafter.addCardToDeck(addCardIndex)) {
                                 System.out.println(String.format("Card %d added to deck.", addCardIndex));
-                                printDraftedCards(drafter.getDraftedCards());
+                                printCardsEnumerated(drafter.getDraftedCards());
                             } else {
                                 System.out.println("There is no card at the specified position.");
                             }
@@ -179,10 +183,61 @@ public class Face {
                         case "redraft":
                             int redraftIndex = Integer.parseInt(arguments.get(1));
                             drafter.redraftCard(redraftIndex);
-                            printDraftedCards(drafter.getDraftedCards());
+                            printCardsEnumerated(drafter.getDraftedCards());
+                            break;
+                        case "addSideboard":
+                            int addSideboardIndex = Integer.parseInt(arguments.get(1));
+                            if(drafter.addCardToSideboard(addSideboardIndex)) {
+                                System.out.println(String.format("Card %d added to sideboard.",addSideboardIndex));
+                                printCardsEnumerated(drafter.getDraftedCards());
+                            } else {
+                                System.out.println("There is no card at the specified position.");
+                            }
                             break;
                         default:
                             System.out.println("This is not a valid draft command. Try 'help' for help.");
+                    }
+            }
+        }
+    }
+
+    private void printSideboard() {
+        printCardsEnumerated(drafter.getSideboard());
+    }
+
+    private void watchSideboard(Scanner scanner) {
+        boolean quit = false;
+        while (!quit) {
+            String input = scanner.nextLine();
+            switch (input) {
+                case "back":
+                    quit = true;
+                    drafter.tidySideboard();
+                    printCardsEnumerated(drafter.getDraftedCards());
+                    break;
+                default:
+                    ArrayList<String> arguments = watchDraftInputDecrypter(input);
+                    switch (arguments.get(0)) {
+                        case "add":
+                            int addCardIndex = Integer.parseInt(arguments.get(1));
+                            if (drafter.addCardToDeckFromSideboard(addCardIndex)) {
+                                System.out.println(String.format("Card %d added to deck from sideboard.", addCardIndex));
+                                printSideboard();
+                            } else {
+                                System.out.println("There is no card in the sideboard on the specified position.");
+                            }
+                            break;
+                        case "discard":
+                            int discardCardIndex = Integer.parseInt(arguments.get(1));
+                            if (drafter.discardCardFromSideboard(discardCardIndex)) {
+                                System.out.println(String.format("Card %d discarded from sideboard.", discardCardIndex));
+                                printSideboard();
+                            } else {
+                                System.out.println("There is no card in the sideboard on the specified position.");
+                            }
+                            break;
+                        default:
+                            System.out.println("This is not a valid sideboard command.");
                     }
             }
         }
@@ -203,11 +258,19 @@ public class Face {
             arguments.add("redraft");
             arguments.add(input.replaceFirst("redraft *",""));
         }
+        if (input.matches("add *sideboard *\\d+")) {
+            arguments.add("addSideboard");
+            arguments.add(input.replaceFirst("add *sideboard *",""));
+        }
+        if (input.matches("discard *\\d+")) {
+            arguments.add("discard");
+            arguments.add(input.replaceFirst("discard *",""));
+        }
         if (arguments.size() == 0) arguments.add("Could not decrypt draft command.");
         return arguments;
     }
 
-    private void printDraftedCards(ArrayList<Card> draftedCards) {
+    private void printCardsEnumerated(ArrayList<Card> draftedCards) {
         int length = draftedCards.size();
         int numberLength;
         if (length == 1) {
@@ -217,10 +280,11 @@ public class Face {
         }
         for (int i = 0; i < length; i++) {
             Card card = draftedCards.get(i);
+            System.out.print(String.format("%s) ", String.format("%1$" + numberLength + "d", i)));
             if (card != null) {
-                System.out.println(String.format("%s) %s", String.format("%1$" + numberLength + "d", i), card.getDraftInfo()));
+                System.out.println(card.getDraftInfo());
             } else {
-                System.out.println(String.format("%d)",i));
+                System.out.println();
             }
         }
     }
