@@ -275,10 +275,11 @@ public class Face {
             arguments.add("containsFilter");
             if (input.matches(".*[^!]:.*")) {
                 arguments.add(":");
+                arguments.add(input.replaceFirst(":.*","").trim());
             } else {
                 arguments.add("!:");
+                arguments.add(input.replaceFirst("!:.*","").trim());
             }
-            arguments.add(input.replaceFirst(":.*","").trim());
             String[] parameters = input.replaceFirst(".*:","").split(",");
             for (String parameter : parameters) {
                 arguments.add(parameter.trim());
