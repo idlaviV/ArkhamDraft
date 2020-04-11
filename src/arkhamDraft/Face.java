@@ -155,16 +155,17 @@ public class Face {
                     }
                     break;
                 case "show sideboard":
-                    printSideboard();
-                    watchSideboard(scanner);
+                    if (printSideboard()) {
+                        watchSideboard(scanner);
+                    }
                     break;
                 default:
                     ArrayList<String> arguments = watchDraftInputDecrypter(input);
                     switch (arguments.get(0)) {
                         case "draft":
                             int draftSize = Integer.parseInt(arguments.get(1));
-                            ArrayList<Card> draftedCards = drafter.draftCards(draftSize);
-                            if (draftedCards.isEmpty()) {
+                            Deck draftedCards = drafter.draftCards(draftSize);
+                            if (draftedCards.getCards().isEmpty()) {
                                 System.out.println("No cards drafted. Argument should be positive\n" +
                                         "and smaller than amount of cards in draft deck.");
                             } else {
@@ -201,8 +202,14 @@ public class Face {
         }
     }
 
-    private void printSideboard() {
-        printCardsEnumerated(drafter.getSideboard());
+    private boolean printSideboard() {
+        if (drafter.getSideboard().getSize() == 0) {
+            System.out.println("Sideboard is empty");
+            return false;
+        } else {
+            printCardsEnumerated(drafter.getSideboard());
+            return true;
+        }
     }
 
     private void watchSideboard(Scanner scanner) {
@@ -270,24 +277,13 @@ public class Face {
         return arguments;
     }
 
-    private void printCardsEnumerated(ArrayList<Card> draftedCards) {
-        int length = draftedCards.size();
-        int numberLength;
-        if (length == 1) {
-            numberLength = 1;
-        } else {
-            numberLength = (int) (Math.log10(length - 1) + 1);
-        }
-        for (int i = 0; i < length; i++) {
-            Card card = draftedCards.get(i);
-            System.out.print(String.format("%s) ", String.format("%1$" + numberLength + "d", i)));
-            if (card != null) {
-                System.out.println(card.getDraftInfo());
-            } else {
-                System.out.println();
-            }
+    private void printCardsEnumerated(Deck draftedCardsDeck) {
+        ArrayList<String> deckString = draftedCardsDeck.getPrintInfoEnumerated();
+        for (String cardString : deckString) {
+            System.out.println(cardString);
         }
     }
+
 
     private void watchFilter(Scanner scanner) {
         boolean quit = false;

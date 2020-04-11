@@ -2,6 +2,7 @@ package arkhamDraft;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Deck  {
 
@@ -52,6 +53,10 @@ public class Deck  {
         return printInfo;
     }
 
+    public void tidy() {
+        physicalDeck = physicalDeck.stream().filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
+    }
+
     public void addCard(List<Card> cards) {
         physicalDeck.addAll(cards);
     }
@@ -64,11 +69,41 @@ public class Deck  {
         return physicalDeck;
     }
 
+    public Card getCard(int index) {return physicalDeck.get(index);}
+
+    public int getSize() {
+        return physicalDeck.size();
+    }
+
+    public void setCard(int index, Card card) {
+        physicalDeck.set(index, card);
+    }
+
     private void sortDeck() {
         sortDeck(Card.typeNameC);
     }
 
     private void sortDeck(Comparator<Card> comparator) {
         physicalDeck.sort(comparator);
+    }
+
+    public ArrayList<String> getPrintInfoEnumerated() {
+        ArrayList<String> printInfo = new ArrayList<>();
+        int length = physicalDeck.size();
+        int numberLength;
+        if (length == 1) {
+            numberLength = 1;
+        } else {
+            numberLength = (int) (Math.log10(length - 1) + 1);
+        }
+        for (int i = 0; i < length; i++) {
+            Card card = physicalDeck.get(i);
+            String output = String.format("%s) ", String.format("%1$" + numberLength + "d", i));
+            if (card != null) {
+                output = String.format("%s%s", output, card.getDraftInfo());
+            }
+            printInfo.add(output);
+        }
+        return printInfo;
     }
 }
