@@ -1,6 +1,7 @@
 package arkhamDraft;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -149,9 +150,19 @@ public class Face {
                     quit = true;
                     break;
                 case "show deck":
-                    ArrayList<String> deckString = drafter.getDraftedDeck().getPrintInfo();
+                    ArrayList<String> deckString = drafter.getDraftedDeck().getPrintInfo(true);
                     for (String cardString : deckString) {
                         System.out.println(cardString);
+                    }
+                    break;
+                case "save deck":
+                    try {
+                        if (saveDeck(scanner)) {
+                            System.out.println("Deck saved.");
+                        }
+                    } catch (IOException e) {
+                        System.out.println("Problem with file");
+                        System.out.println(e);
                     }
                     break;
                 case "show sideboard":
@@ -200,6 +211,36 @@ public class Face {
                     }
             }
         }
+    }
+
+    private boolean saveDeck(Scanner scanner) throws IOException {
+        System.out.println("Please type the name of the deck:");
+        String fileName = scanner.nextLine();
+        File deckFile = new File(String.format("data/decks/%s.txt", fileName));
+        if (deckFile.exists()) {
+            boolean overwrite = false;
+            while (!overwrite) {
+                System.out.println("Deck already exists. Overwrite? (y/n)");
+                String overwriteString = scanner.nextLine();
+                switch (overwriteString) {
+                    case "y":
+                        overwrite = true;
+                        deckFile.delete();
+                        deckFile.createNewFile();
+                        break;
+                    case "n":
+                        return false;
+                }
+            }
+        }
+        FileWriter fileWriter = new FileWriter(deckFile);
+        fileWriter.write(fileName + "\n" + "\n");
+        ArrayList<String> printInfo = drafter.getDraftedDeck().getPrintInfo(false);
+        for (String println: printInfo) {
+            fileWriter.write(println+"\n");
+        }
+        fileWriter.close();
+        return true;
     }
 
     private boolean printSideboard() {
@@ -278,7 +319,7 @@ public class Face {
     }
 
     private void printCardsEnumerated(Deck draftedCardsDeck) {
-        ArrayList<String> deckString = draftedCardsDeck.getPrintInfoEnumerated();
+        ArrayList<String> deckString = draftedCardsDeck.getPrintInfoEnumerated(true);
         for (String cardString : deckString) {
             System.out.println(cardString);
         }

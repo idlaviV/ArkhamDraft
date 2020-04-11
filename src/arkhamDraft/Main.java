@@ -22,6 +22,10 @@ public class Main {
         if (!directory.exists()) {
             directory.mkdir();
         }
+        File directoryDecks = new File("data/decks");
+        if (!directoryDecks.exists()) {
+            directoryDecks.mkdir();
+        }
         File packsFile = new File("data/packs.json");
         File cardsFile = new File("data/cards.json");
         File settingsFile = new File("data/packs.txt");

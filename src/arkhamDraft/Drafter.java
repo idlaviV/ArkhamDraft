@@ -1,10 +1,6 @@
 package arkhamDraft;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 public class Drafter {
@@ -60,7 +56,7 @@ public class Drafter {
     }
 
     public Deck draftCards(int number) {
-        draftedCards.addCard(draftingBox.draftCards(number));
+        draftedCards.addCards(draftingBox.draftCards(number));
         return draftedCards;
     }
 
@@ -81,6 +77,7 @@ public class Drafter {
     }
 
     public boolean addCardToSideboard(int index) {
+
         return addCardFromDeckToDeck(draftedCards, sideboard, index);
     }
 

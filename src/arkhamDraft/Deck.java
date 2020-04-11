@@ -26,7 +26,7 @@ public class Deck  {
         }
     }
 
-    public ArrayList<String> getPrintInfo() {
+    public ArrayList<String> getPrintInfo(boolean color) {
         sortDeck();
         ArrayList<String> printInfo = new ArrayList<>();
         if (physicalDeck.size() == 0) {
@@ -43,13 +43,13 @@ public class Deck  {
                 cardinality++;
             } else {
                 if (before != null) {
-                    printInfo.add(String.format("%dx %s", cardinality, before.getDraftInfo()));
+                    printInfo.add(String.format("%dx %s", cardinality, before.getDraftInfo(color)));
                 }
                 cardinality = 1;
             }
         }
         assert current != null;
-        printInfo.add(String.format("%dx %s", cardinality, current.getDraftInfo()));
+        printInfo.add(String.format("%dx %s", cardinality, current.getDraftInfo(color)));
         return printInfo;
     }
 
@@ -57,12 +57,12 @@ public class Deck  {
         physicalDeck = physicalDeck.stream().filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void addCard(List<Card> cards) {
+    public void addCards(List<Card> cards) {
         physicalDeck.addAll(cards);
     }
 
     public void addCard(Card card) {
-        addCard(Collections.singletonList(card));
+        addCards(Collections.singletonList(card));
     }
 
     public ArrayList<Card> getCards() {
@@ -87,7 +87,7 @@ public class Deck  {
         physicalDeck.sort(comparator);
     }
 
-    public ArrayList<String> getPrintInfoEnumerated() {
+    public ArrayList<String> getPrintInfoEnumerated(boolean color) {
         ArrayList<String> printInfo = new ArrayList<>();
         int length = physicalDeck.size();
         int numberLength;
@@ -100,7 +100,7 @@ public class Deck  {
             Card card = physicalDeck.get(i);
             String output = String.format("%s) ", String.format("%1$" + numberLength + "d", i));
             if (card != null) {
-                output = String.format("%s%s", output, card.getDraftInfo());
+                output = String.format("%s%s", output, card.getDraftInfo(color));
             }
             printInfo.add(output);
         }

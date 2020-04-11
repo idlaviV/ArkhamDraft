@@ -122,7 +122,7 @@ public class Card {
         return deck_limit;
     }
 
-    public String getDraftInfo() {
+    public String getDraftInfo(boolean color) {
         String name = real_name;
         if (subname != null) {
             name = String.format("%s:%s",name,subname);
@@ -130,7 +130,11 @@ public class Card {
         if (xp != null && xp != 0) {
             name = String.format("%s [%d]", name, xp);
         }
-        return String.format("%s%s (%s)%s", getFactionColor(), name, pack_name, Face.ANSI_RESET);
+        if (color) {
+            return String.format("%s%s (%s)%s", getFactionColor(), name, pack_name, Face.ANSI_RESET);
+        } else {
+            return String.format("%s (%s)", name, pack_name);
+        }
     }
 
     public String getReal_name() {
