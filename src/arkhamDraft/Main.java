@@ -1,6 +1,7 @@
 package arkhamDraft;
 
 
+import javax.swing.*;
 import java.io.File;
 
 import java.io.IOException;
@@ -18,6 +19,14 @@ public class Main {
         for (String string: strings) {
             System.out.println(String.format("[%s]-->[%s]", string, getRelator(string)));
         }*/
+        Face face = new Face();
+        face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        face.setTitle("ArkhamDraft");
+        face.setSize(1000,620);
+        face.setResizable(false);
+        face.setLocation(50,50);
+        face.setVisible(true);
+        face.initComponents();
         File directory = new File("data");
         if (!directory.exists()) {
             directory.mkdir();
@@ -36,8 +45,8 @@ public class Main {
         if (!settingsFile.exists()) {
             SettingsManager.generateDefaultSettings();
         }
-        Face face = new Face(settingsManager);
-        face.updateFromJson();
+        Brain brain = new Brain(settingsManager);
+        brain.updateFromJson();
         settingsManager.updateSettings(settingsFile);
 
         /*File deckFile = new File("data/deck.txt"); // This part reads the deck in "data/deck" and prints it
@@ -47,7 +56,7 @@ public class Main {
             System.out.println(line);
         }*/
 
-        face.watch();
+        brain.watch();
         System.out.println("finished");
     }
 

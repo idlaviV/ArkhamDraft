@@ -131,7 +131,7 @@ public class Card {
             name = String.format("%s [%d]", name, xp);
         }
         if (color) {
-            return String.format("%s%s (%s)%s", getFactionColor(), name, pack_name, Face.ANSI_RESET);
+            return String.format("%s%s (%s)%s", getFactionColor(), name, pack_name, Brain.ANSI_RESET);
         } else {
             return String.format("%s (%s)", name, pack_name);
         }
@@ -143,23 +143,23 @@ public class Card {
 
     public String getFactionColor() {
         if (getFaction_code().size() != 1 ) {
-            return Face.ANSI_MULTICLASS;
+            return Brain.ANSI_MULTICLASS;
         } else {
             switch (getFaction_code().get(0)) {
                 case "guardian":
-                    return Face.ANSI_BLUE;
+                    return Brain.ANSI_BLUE;
                 case "seeker":
-                    return Face.ANSI_YELLOW;
+                    return Brain.ANSI_YELLOW;
                 case "rogue":
-                    return Face.ANSI_GREEN;
+                    return Brain.ANSI_GREEN;
                 case "survivor":
-                    return Face.ANSI_RED;
+                    return Brain.ANSI_RED;
                 case "mystic":
-                    return Face.ANSI_PURPLE;
+                    return Brain.ANSI_PURPLE;
                 case "neutral":
-                    return Face.ANSI_WHITE;
+                    return Brain.ANSI_WHITE;
                 default:
-                    return Face.ANSI_RESET;
+                    return Brain.ANSI_RESET;
             }
         }
     }
