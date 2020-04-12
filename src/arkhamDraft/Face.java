@@ -18,12 +18,7 @@ public class Face extends javax.swing.JFrame{
 
         JButton otherButton = new JButton("Something else");
         mainPanel.add(otherButton);
-        otherButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("You pressed the other Button.");
-            }
-        });
+        otherButton.addActionListener(e -> System.out.println("You pressed the other Button."));
 
         this.add(mainPanel);
 
