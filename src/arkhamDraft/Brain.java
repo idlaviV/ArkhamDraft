@@ -10,7 +10,6 @@ import java.util.Scanner;
 public class Brain {
     private Drafter drafter;
     private CardBox masterCardBox;
-    private CardBox blackList;
     private SettingsManager settingsManager;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -184,7 +183,7 @@ public class Brain {
                     }
                     break;
                 default:
-                    ArrayList<String> arguments = watchDraftInputDecrypter(input);
+                    ArrayList<String> arguments = Decoder.watchDraftInputDecrypter(input);
                     switch (arguments.get(0)) {
                         case "draft":
                             int draftSize = Integer.parseInt(arguments.get(1));
@@ -277,7 +276,7 @@ public class Brain {
                     printCardsEnumerated(drafter.getDraftedCards());
                     break;
                 default:
-                    ArrayList<String> arguments = watchDraftInputDecrypter(input);
+                    ArrayList<String> arguments = Decoder.watchDraftInputDecrypter(input);
                     switch (arguments.get(0)) {
                         case "add":
                             int addCardIndex = Integer.parseInt(arguments.get(1));
@@ -304,32 +303,6 @@ public class Brain {
         }
     }
 
-    private ArrayList<String> watchDraftInputDecrypter(String input) {
-        ArrayList<String> arguments = new ArrayList<>();
-        input = input.replaceAll(" +", " ").trim();
-        if (input.matches("draft *: *\\d+")) {
-            arguments.add("draft");
-            arguments.add(input.replaceFirst("draft *: *",""));
-        }
-        if (input.matches("add *\\d+")) {
-            arguments.add("add");
-            arguments.add(input.replaceFirst("add *",""));
-        }
-        if (input.matches("redraft *\\d+")) {
-            arguments.add("redraft");
-            arguments.add(input.replaceFirst("redraft *",""));
-        }
-        if (input.matches("add *sideboard *\\d+")) {
-            arguments.add("addSideboard");
-            arguments.add(input.replaceFirst("add *sideboard *",""));
-        }
-        if (input.matches("discard *\\d+")) {
-            arguments.add("discard");
-            arguments.add(input.replaceFirst("discard *",""));
-        }
-        if (arguments.size() == 0) arguments.add("Could not decrypt draft command.");
-        return arguments;
-    }
 
     private void printCardsEnumerated(Deck draftedCardsDeck) {
         ArrayList<String> deckString = draftedCardsDeck.getPrintInfoEnumerated(true);
@@ -357,7 +330,7 @@ public class Brain {
                     //TODO: Help should be improved.
                     break;
                 default :
-                    ArrayList<String> arguments = watchFilterInputDecrypter(input);
+                    ArrayList<String> arguments = Decoder.watchFilterInputDecrypter(input);
                     switch (arguments.get(0)) {
                         case "containsFilter":
                             drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size())));
@@ -380,41 +353,6 @@ public class Brain {
         int preAdd = drafter.getDraftingBoxSize();
         drafter.addCards();
         System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.", drafter.getDraftingBoxSize() - preAdd));
-    }
-
-    private ArrayList<String> watchFilterInputDecrypter(String input) {
-        ArrayList<String> arguments = new ArrayList<>();
-        input = input.replaceAll(" +", " ").trim();
-        if (input.matches(".*[^!]:.*") || input.matches(".*!:.*")) {
-            arguments.add("containsFilter");
-            if (input.matches(".*[^!]:.*")) {
-                arguments.add(":");
-                arguments.add(input.replaceFirst(":.*","").trim());
-            } else {
-                arguments.add("!:");
-                arguments.add(input.replaceFirst("!:.*","").trim());
-            }
-            String[] parameters = input.replaceFirst(".*:","").split(",");
-            for (String parameter : parameters) {
-                arguments.add(parameter.trim());
-            }
-        } else if (input.matches(".*<.*|.*>.*|.*=.*")) {
-            String relatorString = input.replaceAll("[^<>=!]","");
-            if (relatorString.matches(Relator.relatorRegex)) {
-                arguments.add("numericalFilter");
-                arguments.add(relatorString);
-                arguments.add(input.replaceFirst("<=.*|>=.*|=.*|<.*|>.*", "").trim());
-                String[] parameters = input.replaceFirst(".*[<>=!]+", "").split(",");
-                for (String parameter : parameters) {
-                    arguments.add(parameter.trim());
-                }
-            } else {
-                arguments.add("Could not decrypt filter.");
-            }
-        } else {
-            arguments.add("Could not decrypt filter.");
-        }
-        return arguments;
     }
 
     private boolean updateSettingsFromFile() {
