@@ -15,6 +15,7 @@ public class Face extends javax.swing.JFrame{
 
     public void initComponents() {
         mainPanel = new JPanel();
+        mainPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -25,38 +26,42 @@ public class Face extends javax.swing.JFrame{
         mainPanel.add(buttonPanel, gbc);
 
         JButton startDraftButton = new JButton("Start draft");
-        buttonPanel.add(startDraftButton, gbc);
+        buttonPanel.add(startDraftButton);
+        buttonPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
         JButton otherButton = new JButton("Something else");
-        buttonPanel.add(otherButton, gbc);
+        buttonPanel.add(otherButton);
         otherButton.addActionListener(e -> System.out.println("You pressed the other Button."));
 
         gbc.gridy++;
         draftPanel = new JPanel();
         draftPanel.setLayout(new GridBagLayout());
+        draftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         mainPanel.add(draftPanel, gbc);
         GridBagConstraints gbcDraftPanel = new GridBagConstraints();
         gbcDraftPanel.gridx = 0;
         gbcDraftPanel.gridy = 0;
         gbcDraftPanel.insets = new Insets(2, 2, 2, 2);
 
-        gbcDraftPanel.fill = GridBagConstraints.HORIZONTAL;
         gbcDraftPanel.gridwidth = 3;
         draftPanel.add(new JLabel("Current draft deck"), gbcDraftPanel);
         gbcDraftPanel.gridwidth = 1;
 
         gbcDraftPanel.gridy++;
         draftedCardsPanel = new JPanel();
+        draftedCardsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftPanel.add(draftedCardsPanel, gbcDraftPanel);
         draftedCardsPanel.add(new JLabel("draftpanel"));
 
         gbcDraftPanel.gridx++;
         deckPanel = new JPanel();
+        deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftPanel.add(deckPanel, gbcDraftPanel);
         deckPanel.add(new JLabel("deckpanel"));
 
         gbcDraftPanel.gridx++;
         sideboardPanel = new JPanel();
+        sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftPanel.add(sideboardPanel, gbcDraftPanel);
         sideboardPanel.add(new JLabel("sideboardpanel"));
 
