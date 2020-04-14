@@ -1,8 +1,6 @@
 package arkhamDraft;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 
 public class Face extends javax.swing.JFrame{
