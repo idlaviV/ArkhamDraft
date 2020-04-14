@@ -69,32 +69,6 @@ public class Brain {
         scanner.close();
     }
 
-    private void startDraft() {
-        drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox), settingsManager.getSecondCore());
-    }
-
-    private void increaseDraftDeck() {
-        if (drafter == null) {
-            System.out.println("Start your draft first with 'start draft'!");
-        } else {
-            drafter.initializeCardAddition();
-            System.out.println(String.format("Collected %d cards.", drafter.getFilteredBoxSize()));
-            watchFilter();
-        }
-    }
-
-    private void finalizeDraftDeck(){
-        if (drafter == null) {
-            System.out.println("Start your draft first with 'start draft'!");
-        } else {
-            drafter.finalizeDraft();
-            System.out.println("Draft deck finalized. You may now start to draft cards via 'draft:x',\n" +
-                    "where 'x' is the number of cards you want to draft.");
-            System.out.println(String.format("The draft deck currently holds %d cards.", drafter.getPhysicalDraftingBoxSize()));
-            watchDraft();
-        }
-    }
-
     private void watchSettingsManager(Scanner scanner) throws IOException {
         boolean quit = false;
         while(!quit) {
@@ -225,46 +199,6 @@ public class Brain {
         }
     }
 
-    private boolean saveDeck(Scanner scanner) throws IOException {
-        System.out.println("Please type the name of the deck:");
-        String fileName = scanner.nextLine();
-        File deckFile = new File(String.format("data/decks/%s.txt", fileName));
-        if (deckFile.exists()) {
-            boolean overwrite = false;
-            while (!overwrite) {
-                System.out.println("Deck already exists. Overwrite? (y/n)");
-                String overwriteString = scanner.nextLine();
-                switch (overwriteString) {
-                    case "y":
-                        overwrite = true;
-                        deckFile.delete();
-                        deckFile.createNewFile();
-                        break;
-                    case "n":
-                        return false;
-                }
-            }
-        }
-        FileWriter fileWriter = new FileWriter(deckFile);
-        fileWriter.write(fileName + "\n" + "\n");
-        ArrayList<String> printInfo = drafter.getDraftedDeck().getPrintInfo(false);
-        for (String println: printInfo) {
-            fileWriter.write(println+"\n");
-        }
-        fileWriter.close();
-        return true;
-    }
-
-    private boolean printSideboard() {
-        if (drafter.getSideboard().getSize() == 0) {
-            System.out.println("Sideboard is empty");
-            return false;
-        } else {
-            printCardsEnumerated(drafter.getSideboard());
-            return true;
-        }
-    }
-
     private void watchSideboard(Scanner scanner) {
         boolean quit = false;
         while (!quit) {
@@ -302,15 +236,6 @@ public class Brain {
             }
         }
     }
-
-
-    private void printCardsEnumerated(Deck draftedCardsDeck) {
-        ArrayList<String> deckString = draftedCardsDeck.getPrintInfoEnumerated(true);
-        for (String cardString : deckString) {
-            System.out.println(cardString);
-        }
-    }
-
 
     private void watchFilter() {
         boolean quit = false;
@@ -353,6 +278,79 @@ public class Brain {
         int preAdd = drafter.getDraftingBoxSize();
         drafter.addCards();
         System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.", drafter.getDraftingBoxSize() - preAdd));
+    }
+
+    private void startDraft() {
+        drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox), settingsManager.getSecondCore());
+    }
+
+    private void increaseDraftDeck() {
+        if (drafter == null) {
+            System.out.println("Start your draft first with 'start draft'!");
+        } else {
+            drafter.initializeCardAddition();
+            System.out.println(String.format("Collected %d cards.", drafter.getFilteredBoxSize()));
+            watchFilter();
+        }
+    }
+
+    private void finalizeDraftDeck(){
+        if (drafter == null) {
+            System.out.println("Start your draft first with 'start draft'!");
+        } else {
+            drafter.finalizeDraft();
+            System.out.println("Draft deck finalized. You may now start to draft cards via 'draft:x',\n" +
+                    "where 'x' is the number of cards you want to draft.");
+            System.out.println(String.format("The draft deck currently holds %d cards.", drafter.getPhysicalDraftingBoxSize()));
+            watchDraft();
+        }
+    }
+
+    private boolean saveDeck(Scanner scanner) throws IOException {
+        System.out.println("Please type the name of the deck:");
+        String fileName = scanner.nextLine();
+        File deckFile = new File(String.format("data/decks/%s.txt", fileName));
+        if (deckFile.exists()) {
+            boolean overwrite = false;
+            while (!overwrite) {
+                System.out.println("Deck already exists. Overwrite? (y/n)");
+                String overwriteString = scanner.nextLine();
+                switch (overwriteString) {
+                    case "y":
+                        overwrite = true;
+                        deckFile.delete();
+                        deckFile.createNewFile();
+                        break;
+                    case "n":
+                        return false;
+                }
+            }
+        }
+        FileWriter fileWriter = new FileWriter(deckFile);
+        fileWriter.write(fileName + "\n" + "\n");
+        ArrayList<String> printInfo = drafter.getDraftedDeck().getPrintInfo(false);
+        for (String println: printInfo) {
+            fileWriter.write(println+"\n");
+        }
+        fileWriter.close();
+        return true;
+    }
+
+    private boolean printSideboard() {
+        if (drafter.getSideboard().getSize() == 0) {
+            System.out.println("Sideboard is empty");
+            return false;
+        } else {
+            printCardsEnumerated(drafter.getSideboard());
+            return true;
+        }
+    }
+
+    private void printCardsEnumerated(Deck draftedCardsDeck) {
+        ArrayList<String> deckString = draftedCardsDeck.getPrintInfoEnumerated(true);
+        for (String cardString : deckString) {
+            System.out.println(cardString);
+        }
     }
 
     private boolean updateSettingsFromFile() {
