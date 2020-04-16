@@ -27,6 +27,8 @@ public class Main {
         face.setLocation(50,50);
         face.setVisible(true);
         face.initComponents();
+
+
         File directory = new File("data");
         if (!directory.exists()) {
             directory.mkdir();
