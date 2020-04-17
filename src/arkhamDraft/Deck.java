@@ -54,7 +54,7 @@ public class Deck  {
     }
 
     public void tidy() {
-        physicalDeck = physicalDeck.stream().filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
+        physicalDeck = physicalDeck.stream().filter(o->!o.equals(Card.nullCard)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public void addCards(List<Card> cards) {
@@ -99,7 +99,7 @@ public class Deck  {
         for (int i = 0; i < length; i++) {
             Card card = physicalDeck.get(i);
             String output = String.format("%s) ", String.format("%1$" + numberLength + "d", i));
-            if (card != null) {
+            if (card != null && card != Card.nullCard) {
                 output = String.format("%s%s", output, card.getDraftInfo(color));
             }
             printInfo.add(output);

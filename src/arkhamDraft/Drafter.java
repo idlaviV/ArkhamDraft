@@ -56,6 +56,7 @@ public class Drafter {
     }
 
     public Deck draftCards(int number) {
+        draftedCards = new Deck();
         draftedCards.addCards(draftingBox.draftCards(number));
         return draftedCards;
     }
@@ -77,7 +78,6 @@ public class Drafter {
     }
 
     public boolean addCardToSideboard(int index) {
-
         return addCardFromDeckToDeck(draftedCards, sideboard, index);
     }
 
@@ -86,9 +86,9 @@ public class Drafter {
     }
 
     public boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, int index) {
-        if (index < fromDeck.getSize() && index >= 0 && fromDeck.getCard(index) != null) {
+        if (index < fromDeck.getSize() && index >= 0 && fromDeck.getCard(index) != null && !fromDeck.getCard(index).equals(Card.nullCard)) {
             toDeck.addCard(fromDeck.getCard(index));
-            fromDeck.setCard(index, null);
+            fromDeck.setCard(index, Card.nullCard);
             return true;
         }
         return false;
@@ -117,7 +117,7 @@ public class Drafter {
 
     public boolean discardCardFromSideboard(int index) {
         if (index < sideboard.getSize() && index >= 0 && sideboard.getCard(index) != null) {
-            sideboard.setCard(index, null);
+            sideboard.setCard(index, Card.nullCard);
             return true;
         }
         return false;

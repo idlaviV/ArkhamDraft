@@ -19,14 +19,6 @@ public class Main {
         for (String string: strings) {
             System.out.println(String.format("[%s]-->[%s]", string, getRelator(string)));
         }*/
-        Face face = new Face();
-        face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        face.setTitle("ArkhamDraft");
-        face.setSize(1000,620);
-        face.setResizable(false);
-        face.setLocation(50,50);
-        face.setVisible(true);
-        face.initComponents();
 
 
         File directory = new File("data");
