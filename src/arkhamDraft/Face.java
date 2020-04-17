@@ -3,7 +3,6 @@ package arkhamDraft;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 public class Face extends JFrame{
@@ -12,9 +11,9 @@ public class Face extends JFrame{
     private JPanel draftPanel;
     private JPanel draftedCardsPanel;
     private JPanel sideboardPanel;
-    private DefaultListModel<String> draftedCardsListM;
-    private DefaultListModel<String> deckListM;
-    private DefaultListModel<String> sideboardListM;
+    private CardCheckBoxList draftedCardsList;
+    private CardCheckBoxList deckList;
+    private CardCheckBoxList sideboardList;
 
 
     public void initComponents() {
@@ -41,8 +40,8 @@ public class Face extends JFrame{
         initializeDraftPanel(gbc);
 
 
-        getContentPane().add(mainPanel);
-        this.setVisible(true);
+        add(mainPanel);
+        setVisible(true);
 
     }
 
@@ -62,13 +61,11 @@ public class Face extends JFrame{
 
         gbcDraftPanel.gridy++;
         draftedCardsPanel = new JPanel();
+        draftedCardsPanel.setLayout(new BoxLayout(draftedCardsPanel, BoxLayout.PAGE_AXIS));
         draftedCardsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftPanel.add(draftedCardsPanel, gbcDraftPanel);
-        draftedCardsPanel.add(new JLabel("draftpanel"));
-        draftedCardsListM = new DefaultListModel<>();
-        draftedCardsListM.addElement("testentry");
-        JList<String> draftedCardsList = new JList<>(draftedCardsListM);
-        draftedCardsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        draftedCardsPanel.add(new JLabel("draft panel"));
+        draftedCardsList = new CardCheckBoxList();
         JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
         draftedCardsPanel.add(draftScrollPane);
 
@@ -76,24 +73,43 @@ public class Face extends JFrame{
 
         gbcDraftPanel.gridx++;
         JPanel deckPanel = new JPanel();
+        deckPanel.setLayout(new BoxLayout(deckPanel, BoxLayout.PAGE_AXIS));
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftPanel.add(deckPanel, gbcDraftPanel);
-        deckPanel.add(new JLabel("deckpanel"));
-        deckListM = new DefaultListModel<>();
-        deckListM.addElement("a test card");
-        deckListM.addElement("a test card");
-        JList<String> deckList = new JList<>(deckListM);
+        deckPanel.add(new JLabel("deck panel"));
+        deckList = new CardCheckBoxList();
         JScrollPane deckScrollPane = new JScrollPane(deckList);
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
+        deckList.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", 2));
         deckPanel.add(deckScrollPane);
 
         gbcDraftPanel.gridx++;
         sideboardPanel = new JPanel();
+        sideboardPanel.setLayout(new BoxLayout(sideboardPanel, BoxLayout.PAGE_AXIS));
         sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftPanel.add(sideboardPanel, gbcDraftPanel);
-        sideboardPanel.add(new JLabel("sideboardpanel"));
-        sideboardListM = new DefaultListModel<>();
+        sideboardPanel.add(new JLabel("sideboard panel"));
+        /*sideboardListM = new DefaultListModel<>();
         sideboardListM.addElement("testcard");
         JList<String> sideboardList = new JList<>(sideboardListM);
+        JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
+        sideboardPanel.add(sideboardScrollPane);*/
+        sideboardList = new CardCheckBoxList();
         JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
         sideboardPanel.add(sideboardScrollPane);
     }
