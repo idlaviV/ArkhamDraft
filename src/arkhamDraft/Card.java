@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 
 public class Card {
-    public static Card nullCard = new Card("", "", "", "", false, "", "", "", 0);
+    public static Card nullCard = new Card("", "", "", "", false, "", "", "", null, 0);
     private String pack_code;
     private String pack_name;
     private String type_code;
@@ -20,6 +20,7 @@ public class Card {
     private String name;
     private String real_name;
     private String subname;
+    private Integer cost;
     private int quantity;
     private int deck_limit;
     private String traits;
@@ -29,7 +30,7 @@ public class Card {
     private String real_text;
     private static CardFilter nullFilter = new CardFilter((card)->true);
 
-    public Card(String pack_name, String type_name, String faction_code, String faction2_code, boolean exceptional, String code, String real_name, String subname, Integer xp) {
+    public Card(String pack_name, String type_name, String faction_code, String faction2_code, boolean exceptional, String code, String real_name, String subname, Integer cost, Integer xp) {
         this.pack_name = pack_name;
         this.type_name = type_name;
         this.faction_code = faction_code;
@@ -38,6 +39,7 @@ public class Card {
         this.code = code;
         this.real_name = real_name;
         this.subname = subname;
+        this.cost = cost;
         this.xp = xp;
     }
 
@@ -46,7 +48,7 @@ public class Card {
     }
 
     public Card getPhysicalCard() {
-        return new Card(pack_name, type_name, faction_code, faction2_code, exceptional, code, real_name, subname, xp);
+        return new Card(pack_name, type_name, faction_code, faction2_code, exceptional, code, real_name, subname, cost, xp);
     }
 
     public boolean compareTexts() {
@@ -211,6 +213,7 @@ public class Card {
     private String getCode() {
         return code;
     }
+    public Integer getCost() {return cost;}
 
     private Integer getFactionValue() {
         if (faction_code == null) return null;
@@ -272,6 +275,14 @@ public class Card {
         }
     };
 
+    private static Comparator<Card> costC = new Comparator<Card>() {
+        @Override
+        public int compare(Card card1, Card card2) {
+            Integer cost1 = card1.getCost();
+            Integer cost2 = card2.getCost();
+            return compareIntegers(cost1, cost2);
+        }
+    };
 
     private static Comparator<Card> xpC = new Comparator<Card>() {
         @Override
@@ -282,7 +293,7 @@ public class Card {
         }
     };
 
-    private static Comparator<Card> nameC = new Comparator<Card>() {
+    private static Comparator<Card> nameComp = new Comparator<Card>() {
         @Override
         public int compare(Card card1, Card card2) {
             String name1 = card1.getReal_name();
@@ -290,11 +301,10 @@ public class Card {
             if (card1.getSubname() != null) String.format("%s%s",name1, card1.getSubname());
             if (card2.getSubname() != null) String.format("%s%s",name2, card2.getSubname());
             return name1.compareTo(name2);
-
         }
     };
 
-    private static Comparator<Card> factionC = new Comparator<Card>() {
+    private static Comparator<Card> factionComp = new Comparator<Card>() {
         @Override
         public int compare(Card card1, Card card2) {
             Integer faction1 = card1.getFactionValue();
@@ -303,7 +313,7 @@ public class Card {
         }
     };
 
-    private static Comparator<Card> codeC = new Comparator<Card>() {
+    private static Comparator<Card> codeComp = new Comparator<Card>() {
         @Override
         public int compare(Card card1, Card card2) {
             Integer code1 = Integer.parseInt(card1.getCode());
@@ -325,7 +335,7 @@ public class Card {
     /**
      * Note: this comparator imposes orderings that are inconsistent with equals.
      */
-    private static Comparator<Card> nullC = new Comparator<Card>() {
+    private static Comparator<Card> nullComp = new Comparator<Card>() {
         @Override
         public int compare(Card o1, Card o2) {
             if (o1 == null) return -1;
@@ -334,9 +344,12 @@ public class Card {
         }
     };
 
-    public static Comparator<Card> xpNameC = nullC.thenComparing(xpC.thenComparing(nameC));
-    public static Comparator<Card> factionXpNameC = nullC.thenComparing(factionC.thenComparing(xpC.thenComparing(nameC)));
-    public static Comparator<Card> typeNameC = nullC.thenComparing(typeC.thenComparing(nameC));
+    public static Comparator<Card> xpNameC = nullComp.thenComparing(xpC.thenComparing(nameComp));
+    public static Comparator<Card> factionXpNameC = nullComp.thenComparing(factionComp.thenComparing(xpC.thenComparing(nameComp)));
+    public static Comparator<Card> typeNameC = nullComp.thenComparing(typeC.thenComparing(nameComp));
+    public static Comparator<Card> factionNameC = nullComp.thenComparing(factionComp.thenComparing(nameComp));
+    public static Comparator<Card> nameC = nullComp.thenComparing(nameComp);
+    public static Comparator<Card> costNameC = nullComp.thenComparing(costC.thenComparing(nameC));
 
     public boolean equals(Object o) {
         // If the object is compared with itself then return true
@@ -352,7 +365,7 @@ public class Card {
 
         // typecast o to Complex so that we can compare data members
         Card c = (Card) o;
-        return codeC.compare(this, c) == 0;
+        return codeComp.compare(this, c) == 0;
     }
 
 }

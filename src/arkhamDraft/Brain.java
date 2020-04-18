@@ -27,7 +27,7 @@ public class Brain {
 
     public Brain(SettingsManager settingsManager) {
         this.settingsManager = settingsManager;
-        face = new Face();
+        face = new Face(this);
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         face.setTitle("ArkhamDraft");
         face.setSize(1000,620);
@@ -144,6 +144,8 @@ public class Brain {
                     System.out.println("Draft deck discarded.");
                 case "quit":
                     quit = true;
+                    break;
+                case "debug":
                     break;
                 case "show deck":
                     ArrayList<String> deckString = drafter.getDraftedDeck().getPrintInfo(true);
@@ -384,6 +386,11 @@ public class Brain {
 
     public void updateFromJson() throws IOException {
         masterCardBox = settingsManager.updateDatabaseFromJSON();
+    }
+
+    public void sortDeck(String sortBy) {
+        drafter.sortDeck(Decoder.decryptComparator(sortBy));
+        face.printCardsToDeckPanel(drafter.getDraftedDeck());
     }
 
 }

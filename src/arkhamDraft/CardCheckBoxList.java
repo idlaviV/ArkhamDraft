@@ -5,8 +5,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +13,7 @@ public class CardCheckBoxList extends JList<Card>
     protected static Border noFocusBorder =
             new EmptyBorder(1, 1, 1, 1);
     private Map<Card, Boolean> jBoxStatus = new HashMap<>();
+    private final DefaultListModel<Card> listModel = new DefaultListModel<>();
 
     public CardCheckBoxList()
     {
@@ -34,21 +33,26 @@ public class CardCheckBoxList extends JList<Card>
         );
 
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        setModel(listModel);
     }
 
     public void addCard(Card card) {
-        ListModel<Card> currentList = this.getModel();
+/*        ListModel<Card> currentList = this.getModel();
         Card[] newList = new Card[currentList.getSize() + 1];
         for (int i = 0; i < currentList.getSize(); i++) {
             newList[i] = currentList.getElementAt(i);
         }
         newList[newList.length - 1] = card;
         jBoxStatus.put(card, false);
-        setListData(newList);
+        setListData(newList);*/
+        listModel.addElement(card);
+        jBoxStatus.put(card, false);
+        repaint();
     }
 
     public void clearList() {
-        setListData(new Card[0]);
+        //setListData(new Card[0]);
+        listModel.removeAllElements();
         jBoxStatus = new HashMap<>();
     }
 

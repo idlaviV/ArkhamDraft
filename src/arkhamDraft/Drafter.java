@@ -1,5 +1,6 @@
 package arkhamDraft;
 
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -125,5 +126,9 @@ public class Drafter {
 
     public void tidySideboard() {
         sideboard.tidy();
+    }
+
+    public void sortDeck(Comparator<Card> comparator) {
+        draftedDeck.sortDeck(comparator);
     }
 }

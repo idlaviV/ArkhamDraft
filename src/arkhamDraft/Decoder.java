@@ -1,6 +1,7 @@
 package arkhamDraft;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Decoder {
 
@@ -64,5 +65,23 @@ public class Decoder {
             arguments.add("Could not decrypt filter.");
         }
         return arguments;
+    }
+
+    public static Comparator<Card> decryptComparator(String comparatorString) {
+        switch (comparatorString) {
+            case "Type, then name":
+                return Card.typeNameC;
+            case "Just name":
+                return Card.nameC;
+            case "Faction, then name":
+                return Card.factionNameC;
+            case "Faction, then XP, then name":
+                return Card.factionXpNameC;
+            case "XP, then name":
+                return Card.xpNameC;
+            case "Cost, then name":
+                return Card.costNameC;
+        }
+        return null;
     }
 }

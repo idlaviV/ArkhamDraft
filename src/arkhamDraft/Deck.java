@@ -79,11 +79,11 @@ public class Deck  {
         physicalDeck.set(index, card);
     }
 
-    private void sortDeck() {
+    public void sortDeck() {
         sortDeck(Card.typeNameC);
     }
 
-    private void sortDeck(Comparator<Card> comparator) {
+    public void sortDeck(Comparator<Card> comparator) {
         physicalDeck.sort(comparator);
     }
 
