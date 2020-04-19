@@ -35,6 +35,10 @@ public class Face extends JFrame{
         buttonPanel.add(startDraftButton);
         buttonPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
+        JButton newDraftDeckButton = new JButton("New draft deck");
+        buttonPanel.add(newDraftDeckButton);
+        newDraftDeckButton.addActionListener(e -> new newDraftDeckDialog(brain));
+
         JButton otherButton = new JButton("Something else");
         buttonPanel.add(otherButton);
         otherButton.addActionListener(e -> System.out.println("You pressed the other Button."));
@@ -133,7 +137,7 @@ public class Face extends JFrame{
         sortComboBoxModel.addElement("Faction, then XP, then name");
         sortComboBoxModel.addElement("XP, then name");
         sortComboBoxModel.addElement("Cost, then name");
-        sortDeckButton.addActionListener(e -> {brain.sortDeck((String) Objects.requireNonNull(sortComboBox.getSelectedItem()));});
+        sortDeckButton.addActionListener(e -> brain.sortDeck((String) Objects.requireNonNull(sortComboBox.getSelectedItem())));
 
         return deckPanel;
     }

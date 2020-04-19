@@ -56,8 +56,8 @@ public class Brain {
                 case "test draft":
                     drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox), settingsManager.getSecondCore());
                     drafter.initializeCardAddition();
-                    drafter.filter(Card.generateCardFilter("faction", Relator.getContainRelator(":"), Collections.singletonList("guardian")));
-                    drafter.filter(Card.generateCardFilter("xp", Relator.getNumericalRelator("="), 0));
+                    drafter.filter(Card.generateCardFilter("faction", Relator.getContainRelator(":"), Collections.singletonList("guardian"), ":"));
+                    drafter.filter(Card.generateCardFilter("xp", Relator.getNumericalRelator("="), 0, "="));
                     drafter.addCards();
                     drafter.finalizeDraft();
                     System.out.println(String.format("Added all faction:guardian, xp=0 cards. There are %d of them.", drafter.getPhysicalDraftingBoxSize()));
@@ -279,13 +279,13 @@ public class Brain {
                     ArrayList<String> arguments = Decoder.watchFilterInputDecrypter(input);
                     switch (arguments.get(0)) {
                         case "containsFilter":
-                            drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size())));
+                            drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size()), arguments.get(1)));
                             System.out.println(String.format("%d cards left.",drafter.getFilteredBoxSize()));
                             break;
                         case "numericalFilter":
                             try {
                                 int value = Integer.parseInt(arguments.get(3));
-                                drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getNumericalRelator(arguments.get(1)), value));
+                                drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getNumericalRelator(arguments.get(1)), value, arguments.get(1)));
                                 System.out.println(String.format("%d cards left.", drafter.getFilteredBoxSize()));
                             } catch (NumberFormatException e) {
                                 System.out.println("Error: value of filter is not an integer.");
