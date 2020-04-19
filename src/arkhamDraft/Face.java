@@ -12,6 +12,7 @@ public class Face extends JFrame{
     private CardCheckBoxList draftedCardsList;
     private JButton sortDeckButton;
     private Brain brain;
+    private NewDraftDeckDialog newDraftDeckDialog;
 
     public Face(Brain brain) {
         super();
@@ -37,7 +38,7 @@ public class Face extends JFrame{
 
         JButton newDraftDeckButton = new JButton("New draft deck");
         buttonPanel.add(newDraftDeckButton);
-        newDraftDeckButton.addActionListener(e -> new newDraftDeckDialog(brain));
+        newDraftDeckButton.addActionListener(e -> newDraftDeckDialog = new NewDraftDeckDialog(brain));
 
         JButton otherButton = new JButton("Something else");
         buttonPanel.add(otherButton);
@@ -151,5 +152,9 @@ public class Face extends JFrame{
         JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
         sideboardPanel.add(sideboardScrollPane);
         return sideboardPanel;
+    }
+
+    public void addFilterToFilterList(CardFilter newCardFilter) {
+        newDraftDeckDialog.addFilterToFilterList(newCardFilter);
     }
 }

@@ -84,4 +84,25 @@ public class Decoder {
         }
         return null;
     }
+
+    public static ArrayList<String> decryptGUIFilter(String attributeString, String relatorString, String valueString) {
+        ArrayList<String> arguments = new ArrayList<>();
+        if (attributeString.equals("XP")) {
+            arguments.add("numericalFilter");
+            arguments.add(relatorString);
+        } else {
+            arguments.add("containsFilter");
+            if (relatorString.equals("contains not")) {
+                arguments.add("!:");
+            } else {
+                arguments.add(":");
+            }
+        }
+        arguments.add(attributeString);
+        String[] parameters = valueString.replaceAll(" {2}"," ").trim().split(",");
+        for (String parameter : parameters) {
+            arguments.add(parameter.trim());
+        }
+        return arguments;
+    }
 }

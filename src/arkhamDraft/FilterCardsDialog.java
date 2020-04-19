@@ -2,19 +2,20 @@ package arkhamDraft;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 
-public class filterCardsDialog extends JDialog {
+public class FilterCardsDialog extends JDialog {
     private Brain brain;
     private JList<CardFilter> filterList;
+    private DefaultListModel<CardFilter> filterListModel;
     private JComboBox<String> attributeSelector;
     private JComboBox<String> relatorSelector;
-    private JTextField valueSelector;
+    private HintTextField valueSelector;
     private JButton addFilterButton;
 
-    public filterCardsDialog(Brain brain) {
+    public FilterCardsDialog(Brain brain) {
         super();
         this.brain = brain;
         setTitle("Add Cards");
@@ -36,12 +37,13 @@ public class filterCardsDialog extends JDialog {
         addFilterButton.setEnabled(false);
         add(addFilterButton);
         add(initializeFilterMenu());
+        addFilterButton.addActionListener(addFilterButtonAL);
     }
 
     private Component initializeFilterList() {
-        DefaultListModel<CardFilter> listModel = new DefaultListModel<>();
-        filterList = new JList<>(listModel);
-        listModel.addElement(new CardFilter((card)->true, "null"));
+        filterListModel = new DefaultListModel<>();
+        filterList = new JList<>(filterListModel);
+        filterListModel.addElement(new CardFilter((card)->true, "null"));
         return filterList;
     }
 
@@ -64,7 +66,7 @@ public class filterCardsDialog extends JDialog {
         relatorSelector.setPrototypeDisplayValue("contains not");
         filterAdditionPanel.add(relatorSelector);
 
-        valueSelector = new JTextField("Value", 15);
+        valueSelector = new HintTextField("Value", 15);
         valueSelector.setEnabled(false);
         filterAdditionPanel.add(valueSelector);
 
@@ -78,6 +80,7 @@ public class filterCardsDialog extends JDialog {
                 valueSelector.setEnabled(false);
                 addFilterButton.setEnabled(false);
             } else {
+                valueSelector.setEnabled(false);
                 initializeRelatorSelector(attributeSelector.getSelectedItem().equals("XP"));
             }
         };
@@ -86,7 +89,7 @@ public class filterCardsDialog extends JDialog {
     private void initializeRelatorSelector(Boolean isNumerical) {
         relatorSelector.setEnabled(true);
         DefaultComboBoxModel<String> comboBoxModel= new DefaultComboBoxModel<>();
-        comboBoxModel.addElement("Choose Relator");
+        comboBoxModel.addElement("Choose relator");
         if (isNumerical) {
             comboBoxModel.addElement("=");
             comboBoxModel.addElement(">");
@@ -98,5 +101,25 @@ public class filterCardsDialog extends JDialog {
             comboBoxModel.addElement("contains not");
         }
         relatorSelector.setModel(comboBoxModel);
+        relatorSelector.addActionListener(e -> {
+            if (relatorSelector.getSelectedItem().equals("Choose relator")) {
+                valueSelector.setEnabled(false);
+                addFilterButton.setEnabled(false);
+            } else {
+                valueSelector.setEnabled(true);
+                addFilterButton.setEnabled(true);
+            }
+        });
+    }
+
+    private final ActionListener addFilterButtonAL = e -> {
+        ArrayList<String> arguments = Decoder.decryptGUIFilter(attributeSelector.getItemAt(attributeSelector.getSelectedIndex()),
+                relatorSelector.getItemAt(relatorSelector.getSelectedIndex()),
+                valueSelector.getText());
+        brain.addFilterFromGUI(arguments);
+    };
+
+    public void addFilterToFilterList(CardFilter newCardFilter) {
+        filterListModel.addElement(newCardFilter);
     }
 }

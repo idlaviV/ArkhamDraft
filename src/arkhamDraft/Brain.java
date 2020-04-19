@@ -393,4 +393,23 @@ public class Brain {
         face.printCardsToDeckPanel(drafter.getDraftedDeck());
     }
 
+    public void addFilterFromGUI(ArrayList<String> arguments) {
+        CardFilter newCardFilter = null;
+        switch (arguments.get(0)) {
+            case "containsFilter":
+                newCardFilter = Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size()), arguments.get(1));
+                drafter.filter(newCardFilter);
+                break;
+            case "numericalFilter":
+                try {
+                    int value = Integer.parseInt(arguments.get(3));
+                    newCardFilter = Card.generateCardFilter(arguments.get(2), Relator.getNumericalRelator(arguments.get(1)), value, arguments.get(1));
+                    drafter.filter(newCardFilter);
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: value of filter is not an integer.");
+                }
+                break;
+        }
+        face.addFilterToFilterList(newCardFilter);
+    }
 }

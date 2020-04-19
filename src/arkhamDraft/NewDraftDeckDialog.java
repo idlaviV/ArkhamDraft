@@ -3,11 +3,12 @@ package arkhamDraft;
 import javax.swing.*;
 import java.awt.*;
 
-public class newDraftDeckDialog extends JDialog {
+public class NewDraftDeckDialog extends JDialog {
     private Brain brain;
     private JLabel currentDraftDeck;
+    private FilterCardsDialog filterCardsDialog;
 
-    public newDraftDeckDialog(Brain brain) {
+    public NewDraftDeckDialog(Brain brain) {
         super();
         this.brain = brain;
         initializeDialogue();
@@ -30,11 +31,15 @@ public class newDraftDeckDialog extends JDialog {
 
         JButton addCardsButton = new JButton("Add Cards");
         add(addCardsButton);
-        addCardsButton.addActionListener(e -> new filterCardsDialog(brain));
+        addCardsButton.addActionListener(e -> filterCardsDialog = new FilterCardsDialog(brain));
 
         JButton finalizeDraftDeckButton = new JButton("Finalize");
         add(finalizeDraftDeckButton);
         finalizeDraftDeckButton.addActionListener(e -> dispose());
 
+    }
+
+    public void addFilterToFilterList(CardFilter newCardFilter) {
+        filterCardsDialog.addFilterToFilterList(newCardFilter);
     }
 }
