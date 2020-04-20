@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 public class FilterCardsDialog extends JDialog {
     private Brain brain;
-    private JList<CardFilter> filterList;
     private DefaultListModel<CardFilter> filterListModel;
     private JComboBox<String> attributeSelector;
     private JComboBox<String> relatorSelector;
@@ -42,9 +41,10 @@ public class FilterCardsDialog extends JDialog {
 
     private Component initializeFilterList() {
         filterListModel = new DefaultListModel<>();
-        filterList = new JList<>(filterListModel);
-        filterListModel.addElement(new CardFilter((card)->true, "null"));
-        return filterList;
+        JList<CardFilter> filterList = new JList<>(filterListModel);
+        filterList.setVisibleRowCount(0);
+        //filterListModel.addElement(new CardFilter((card)->true, "null"));
+        return new JScrollPane(filterList);
     }
 
     private Component initializeFilterMenu() {

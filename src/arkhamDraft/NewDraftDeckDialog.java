@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class NewDraftDeckDialog extends JDialog {
-    private Brain brain;
+    private final Brain brain;
     private JLabel currentDraftDeck;
     private FilterCardsDialog filterCardsDialog;
 

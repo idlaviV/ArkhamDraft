@@ -10,8 +10,7 @@ public class Face extends JFrame{
     private CardCheckBoxList deckList;
     private CardCheckBoxList sideboardList;
     private CardCheckBoxList draftedCardsList;
-    private JButton sortDeckButton;
-    private Brain brain;
+    private final Brain brain;
     private NewDraftDeckDialog newDraftDeckDialog;
 
     public Face(Brain brain) {
@@ -46,13 +45,13 @@ public class Face extends JFrame{
         otherButton.addActionListener(e -> System.out.println("You pressed the other Button."));
 
         gbc.gridy++;
-        mainPanel.add(initializeDraftPanel(gbc), gbc);
+        mainPanel.add(initializeDraftPanel(), gbc);
 
         add(mainPanel);
         setVisible(true);
     }
 
-    private Component initializeDraftPanel(GridBagConstraints gbc) {
+    private Component initializeDraftPanel() {
         JPanel draftPanel = new JPanel();
         draftPanel.setLayout(new GridBagLayout());
         draftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -97,7 +96,7 @@ public class Face extends JFrame{
     }
 
     private void printCardsToPanel(Deck deck, CardCheckBoxList list) {
-        java.awt.EventQueue.invokeLater(() -> {
+        EventQueue.invokeLater(() -> {
             list.clearList();
             for (Card card : deck.getCards()) {
                 if (!card.equals(Card.nullCard)) {
@@ -127,7 +126,7 @@ public class Face extends JFrame{
         JScrollPane deckScrollPane = new JScrollPane(deckList);
         deckPanel.add(deckScrollPane);
 
-        sortDeckButton = new JButton("Sort Deck");
+        JButton sortDeckButton = new JButton("Sort Deck");
         deckPanel.add(sortDeckButton);
 
         DefaultComboBoxModel<String> sortComboBoxModel = new DefaultComboBoxModel<>();
