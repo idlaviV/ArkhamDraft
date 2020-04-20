@@ -38,7 +38,8 @@ public class Face extends JFrame{
 
         JButton newDraftDeckButton = new JButton("New draft deck");
         buttonPanel.add(newDraftDeckButton);
-        newDraftDeckButton.addActionListener(e -> newDraftDeckDialog = new NewDraftDeckDialog(brain));
+        newDraftDeckDialog = new NewDraftDeckDialog(brain);
+        newDraftDeckButton.addActionListener(e -> newDraftDeckDialog.setVisible(true));
 
         JButton otherButton = new JButton("Something else");
         buttonPanel.add(otherButton);

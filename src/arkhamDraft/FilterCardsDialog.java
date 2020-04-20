@@ -26,7 +26,7 @@ public class FilterCardsDialog extends JDialog {
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         initializeDialog();
-        setVisible(true);
+        //setVisible(true);
     }
 
     private void initializeDialog() {
@@ -112,12 +112,12 @@ public class FilterCardsDialog extends JDialog {
         });
     }
 
-    private final ActionListener addFilterButtonAL = e -> {
+    private final ActionListener addFilterButtonAL = e -> EventQueue.invokeLater(() -> {
         ArrayList<String> arguments = Decoder.decryptGUIFilter(attributeSelector.getItemAt(attributeSelector.getSelectedIndex()),
                 relatorSelector.getItemAt(relatorSelector.getSelectedIndex()),
                 valueSelector.getText());
         brain.addFilterFromGUI(arguments);
-    };
+    });
 
     public void addFilterToFilterList(CardFilter newCardFilter) {
         filterListModel.addElement(newCardFilter);

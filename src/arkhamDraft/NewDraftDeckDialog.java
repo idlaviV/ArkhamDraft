@@ -12,7 +12,7 @@ public class NewDraftDeckDialog extends JDialog {
         super();
         this.brain = brain;
         initializeDialogue();
-        setVisible(true);
+        //setVisible(true);
     }
 
     private void initializeDialogue() {
@@ -31,7 +31,8 @@ public class NewDraftDeckDialog extends JDialog {
 
         JButton addCardsButton = new JButton("Add Cards");
         add(addCardsButton);
-        addCardsButton.addActionListener(e -> filterCardsDialog = new FilterCardsDialog(brain));
+        filterCardsDialog = new FilterCardsDialog(brain);
+        addCardsButton.addActionListener(e -> filterCardsDialog.setVisible(true));
 
         JButton finalizeDraftDeckButton = new JButton("Finalize");
         add(finalizeDraftDeckButton);
