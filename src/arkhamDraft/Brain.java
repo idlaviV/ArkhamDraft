@@ -398,18 +398,40 @@ public class Brain {
         switch (arguments.get(0)) {
             case "containsFilter":
                 newCardFilter = Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size()), arguments.get(1));
-                drafter.filter(newCardFilter);
+                //drafter.filter(newCardFilter);
                 break;
             case "numericalFilter":
                 try {
                     int value = Integer.parseInt(arguments.get(3));
                     newCardFilter = Card.generateCardFilter(arguments.get(2), Relator.getNumericalRelator(arguments.get(1)), value, arguments.get(1));
-                    drafter.filter(newCardFilter);
+                    //drafter.filter(newCardFilter);
                 } catch (NumberFormatException e) {
                     System.out.println("Error: value of filter is not an integer.");
                 }
                 break;
         }
+        drafter.addToFilterList(newCardFilter);
         face.addFilterToFilterList(newCardFilter);
+    }
+
+    public void guiEntersFilterCardsDialog() {
+        drafter.initializeCardAddition();
+    }
+
+    public void guiLeavesFilterCardsDialog() {
+        drafter.applyFilterList();
+        int preAdd = drafter.getDraftingBoxSize();
+        drafter.addCards();
+        System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.", drafter.getDraftingBoxSize() - preAdd));
+        face.updateDraftDeckLog(String.format("%d card(s) added to draft deck.", drafter.getDraftingBoxSize() - preAdd));
+        face.updateDraftDeckSize(drafter.getDraftingBoxSize());
+    }
+
+    public void guiOpensNewDraftDeckDialog() {
+        startDraft();
+    }
+
+    public void GUIFinalizeDraftDeck() {
+        drafter.finalizeDraft();
     }
 }

@@ -1,5 +1,6 @@
 package arkhamDraft;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class Drafter {
     private Deck draftedDeck = new Deck();
     private Deck sideboard = new Deck();
     private boolean secondCore;
+    private ArrayList<CardFilter> filterList = new ArrayList<>();
 
     public Drafter(CardBox ownedCardBox, boolean secondCore) {
         this.ownedCardBox = ownedCardBox;
@@ -20,6 +22,7 @@ public class Drafter {
 
     public void initializeCardAddition(){
         filteredCardBox = new CardBox(ownedCardBox);
+        filterList = new ArrayList<>();
     }
 
     public boolean filter(CardFilter cardFilter){
@@ -130,5 +133,15 @@ public class Drafter {
 
     public void sortDeck(Comparator<Card> comparator) {
         draftedDeck.sortDeck(comparator);
+    }
+
+    public void addToFilterList(CardFilter cardFilter) {
+        filterList.add(cardFilter);
+    }
+
+    public void applyFilterList() {
+        for (CardFilter filter : filterList) {
+            filter(filter);
+        }
     }
 }

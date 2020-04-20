@@ -37,6 +37,14 @@ public class FilterCardsDialog extends JDialog {
         add(addFilterButton);
         add(initializeFilterMenu());
         addFilterButton.addActionListener(addFilterButtonAL);
+
+        JButton addCardsButton = new JButton("Add cards to draft deck");
+        add(addCardsButton);
+        addCardsButton.addActionListener(e-> EventQueue.invokeLater(()->{
+            brain.guiLeavesFilterCardsDialog();
+            valueSelector.resetToHint();
+            this.dispose();
+        }));
     }
 
     private Component initializeFilterList() {
@@ -121,5 +129,9 @@ public class FilterCardsDialog extends JDialog {
 
     public void addFilterToFilterList(CardFilter newCardFilter) {
         filterListModel.addElement(newCardFilter);
+    }
+
+    public void tidyUp() {
+        filterListModel.removeAllElements();
     }
 }

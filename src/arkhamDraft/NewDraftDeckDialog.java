@@ -1,11 +1,14 @@
 package arkhamDraft;
 
+import sun.plugin.javascript.JSContext;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class NewDraftDeckDialog extends JDialog {
     private final Brain brain;
-    private JLabel currentDraftDeck;
+    private JTextArea draftDeckLog;
+    private JLabel draftDeckSizeLabel;
     private FilterCardsDialog filterCardsDialog;
 
     public NewDraftDeckDialog(Brain brain) {
@@ -26,21 +29,49 @@ public class NewDraftDeckDialog extends JDialog {
         JPanel currentDraftDeckPanel = new JPanel();
         currentDraftDeckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         add(currentDraftDeckPanel);
-        currentDraftDeck = new JLabel("Draft deck is empty.");
-        currentDraftDeckPanel.add(currentDraftDeck);
+
+        draftDeckSizeLabel = new JLabel("Draft deck is empty");
+        currentDraftDeckPanel.add(draftDeckSizeLabel);
+
+        draftDeckLog = new JTextArea("Created empty draft deck.", 5, 20);
+        JScrollPane draftDeckLogScrollPane = new JScrollPane(draftDeckLog);
+        draftDeckLogScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        //draftDeckLogScrollPane.setPreferredSize(new Dimension(250, 5*draftDeckLog.getFont().getSize()));
+        currentDraftDeckPanel.add(draftDeckLogScrollPane);
+        draftDeckLog.setBackground(this.getBackground());
 
         JButton addCardsButton = new JButton("Add Cards");
         add(addCardsButton);
         filterCardsDialog = new FilterCardsDialog(brain);
-        addCardsButton.addActionListener(e -> filterCardsDialog.setVisible(true));
+        addCardsButton.addActionListener(e -> {
+            filterCardsDialog.tidyUp();
+            brain.guiEntersFilterCardsDialog();
+            filterCardsDialog.setVisible(true);
+        });
 
         JButton finalizeDraftDeckButton = new JButton("Finalize");
         add(finalizeDraftDeckButton);
-        finalizeDraftDeckButton.addActionListener(e -> dispose());
+        finalizeDraftDeckButton.addActionListener(e -> {
+            brain.GUIFinalizeDraftDeck();
+            dispose();});
 
     }
 
     public void addFilterToFilterList(CardFilter newCardFilter) {
         filterCardsDialog.addFilterToFilterList(newCardFilter);
+    }
+
+    public void updateDraftDeckLog(String newLabel) {
+        draftDeckLog.setText(String.format("%s\n%s", draftDeckLog.getText(), newLabel));
+        repaint();
+    }
+
+    public void tidyUp() {
+        draftDeckLog.setText("Created empty draft deck.");
+        draftDeckSizeLabel.setText("Draft deck is empty.");
+    }
+
+    public void updateDraftDeckSize(int newSize) {
+        draftDeckSizeLabel.setText(String.format("Draft deck contains %d cards.", newSize));
     }
 }

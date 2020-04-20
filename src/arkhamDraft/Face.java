@@ -38,7 +38,11 @@ public class Face extends JFrame{
         JButton newDraftDeckButton = new JButton("New draft deck");
         buttonPanel.add(newDraftDeckButton);
         newDraftDeckDialog = new NewDraftDeckDialog(brain);
-        newDraftDeckButton.addActionListener(e -> newDraftDeckDialog.setVisible(true));
+        newDraftDeckButton.addActionListener(e -> {
+            brain.guiOpensNewDraftDeckDialog();
+            newDraftDeckDialog.tidyUp();
+            newDraftDeckDialog.setVisible(true);
+        });
 
         JButton otherButton = new JButton("Something else");
         buttonPanel.add(otherButton);
@@ -156,5 +160,13 @@ public class Face extends JFrame{
 
     public void addFilterToFilterList(CardFilter newCardFilter) {
         newDraftDeckDialog.addFilterToFilterList(newCardFilter);
+    }
+
+    public void updateDraftDeckLog(String newLabel) {
+        newDraftDeckDialog.updateDraftDeckLog(newLabel);
+    }
+
+    public void updateDraftDeckSize(int newSize) {
+        newDraftDeckDialog.updateDraftDeckSize(newSize);
     }
 }
