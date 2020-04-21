@@ -144,4 +144,12 @@ public class Drafter {
             filter(filter);
         }
     }
+
+    public int getCardsFilteredByFilterList() {
+        CardBox newCardBox = new CardBox(ownedCardBox);
+        for (CardFilter filter : filterList) {
+            newCardBox.filter(filter);
+        }
+        return newCardBox.getCards().size();
+    }
 }

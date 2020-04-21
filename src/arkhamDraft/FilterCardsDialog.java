@@ -13,6 +13,7 @@ public class FilterCardsDialog extends JDialog {
     private JComboBox<String> relatorSelector;
     private HintTextField valueSelector;
     private JButton addFilterButton;
+    private JLabel currentCardsFilteredLabel;
 
     public FilterCardsDialog(Brain brain) {
         super();
@@ -45,6 +46,9 @@ public class FilterCardsDialog extends JDialog {
             valueSelector.resetToHint();
             this.dispose();
         }));
+
+        currentCardsFilteredLabel = new JLabel("Picked up all cards.");
+        add(currentCardsFilteredLabel);
     }
 
     private Component initializeFilterList() {
@@ -133,5 +137,10 @@ public class FilterCardsDialog extends JDialog {
 
     public void tidyUp() {
         filterListModel.removeAllElements();
+        currentCardsFilteredLabel.setText("Picked up all cards.");
+    }
+
+    public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
+        currentCardsFilteredLabel.setText(String.format("%d cards left.", cardsFilteredByFilterListSize));
     }
 }

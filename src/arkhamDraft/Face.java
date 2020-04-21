@@ -169,4 +169,8 @@ public class Face extends JFrame{
     public void updateDraftDeckSize(int newSize) {
         newDraftDeckDialog.updateDraftDeckSize(newSize);
     }
+
+    public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
+        newDraftDeckDialog.updateCurrentCardsFiltered(cardsFilteredByFilterListSize);
+    }
 }

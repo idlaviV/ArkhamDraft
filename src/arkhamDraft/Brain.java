@@ -412,6 +412,7 @@ public class Brain {
         }
         drafter.addToFilterList(newCardFilter);
         face.addFilterToFilterList(newCardFilter);
+        face.updateCurrentCardsFiltered(drafter.getCardsFilteredByFilterList());
     }
 
     public void guiEntersFilterCardsDialog() {

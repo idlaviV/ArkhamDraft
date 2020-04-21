@@ -74,4 +74,8 @@ public class NewDraftDeckDialog extends JDialog {
     public void updateDraftDeckSize(int newSize) {
         draftDeckSizeLabel.setText(String.format("Draft deck contains %d cards.", newSize));
     }
+
+    public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
+        filterCardsDialog.updateCurrentCardsFiltered(cardsFilteredByFilterListSize);
+    }
 }
