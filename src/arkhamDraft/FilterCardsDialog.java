@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 public class FilterCardsDialog extends JDialog {
     private Brain brain;
-    private DefaultListModel<CardFilter> filterListModel;
+    //private DefaultListModel<CardFilter> filterListModel;
+    private DeposableFilterList filterList;
     private JComboBox<String> attributeSelector;
     private JComboBox<String> relatorSelector;
     private HintTextField valueSelector;
@@ -52,11 +53,12 @@ public class FilterCardsDialog extends JDialog {
     }
 
     private Component initializeFilterList() {
-        filterListModel = new DefaultListModel<>();
-        JList<CardFilter> filterList = new JList<>(filterListModel);
-        filterList.setVisibleRowCount(0);
+        filterList = new DeposableFilterList();
+        //filterListModel = new DefaultListModel<>();
+        //JList<CardFilter> filterList = new JList<>(filterListModel);
         //filterListModel.addElement(new CardFilter((card)->true, "null"));
-        return new JScrollPane(filterList);
+        //return new JScrollPane(filterList.getComponent());
+        return filterList.getComponent();
     }
 
     private Component initializeFilterMenu() {
@@ -132,11 +134,12 @@ public class FilterCardsDialog extends JDialog {
     });
 
     public void addFilterToFilterList(CardFilter newCardFilter) {
-        filterListModel.addElement(newCardFilter);
+            filterList.addCardFilter(newCardFilter);
+            revalidate();
     }
 
     public void tidyUp() {
-        filterListModel.removeAllElements();
+        filterList.clearList();
         currentCardsFilteredLabel.setText("Picked up all cards.");
     }
 
