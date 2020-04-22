@@ -152,4 +152,8 @@ public class Drafter {
         }
         return newCardBox.getCards().size();
     }
+
+    public void removeCardFilterFromList(CardFilter cardFilter) {
+        filterList.remove(cardFilter);
+    }
 }

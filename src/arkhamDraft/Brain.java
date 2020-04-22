@@ -435,4 +435,9 @@ public class Brain {
     public void GUIFinalizeDraftDeck() {
         drafter.finalizeDraft();
     }
+
+    public void removeCardFilterFromList(CardFilter cardFilter) {
+        drafter.removeCardFilterFromList(cardFilter);
+        face.updateCurrentCardsFiltered(drafter.getCardsFilteredByFilterList());
+    }
 }

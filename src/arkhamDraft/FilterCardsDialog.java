@@ -53,7 +53,7 @@ public class FilterCardsDialog extends JDialog {
     }
 
     private Component initializeFilterList() {
-        filterList = new DeposableFilterList();
+        filterList = new DeposableFilterList(this);
         //filterListModel = new DefaultListModel<>();
         //JList<CardFilter> filterList = new JList<>(filterListModel);
         //filterListModel.addElement(new CardFilter((card)->true, "null"));
@@ -145,5 +145,11 @@ public class FilterCardsDialog extends JDialog {
 
     public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
         currentCardsFilteredLabel.setText(String.format("%d cards left.", cardsFilteredByFilterListSize));
+    }
+
+    public void removeCardFilterFromList(CardFilter cardFilter) {
+        brain.removeCardFilterFromList(cardFilter);
+        revalidate();
+        repaint();
     }
 }
