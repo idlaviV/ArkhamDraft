@@ -1,7 +1,5 @@
 package arkhamDraft;
 
-import sun.plugin.javascript.JSContext;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -36,7 +34,6 @@ public class NewDraftDeckDialog extends JDialog {
         draftDeckLog = new JTextArea("Created empty draft deck.", 5, 20);
         JScrollPane draftDeckLogScrollPane = new JScrollPane(draftDeckLog);
         draftDeckLogScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        //draftDeckLogScrollPane.setPreferredSize(new Dimension(250, 5*draftDeckLog.getFont().getSize()));
         currentDraftDeckPanel.add(draftDeckLogScrollPane);
         draftDeckLog.setBackground(this.getBackground());
 
@@ -52,9 +49,8 @@ public class NewDraftDeckDialog extends JDialog {
         JButton finalizeDraftDeckButton = new JButton("Finalize");
         add(finalizeDraftDeckButton);
         finalizeDraftDeckButton.addActionListener(e -> {
-            brain.GUIFinalizeDraftDeck();
+            brain.guiFinalizeDraftDeck();
             dispose();});
-
     }
 
     public void addFilterToFilterList(CardFilter newCardFilter) {

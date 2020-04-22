@@ -60,8 +60,11 @@ public class Drafter {
     }
 
     public Deck draftCards(int number) {
-        draftedCards = new Deck();
-        draftedCards.addCards(draftingBox.draftCards(number));
+        ArrayList<Card> newCards = draftingBox.draftCards(number);
+        if (!newCards.isEmpty()) {
+            draftedCards = new Deck();
+        }
+        draftedCards.addCards(newCards);
         return draftedCards;
     }
 

@@ -432,8 +432,13 @@ public class Brain {
         startDraft();
     }
 
-    public void GUIFinalizeDraftDeck() {
+    public void guiFinalizeDraftDeck() {
         drafter.finalizeDraft();
+    }
+
+    public void guiDraftCards(int amount) {
+        drafter.draftCards(amount);
+        face.printCardsToDraftPanel(drafter.getDraftedCards());
     }
 
     public void removeCardFilterFromList(CardFilter cardFilter) {

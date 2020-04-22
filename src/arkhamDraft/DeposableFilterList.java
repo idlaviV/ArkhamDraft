@@ -24,7 +24,9 @@ public class DeposableFilterList {
         tableModel.setColumnCount(2);
         guiList = new JTable(tableModel);
         guiList.getColumnModel().getColumn(1).setCellRenderer(new DeposableFilterListRenderer());
-        guiList.setLayout(new BoxLayout(guiList, BoxLayout.Y_AXIS));
+        guiList.setTableHeader(null);
+        guiList.getColumnModel().getColumn(0).setPreferredWidth(300);
+        guiList.getColumnModel().getColumn(1).setPreferredWidth(50);
         guiList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -38,10 +40,8 @@ public class DeposableFilterList {
     }
 
     public void addCardFilter(CardFilter cardFilter) {
-        //guiList.removeAll();
         filters.add(cardFilter);
         tableModel.addRow(new Object[]{cardFilter.toString(), newPanel(cardFilter)});
-        //guiList.add(newPanel(cardFilter));
 
     }
 
@@ -49,9 +49,6 @@ public class DeposableFilterList {
         parentDialog.removeCardFilterFromList(filters.get(index));
         filters.remove(index);
         tableModel.removeRow(index);
-        //for (CardFilter filter : filters) {
-        //    guiList.add(newPanel(filter));
-        //}
         repaint();
     }
 

@@ -118,6 +118,16 @@ public class Face extends JFrame{
         draftedCardsList = new CardCheckBoxList();
         JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
         draftedCardsPanel.add(draftScrollPane);
+
+        JPanel draftButtonPanel = new JPanel();
+        JButton draftCardsButton = new JButton("Draft");
+        draftButtonPanel.add(draftCardsButton);
+        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(3,1,100,1);
+        draftButtonPanel.add(new JSpinner(spinnerModel));
+        draftCardsButton.addActionListener(e -> {
+            brain.guiDraftCards((int) spinnerModel.getNumber());
+        });
+        draftedCardsPanel.add(draftButtonPanel);
         return draftedCardsPanel;
     }
 
