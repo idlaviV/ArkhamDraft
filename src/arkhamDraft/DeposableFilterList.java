@@ -1,6 +1,8 @@
 package arkhamDraft;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
@@ -23,6 +25,16 @@ public class DeposableFilterList {
         guiList = new JTable(tableModel);
         guiList.getColumnModel().getColumn(1).setCellRenderer(new DeposableFilterListRenderer());
         guiList.setLayout(new BoxLayout(guiList, BoxLayout.Y_AXIS));
+        guiList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (guiList.getSelectedRow()>-1) {
+                    if (guiList.getSelectedColumn() == 1) {
+                        removeCardFilterFromList(guiList.getSelectedRow());
+                    }
+                }
+            }
+        });
     }
 
     public void addCardFilter(CardFilter cardFilter) {
@@ -33,10 +45,9 @@ public class DeposableFilterList {
 
     }
 
-    private void removeCardFilterFromList(CardFilter cardFilter) {
-        parentDialog.removeCardFilterFromList(cardFilter);
-        int index = filters.indexOf(cardFilter);
-        filters.remove(cardFilter);
+    private void removeCardFilterFromList(int index) {
+        parentDialog.removeCardFilterFromList(filters.get(index));
+        filters.remove(index);
         tableModel.removeRow(index);
         //for (CardFilter filter : filters) {
         //    guiList.add(newPanel(filter));
@@ -48,9 +59,6 @@ public class DeposableFilterList {
         JPanel newPanel = new JPanel();
         newPanel.add(new JLabel(cardFilter.toString()));
         JButton newButton = new JButton("Remove");
-        newButton.addActionListener(e -> {
-            removeCardFilterFromList(cardFilter);
-        });
         newPanel.add(newButton);
         newPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         return newPanel;
