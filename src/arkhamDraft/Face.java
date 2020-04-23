@@ -7,11 +7,13 @@ import java.util.Objects;
 
 public class Face extends JFrame{
     private JPanel mainPanel;
+    private JPanel draftPanel;
     private CardCheckBoxList deckList;
     private CardCheckBoxList sideboardList;
     private CardCheckBoxList draftedCardsList;
     private final Brain brain;
     private NewDraftDeckDialog newDraftDeckDialog;
+    EverythingDisablerAndReenabler draftEnabler;
 
     public Face(Brain brain) {
         super();
@@ -52,11 +54,13 @@ public class Face extends JFrame{
         mainPanel.add(initializeDraftPanel(), gbc);
 
         add(mainPanel);
+        draftEnabler = new EverythingDisablerAndReenabler(draftPanel, null);
+        draftEnabler.disable();
         setVisible(true);
     }
 
     private Component initializeDraftPanel() {
-        JPanel draftPanel = new JPanel();
+        draftPanel = new JPanel();
         draftPanel.setLayout(new GridBagLayout());
         draftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         GridBagConstraints gbcDraftPanel = new GridBagConstraints();
@@ -182,5 +186,13 @@ public class Face extends JFrame{
 
     public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
         newDraftDeckDialog.updateCurrentCardsFiltered(cardsFilteredByFilterListSize);
+    }
+
+    public void enableDraftPanel(boolean b) {
+        if (b) {
+            draftEnabler.reenable();
+        } else {
+            draftEnabler.disable();
+        }
     }
 }

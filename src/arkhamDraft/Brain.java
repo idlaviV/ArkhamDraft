@@ -22,7 +22,8 @@ public class Brain {
     public static final String ANSI_MULTICLASS = "\u001B[90m";
     public static final String ANSI_WHITE = "\u001B[37m";
     private Scanner scanner;
-    private Face face;
+    private final Face face;
+    private boolean draftEnabled = false;
 
 
     public Brain(SettingsManager settingsManager) {
@@ -434,6 +435,11 @@ public class Brain {
 
     public void guiFinalizeDraftDeck() {
         drafter.finalizeDraft();
+        if (!draftEnabled) {
+            face.enableDraftPanel(true);
+            draftEnabled = true;
+        }
+        face.printCardsToDraftPanel(drafter.getDraftedCards());
     }
 
     public void guiDraftCards(int amount) {
