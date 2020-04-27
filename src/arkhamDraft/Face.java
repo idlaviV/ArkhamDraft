@@ -2,6 +2,8 @@ package arkhamDraft;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Objects;
 
 
@@ -14,6 +16,7 @@ public class Face extends JFrame{
     private final Brain brain;
     private NewDraftDeckDialog newDraftDeckDialog;
     EverythingDisablerAndReenabler draftEnabler;
+
 
     public Face(Brain brain) {
         super();
@@ -123,6 +126,11 @@ public class Face extends JFrame{
         JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
         draftedCardsPanel.add(draftScrollPane);
 
+        draftedCardsPanel.add(initializeDraftActionsPanel());
+        return draftedCardsPanel;
+    }
+
+    private Component initializeDraftActionsPanel() {
         JPanel draftButtonPanel = new JPanel();
         JButton draftCardsButton = new JButton("Draft");
         draftButtonPanel.add(draftCardsButton);
@@ -131,8 +139,26 @@ public class Face extends JFrame{
         draftCardsButton.addActionListener(e -> {
             brain.guiDraftCards((int) spinnerModel.getNumber());
         });
-        draftedCardsPanel.add(draftButtonPanel);
-        return draftedCardsPanel;
+
+        JPanel otherButtonsPanel = new JPanel();
+        JButton redraftButton = new JButton("Redraft");
+        JButton addButton = new JButton("Add");
+        JButton addSideboardButton = new JButton("To Sideboard");
+        otherButtonsPanel.add(redraftButton);
+        otherButtonsPanel.add(addButton);
+        otherButtonsPanel.add(addSideboardButton);
+
+        redraftButton.addActionListener(e -> EventQueue.invokeLater(() -> brain.guiRedraft(draftedCardsList.getCheckedCards())));
+        addButton.addActionListener(e -> EventQueue.invokeLater(()-> brain.guiAddToDeck(draftedCardsList.getCheckedCards())));
+        addSideboardButton.addActionListener(e -> EventQueue.invokeLater(() -> brain.guiAddToSideboard(draftedCardsList.getCheckedCards())));
+
+        JPanel draftActionsPanel = new JPanel();
+        draftActionsPanel.setLayout(new BoxLayout(draftActionsPanel, BoxLayout.Y_AXIS));
+        draftButtonPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        otherButtonsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        draftActionsPanel.add(draftButtonPanel);
+        draftActionsPanel.add(otherButtonsPanel);
+        return draftActionsPanel;
     }
 
     private Component initializeDeckPanel(){

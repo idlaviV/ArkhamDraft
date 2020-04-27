@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,9 +46,20 @@ public class CardCheckBoxList extends JList<Card>
         newList[newList.length - 1] = card;
         jBoxStatus.put(card, false);
         setListData(newList);*/
-        listModel.addElement(card);
         jBoxStatus.put(card, false);
-        repaint();
+        listModel.addElement(card);
+        //repaint();
+    }
+
+    public ArrayList<Card> getCheckedCards() {
+        ArrayList<Card> checkedCards = new ArrayList<>();
+        for (int index = 0; index < listModel.getSize(); index++) {
+            Card currentCard = listModel.get(index);
+            if (jBoxStatus.get(currentCard)) {
+                checkedCards.add(currentCard);
+            }
+        }
+        return checkedCards;
     }
 
     public void clearList() {

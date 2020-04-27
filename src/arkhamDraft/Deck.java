@@ -106,4 +106,8 @@ public class Deck  {
         }
         return printInfo;
     }
+
+    public int getIndex(Card card) {
+        return physicalDeck.indexOf(card);
+    }
 }

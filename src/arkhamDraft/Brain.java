@@ -451,4 +451,27 @@ public class Brain {
         drafter.removeCardFilterFromList(cardFilter);
         face.updateCurrentCardsFiltered(drafter.getCardsFilteredByFilterList());
     }
+
+    public void guiRedraft(ArrayList<Card> checkedCards) {
+        for (Card currentCard : checkedCards) {
+            drafter.redraftCard(currentCard);
+        }
+        face.printCardsToDraftPanel(drafter.getDraftedCards());
+    }
+
+    public void guiAddToDeck(ArrayList<Card> checkedCards) {
+        for (Card currentCard : checkedCards) {
+            drafter.addCardToDeck(currentCard);
+        }
+        face.printCardsToDraftPanel(drafter.getDraftedCards());
+        face.printCardsToDeckPanel(drafter.getDraftedDeck());
+    }
+
+    public void guiAddToSideboard(ArrayList<Card> checkedCards) {
+        for (Card currentCard : checkedCards) {
+            drafter.addCardToSideboard(currentCard);
+        }
+        face.printCardsToDraftPanel(drafter.getDraftedCards());
+        face.printCardsToSideboardPanel(drafter.getSideboard());
+    }
 }

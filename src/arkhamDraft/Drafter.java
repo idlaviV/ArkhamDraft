@@ -80,12 +80,33 @@ public class Drafter {
         return draftedCards;
     }
 
+    public Deck redraftCard(Card card) {
+        int index = draftedCards.getIndex(card);
+        if (index > -1) {
+            List<Card> cards = draftingBox.draftCards(1);
+            if (!cards.isEmpty()) {
+                draftedCards.setCard(index, cards.get(0));
+            } else {
+                System.out.println("There are no cards in the draft deck left for redraft.");
+            }
+        }
+        return draftedCards;
+    }
+
     public boolean addCardToDeck(int index) {
         return addCardFromDeckToDeck(draftedCards, draftedDeck, index);
     }
 
+    public boolean addCardToDeck(Card card) {
+        return addCardFromDeckToDeck(draftedCards, draftedDeck, card);
+    }
+
     public boolean addCardToSideboard(int index) {
         return addCardFromDeckToDeck(draftedCards, sideboard, index);
+    }
+
+    public boolean addCardToSideboard(Card card) {
+        return addCardFromDeckToDeck(draftedCards, sideboard, card);
     }
 
     public boolean addCardToDeckFromSideboard(int index) {
@@ -97,6 +118,18 @@ public class Drafter {
             toDeck.addCard(fromDeck.getCard(index));
             fromDeck.setCard(index, Card.nullCard);
             return true;
+        }
+        return false;
+    }
+
+    public boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, Card card) {
+        int index = draftedCards.getIndex(card);
+        if (index > -1) {
+            if (index < fromDeck.getSize() && fromDeck.getCard(index) != null && !fromDeck.getCard(index).equals(Card.nullCard)) {
+                toDeck.addCard(fromDeck.getCard(index));
+                fromDeck.setCard(index, Card.nullCard);
+                return true;
+            }
         }
         return false;
     }
@@ -159,4 +192,6 @@ public class Drafter {
     public void removeCardFilterFromList(CardFilter cardFilter) {
         filterList.remove(cardFilter);
     }
+
+
 }

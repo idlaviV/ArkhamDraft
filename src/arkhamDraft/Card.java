@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 
 public class Card {
-    public static Card nullCard = new Card("", "", "", "", false, "", "", "", null, 0);
+    public static Card nullCard = new Card("", "", "", "", false, "0000", "", "", null, 0);
     private String pack_code;
     private String pack_name;
     private String type_code;
