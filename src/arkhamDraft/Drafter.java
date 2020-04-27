@@ -6,14 +6,16 @@ import java.util.List;
 
 
 public class Drafter {
-    private DraftingBox draftingBox = new DraftingBox();
-    private CardBox ownedCardBox;
-    private CardBox filteredCardBox;
+    private CardBox ownedCardBox; //all cards the drafter knows of
+    private CardBox filteredCardBox; //can be filtered by the user, can be added to the draftingBox, only used by console
+    private DraftingBox draftingBox = new DraftingBox(); //Box of cards which can be drafted from
+
     private Deck draftedCards = new Deck();
     private Deck draftedDeck = new Deck();
     private Deck sideboard = new Deck();
+
     private boolean secondCore;
-    private ArrayList<CardFilter> filterList = new ArrayList<>();
+    private ArrayList<CardFilter> filterList = new ArrayList<>(); //only used by gui
 
     public Drafter(CardBox ownedCardBox, boolean secondCore) {
         this.ownedCardBox = ownedCardBox;
@@ -25,34 +27,17 @@ public class Drafter {
         filterList = new ArrayList<>();
     }
 
-    public boolean filter(CardFilter cardFilter){
+    public void filter(CardFilter cardFilter){
         if (filteredCardBox == null) {
-            return false;
+            System.err.println("FilteredCardBox is null");
         } else {
             filteredCardBox.filter(cardFilter);
-            return true;
         }
     }
 
     public void addCards(){
         draftingBox.addCards(filteredCardBox);
         filteredCardBox = null;
-    }
-
-    public int getDraftingBoxSize() {
-        return draftingBox.getCards().size();
-    }
-
-    public int getPhysicalDraftingBoxSize() {
-        return draftingBox.getPhysicalDraftingBoxSize();
-    }
-
-    public int getFilteredBoxSize(){
-        if (filteredCardBox == null) {
-            return -1;
-        } else {
-            return filteredCardBox.getCards().size();
-        }
     }
 
     public void clear(){
@@ -63,8 +48,8 @@ public class Drafter {
         ArrayList<Card> newCards = draftingBox.draftCards(number);
         if (!newCards.isEmpty()) {
             draftedCards = new Deck();
+            draftedCards.addCards(newCards);
         }
-        draftedCards.addCards(newCards);
         return draftedCards;
     }
 
@@ -81,16 +66,15 @@ public class Drafter {
     }
 
     public Deck redraftCard(Card card) {
-        int index = draftedCards.getIndex(card);
-        if (index > -1) {
-            List<Card> cards = draftingBox.draftCards(1);
-            if (!cards.isEmpty()) {
-                draftedCards.setCard(index, cards.get(0));
-            } else {
-                System.out.println("There are no cards in the draft deck left for redraft.");
-            }
-        }
-        return draftedCards;
+        return redraftCard(draftedCards.getIndex(card));
+    }
+
+    public void finalizeDraft() {
+        draftingBox.finalizeDraft(secondCore);
+    }
+
+    public void discardDraftingBox() {
+        draftingBox = new DraftingBox();
     }
 
     public boolean addCardToDeck(int index) {
@@ -117,7 +101,7 @@ public class Drafter {
         return addCardFromDeckToDeck(sideboard, draftedDeck, card);
     }
 
-    public boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, int index) {
+    private boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, int index) {
         if (index < fromDeck.getSize() && index >= 0 && fromDeck.getCard(index) != null && !fromDeck.getCard(index).equals(Card.nullCard)) {
             toDeck.addCard(fromDeck.getCard(index));
             fromDeck.setCard(index, Card.nullCard);
@@ -126,38 +110,10 @@ public class Drafter {
         return false;
     }
 
-    public boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, Card card) {
-        int index = fromDeck.getIndex(card);
-        if (index > -1) {
-            if (index < fromDeck.getSize() && fromDeck.getCard(index) != null && !fromDeck.getCard(index).equals(Card.nullCard)) {
-                toDeck.addCard(fromDeck.getCard(index));
-                fromDeck.setCard(index, Card.nullCard);
-                return true;
-            }
-        }
-        return false;
+    private boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, Card card) {
+        return addCardFromDeckToDeck(fromDeck, toDeck, fromDeck.getIndex(card));
     }
 
-
-    public void finalizeDraft() {
-        draftingBox.finalizeDraft(secondCore);
-    }
-
-    public void discardDraftingBox() {
-        draftingBox = new DraftingBox();
-    }
-
-    public Deck getDraftedCards() {
-        return draftedCards;
-    }
-
-    public Deck getDraftedDeck() {
-        return draftedDeck;
-    }
-
-    public Deck getSideboard() {
-        return sideboard;
-    }
 
     public boolean discardCardFromSideboard(int index) {
         if (index < sideboard.getSize() && index >= 0 && sideboard.getCard(index) != null) {
@@ -185,7 +141,7 @@ public class Drafter {
         }
     }
 
-    public int getCardsFilteredByFilterList() {
+    public int getNumberOfCardsLeftAfterFiltering() {
         CardBox newCardBox = new CardBox(ownedCardBox);
         for (CardFilter filter : filterList) {
             newCardBox.filter(filter);
@@ -197,5 +153,33 @@ public class Drafter {
         filterList.remove(cardFilter);
     }
 
+
+    public int getDraftingBoxSize() {
+        return draftingBox.getCards().size();
+    }
+
+    public int getPhysicalDraftingBoxSize() {
+        return draftingBox.getPhysicalDraftingBoxSize();
+    }
+
+    public int getFilteredBoxSize(){
+        if (filteredCardBox == null) {
+            return -1;
+        } else {
+            return filteredCardBox.getCards().size();
+        }
+    }
+
+    public Deck getDraftedCards() {
+        return draftedCards;
+    }
+
+    public Deck getDraftedDeck() {
+        return draftedDeck;
+    }
+
+    public Deck getSideboard() {
+        return sideboard;
+    }
 
 }

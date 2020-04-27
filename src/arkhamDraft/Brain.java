@@ -413,7 +413,7 @@ public class Brain {
         }
         drafter.addToFilterList(newCardFilter);
         face.addFilterToFilterList(newCardFilter);
-        face.updateCurrentCardsFiltered(drafter.getCardsFilteredByFilterList());
+        face.updateCurrentCardsFiltered(drafter.getNumberOfCardsLeftAfterFiltering());
     }
 
     public void guiEntersFilterCardsDialog() {
@@ -449,7 +449,7 @@ public class Brain {
 
     public void removeCardFilterFromList(CardFilter cardFilter) {
         drafter.removeCardFilterFromList(cardFilter);
-        face.updateCurrentCardsFiltered(drafter.getCardsFilteredByFilterList());
+        face.updateCurrentCardsFiltered(drafter.getNumberOfCardsLeftAfterFiltering());
     }
 
     public void guiRedraft(ArrayList<Card> checkedCards) {
