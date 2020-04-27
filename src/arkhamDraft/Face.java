@@ -189,12 +189,17 @@ public class Face extends JFrame{
 
     private Component initializeSideBoardPanel() {
         JPanel sideboardPanel = new JPanel();
+        JPanel sideboardButtonPanel = new JPanel();
+        JButton addFromSideBoardButton = new JButton("Add");
+        sideboardButtonPanel.add(addFromSideBoardButton);
+        addFromSideBoardButton.addActionListener(e -> EventQueue.invokeLater(() -> brain.guiAddFromSideboard(sideboardList.getCheckedCards())));
         sideboardPanel.setLayout(new BoxLayout(sideboardPanel, BoxLayout.PAGE_AXIS));
         sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         sideboardPanel.add(new JLabel("sideboard panel"));
         sideboardList = new CardCheckBoxList();
         JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
         sideboardPanel.add(sideboardScrollPane);
+        sideboardPanel.add(sideboardButtonPanel);
         return sideboardPanel;
     }
 

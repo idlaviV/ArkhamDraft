@@ -474,4 +474,12 @@ public class Brain {
         face.printCardsToDraftPanel(drafter.getDraftedCards());
         face.printCardsToSideboardPanel(drafter.getSideboard());
     }
+
+    public void guiAddFromSideboard(ArrayList<Card> checkedCards) {
+        for (Card currentCard : checkedCards) {
+            drafter.addCardToDeckFromSideboard(currentCard);
+        }
+        face.printCardsToDeckPanel(drafter.getDraftedDeck());
+        face.printCardsToSideboardPanel(drafter.getSideboard());
+    }
 }

@@ -113,6 +113,10 @@ public class Drafter {
         return addCardFromDeckToDeck(sideboard, draftedDeck, index);
     }
 
+    public boolean addCardToDeckFromSideboard(Card card) {
+        return addCardFromDeckToDeck(sideboard, draftedDeck, card);
+    }
+
     public boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, int index) {
         if (index < fromDeck.getSize() && index >= 0 && fromDeck.getCard(index) != null && !fromDeck.getCard(index).equals(Card.nullCard)) {
             toDeck.addCard(fromDeck.getCard(index));
@@ -123,7 +127,7 @@ public class Drafter {
     }
 
     public boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, Card card) {
-        int index = draftedCards.getIndex(card);
+        int index = fromDeck.getIndex(card);
         if (index > -1) {
             if (index < fromDeck.getSize() && fromDeck.getCard(index) != null && !fromDeck.getCard(index).equals(Card.nullCard)) {
                 toDeck.addCard(fromDeck.getCard(index));
