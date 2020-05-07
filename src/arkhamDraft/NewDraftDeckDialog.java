@@ -1,7 +1,9 @@
 package arkhamDraft;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class NewDraftDeckDialog extends JDialog {
     private final Brain brain;
@@ -51,6 +53,19 @@ public class NewDraftDeckDialog extends JDialog {
         finalizeDraftDeckButton.addActionListener(e -> {
             brain.guiFinalizeDraftDeck();
             dispose();});
+
+        JButton saveButton = new JButton();
+        try {
+            Image img = ImageIO.read(getClass().getResource("icons/actions-document-save-icon.png"));
+            saveButton.setIcon(new ImageIcon(img));
+            saveButton.setMargin(new Insets(0, 0, 0, 0));
+            saveButton.setBorder(null);
+            saveButton.setContentAreaFilled(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        add(saveButton);
+        saveButton.addActionListener(e->brain.guiSaveFilterList());
     }
 
     public void addFilterToFilterList(CardFilter newCardFilter) {

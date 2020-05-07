@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 public class CardBox {
     private Set<Card> cards = new HashSet<>();
 
+    private ArrayList<CardFilter> generatingFilters = new ArrayList<>();
+
     public CardBox(Card[] cards){
         this.cards = new HashSet<>(Arrays.asList(cards));
     }
@@ -35,6 +37,7 @@ public class CardBox {
     }
 
     public void filter(CardFilter cardFilter) {
+        generatingFilters.add(cardFilter);
         cards = cards.stream().filter(cardFilter::apply).collect(Collectors.toSet());
     }
 
@@ -75,5 +78,9 @@ public class CardBox {
             }
         }
         return physicalCards;
+    }
+
+    public ArrayList<CardFilter> getGeneratingFilters() {
+        return generatingFilters;
     }
 }

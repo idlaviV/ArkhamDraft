@@ -1,9 +1,9 @@
 package arkhamDraft;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -481,5 +481,30 @@ public class Brain {
         }
         face.printCardsToDeckPanel(drafter.getDraftedDeck());
         face.printCardsToSideboardPanel(drafter.getSideboard());
+    }
+
+    public void guiSaveFilterList() {
+        File directory = new File("cardFilter");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        long time = new Date().getTime();
+        Timestamp ts = new Timestamp(time);
+        File saveFile = new File(String.format("cardFilter/%d.txt", time));
+        try {
+            saveFile.createNewFile();
+            FileWriter fw = new FileWriter(saveFile);
+            ArrayList<ArrayList<CardFilter>> filterListAll = drafter.getCardFilterOfDraftingBox();
+            for (ArrayList<CardFilter> filterList : filterListAll) {
+                for (CardFilter filter : filterList) {
+                    fw.write(filter.toString() + "\n");
+                }
+                fw.write("=====\n");
+            }
+            fw.close();
+        }  catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

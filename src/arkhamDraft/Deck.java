@@ -8,9 +8,11 @@ public class Deck  {
 
     private ArrayList<Card> physicalDeck = new ArrayList<>();
 
+
     public Deck() {
         physicalDeck = new ArrayList<>();
     }
+
 
     public Deck(ArrayList<Card> physicalDeck) {
         this.physicalDeck = physicalDeck;

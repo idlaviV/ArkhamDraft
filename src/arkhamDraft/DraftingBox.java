@@ -6,12 +6,15 @@ import java.util.Random;
 public class DraftingBox extends CardBox {
 
     private ArrayList<Card> physicalDraftingBox = new ArrayList<>();
+    private ArrayList<ArrayList<CardFilter>> generatingFilters = new ArrayList<>();
+
 
     public DraftingBox() {
         super(new Card[0]);
     }
 
     public void addCards(CardBox filteredCardBox) {
+        generatingFilters.add(filteredCardBox.getGeneratingFilters());
         getCards().addAll(filteredCardBox.getCards());
     }
 
@@ -39,5 +42,9 @@ public class DraftingBox extends CardBox {
             }
         }
         return draftedCards;
+    }
+
+    public ArrayList<ArrayList<CardFilter>> getAllGeneratingFilters() {
+        return generatingFilters;
     }
 }

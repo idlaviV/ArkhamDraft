@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HintTextField extends JTextField {
+
+    private final String _hint;
+    private Graphics g;
+
     public HintTextField(String hint, int columns) {
         super();
         super.setColumns(columns);
@@ -14,8 +18,6 @@ public class HintTextField extends JTextField {
         super.paint(g);
         setHintIfEmpty(g);
     }
-    private final String _hint;
-    private Graphics g;
 
     public void resetToHint() {
         setText("");

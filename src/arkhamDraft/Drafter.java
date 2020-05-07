@@ -182,4 +182,8 @@ public class Drafter {
         return sideboard;
     }
 
+    public ArrayList<ArrayList<CardFilter>> getCardFilterOfDraftingBox() {
+        return draftingBox.getAllGeneratingFilters();
+    }
+
 }

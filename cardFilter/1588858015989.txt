@@ -1,0 +1,9 @@
+XP=0
+Faction:[rogue]
+=====
+XP=4
+Type:[skill]
+XP>2
+=====
+Trait:[insight]
+=====
