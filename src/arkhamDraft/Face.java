@@ -203,6 +203,14 @@ public class Face extends JFrame{
         return sideboardPanel;
     }
 
+    public void enableDraftPanel(boolean b) {
+        if (b) {
+            draftEnabler.reenable();
+        } else {
+            draftEnabler.disable();
+        }
+    }
+
     public void addFilterToFilterList(CardFilter newCardFilter) {
         newDraftDeckDialog.addFilterToFilterList(newCardFilter);
     }
@@ -217,14 +225,6 @@ public class Face extends JFrame{
 
     public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
         newDraftDeckDialog.updateCurrentCardsFiltered(cardsFilteredByFilterListSize);
-    }
-
-    public void enableDraftPanel(boolean b) {
-        if (b) {
-            draftEnabler.reenable();
-        } else {
-            draftEnabler.disable();
-        }
     }
 
     public void draftingBoxWasDiscarded() {

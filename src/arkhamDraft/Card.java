@@ -1,6 +1,8 @@
 package arkhamDraft;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.function.BiFunction;
 
 public class Card {
@@ -386,4 +388,26 @@ public class Card {
         return returnString;
     }
 
+    public Color getGUIColor() {
+        if (getFaction_code().size() != 1 ) {
+            return Color.ORANGE;
+        } else {
+            switch (getFaction_code().get(0)) {
+                case "guardian":
+                    return Color.BLUE;
+                case "seeker":
+                    return Color.YELLOW;
+                case "rogue":
+                    return Color.GREEN;
+                case "survivor":
+                    return Color.RED;
+                case "mystic":
+                    return Color.MAGENTA;
+                case "neutral":
+                    return Color.WHITE;
+                default:
+                    return Color.WHITE;
+            }
+        }
+    }
 }
