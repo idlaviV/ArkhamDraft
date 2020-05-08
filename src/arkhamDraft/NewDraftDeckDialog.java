@@ -6,8 +6,6 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Date;
 
 public class NewDraftDeckDialog extends JDialog {
     private final Brain brain;
@@ -57,7 +55,9 @@ public class NewDraftDeckDialog extends JDialog {
         add(initializeFinalizeDraftDeckButton());
         add(initializeSaveButton());
         add(initializeLoadButton());
+        add(initializeDeleteButton());
     }
+
 
     private Component initializeFinalizeDraftDeckButton() {
         JButton finalizeDraftDeckButton = new JButton("Finalize");
@@ -135,6 +135,23 @@ public class NewDraftDeckDialog extends JDialog {
         return loadButton;
     }
 
+    private Component initializeDeleteButton() {
+        JButton deleteButton = new JButton();
+        try {
+            Image img = ImageIO.read(getClass().getResource("icons/actions-edit-delete-icon.png"));
+            deleteButton.setIcon(new ImageIcon(img));
+            deleteButton.setMargin(new Insets(0, 0, 0, 0));
+            deleteButton.setBorder(null);
+            deleteButton.setContentAreaFilled(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        deleteButton.addActionListener(e->{
+            brain.guiDeleteDeck();
+        });
+        return deleteButton;
+    }
+
     public void addFilterToFilterList(CardFilter newCardFilter) {
         filterCardsDialog.addFilterToFilterList(newCardFilter);
     }
@@ -155,5 +172,10 @@ public class NewDraftDeckDialog extends JDialog {
 
     public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
         filterCardsDialog.updateCurrentCardsFiltered(cardsFilteredByFilterListSize);
+    }
+
+    public void draftingBoxWasDiscarded() {
+        draftDeckLog.setText(String.format("%s\n%s\n%s", draftDeckLog.getText(), "Discarded all cards.","Created new empty draft deck."));
+        draftDeckSizeLabel.setText("Draft deck is empty.");
     }
 }

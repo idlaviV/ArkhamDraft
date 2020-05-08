@@ -534,4 +534,9 @@ public class Brain {
             e.printStackTrace();
         }
     }
+
+    public void guiDeleteDeck() {
+        drafter.discardDraftingBox();
+        face.draftingBoxWasDiscarded();
+    }
 }

@@ -226,4 +226,8 @@ public class Face extends JFrame{
             draftEnabler.disable();
         }
     }
+
+    public void draftingBoxWasDiscarded() {
+        newDraftDeckDialog.draftingBoxWasDiscarded();
+    }
 }
