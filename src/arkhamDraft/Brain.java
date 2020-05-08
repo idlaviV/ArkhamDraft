@@ -2,11 +2,8 @@ package arkhamDraft;
 
 import javax.swing.*;
 import java.io.*;
-import java.util.Date;
+import java.util.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
 
 public class Brain {
     private Drafter drafter;
@@ -492,14 +489,20 @@ public class Brain {
         Timestamp ts = new Timestamp(time);
         File saveFile = new File(String.format("cardFilter/%d.txt", time));
         try {
-            saveFile.createNewFile();
+            if(!saveFile.createNewFile()){
+                System.out.println("Problem with file");
+            }
             FileWriter fw = new FileWriter(saveFile);
             ArrayList<ArrayList<CardFilter>> filterListAll = drafter.getCardFilterOfDraftingBox();
-            for (ArrayList<CardFilter> filterList : filterListAll) {
+            Iterator<ArrayList<CardFilter>> iterator = filterListAll.iterator();
+            while(iterator.hasNext()) {
+                ArrayList<CardFilter> filterList = iterator.next();
                 for (CardFilter filter : filterList) {
                     fw.write(filter.toString() + "\n");
                 }
-                fw.write("=====\n");
+                if (iterator.hasNext()) {
+                    fw.write("=====\n");
+                }
             }
             fw.close();
         }  catch (IOException e) {

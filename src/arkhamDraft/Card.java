@@ -198,19 +198,19 @@ public class Card {
         switch (attribute){
             case "faction":
             case "Faction":
-                return new CardFilter((card) -> relator.apply(card.getFaction_code(),values), String.format("Faction%s%s", relatorString, values));
+                return new CardFilter((card) -> relator.apply(card.getFaction_code(),values), String.format("Faction%s%s", relatorString, rewriteValues(values)));
             case "trait":
             case "Trait":
-                return new CardFilter((card) -> relator.apply(card.getTraits(),values), String.format("Trait%s%s", relatorString, values));
+                return new CardFilter((card) -> relator.apply(card.getTraits(),values), String.format("Trait%s%s", relatorString, rewriteValues(values)));
             case "pack":
             case "Pack":
-                return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getPack()),values), String.format("Pack%s%s", relatorString, values));
+                return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getPack()),values), String.format("Pack%s%s", relatorString, rewriteValues(values)));
             case "type":
             case "Type":
-                return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getType()),values), String.format("Type%s%s", relatorString, values));
+                return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getType()),values), String.format("Type%s%s", relatorString, rewriteValues(values)));
             case "text":
             case "Text":
-                return new CardFilter((card) -> values.stream().anyMatch(value -> card.getText() != null && card.getText().contains(value)), String.format("Text", relatorString, values));
+                return new CardFilter((card) -> values.stream().anyMatch(value -> card.getText() != null && card.getText().contains(value)), String.format("Text", relatorString, rewriteValues(values)));
             default:
                 return nullFilter;
         }
@@ -372,6 +372,18 @@ public class Card {
         // typecast o to Complex so that we can compare data members
         Card c = (Card) o;
         return codeComp.compare(this, c) == 0;
+    }
+
+    private static String rewriteValues(List<String> values) {
+        String returnString = "";
+        Iterator<String> iterator = values.iterator();
+        while(iterator.hasNext()) {
+            returnString += iterator.next();
+            if (iterator.hasNext()) {
+                returnString += ", ";
+            }
+        }
+        return returnString;
     }
 
 }
