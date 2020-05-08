@@ -274,29 +274,33 @@ public class Brain {
                     //TODO: Help should be improved.
                     break;
                 default :
-                    ArrayList<String> arguments = Decoder.watchFilterInputDecrypter(input);
-                    switch (arguments.get(0)) {
-                        case "containsFilter":
-                            drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size()), arguments.get(1)));
-                            System.out.println(String.format("%d cards left.",drafter.getFilteredBoxSize()));
-                            break;
-                        case "numericalFilter":
-                            try {
-                                int value = Integer.parseInt(arguments.get(3));
-                                drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getNumericalRelator(arguments.get(1)), value, arguments.get(1)));
-                                System.out.println(String.format("%d cards left.", drafter.getFilteredBoxSize()));
-                            } catch (NumberFormatException e) {
-                                System.out.println("Error: value of filter is not an integer.");
-                            }
-                            break;
-                        default:
-                            notWellFormatted();
-                    }
+                    generateFilter(input);
             }
         }
         int preAdd = drafter.getDraftingBoxSize();
         drafter.addCards();
         System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.", drafter.getDraftingBoxSize() - preAdd));
+    }
+
+    private void generateFilter(String input) {
+        ArrayList<String> arguments = Decoder.watchFilterInputDecrypter(input);
+        switch (arguments.get(0)) {
+            case "containsFilter":
+                drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size()), arguments.get(1)));
+                System.out.println(String.format("%d cards left.",drafter.getFilteredBoxSize()));
+                break;
+            case "numericalFilter":
+                try {
+                    int value = Integer.parseInt(arguments.get(3));
+                    drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getNumericalRelator(arguments.get(1)), value, arguments.get(1)));
+                    System.out.println(String.format("%d cards left.", drafter.getFilteredBoxSize()));
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: value of filter is not an integer.");
+                }
+                break;
+            default:
+                notWellFormatted();
+        }
     }
 
     private void startDraft() {
@@ -419,6 +423,10 @@ public class Brain {
 
     public void guiLeavesFilterCardsDialog() {
         drafter.applyFilterList();
+        guiAddCards();
+    }
+
+    private void guiAddCards() {
         int preAdd = drafter.getDraftingBoxSize();
         drafter.addCards();
         System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.", drafter.getDraftingBoxSize() - preAdd));
@@ -480,17 +488,11 @@ public class Brain {
         face.printCardsToSideboardPanel(drafter.getSideboard());
     }
 
-    public void guiSaveFilterList() {
-        File directory = new File("cardFilter");
-        if (!directory.exists()) {
-            directory.mkdir();
-        }
-        long time = new Date().getTime();
-        Timestamp ts = new Timestamp(time);
-        File saveFile = new File(String.format("cardFilter/%d.txt", time));
+    public void guiSaveFilterList(File saveFile) {
         try {
             if(!saveFile.createNewFile()){
-                System.out.println("Problem with file");
+                saveFile.delete();
+                saveFile.createNewFile();
             }
             FileWriter fw = new FileWriter(saveFile);
             ArrayList<ArrayList<CardFilter>> filterListAll = drafter.getCardFilterOfDraftingBox();
@@ -509,5 +511,27 @@ public class Brain {
             e.printStackTrace();
         }
 
+    }
+
+    public void guiLoadFilterList(File file) {
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+            drafter.initializeCardAddition();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                if (line.matches("=*")) {
+                    guiAddCards();
+                    drafter.initializeCardAddition();
+                } else {
+                    generateFilter(line);
+                }
+            }
+            guiAddCards();
+            reader.close();
+            fr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

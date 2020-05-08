@@ -2,14 +2,19 @@ package arkhamDraft;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class NewDraftDeckDialog extends JDialog {
     private final Brain brain;
     private JTextArea draftDeckLog;
     private JLabel draftDeckSizeLabel;
     private FilterCardsDialog filterCardsDialog;
+    private final JFileChooser fc = new JFileChooser();
 
     public NewDraftDeckDialog(Brain brain) {
         super();
@@ -48,12 +53,21 @@ public class NewDraftDeckDialog extends JDialog {
             filterCardsDialog.setVisible(true);
         });
 
+
+        add(initializeFinalizeDraftDeckButton());
+        add(initializeSaveButton());
+        add(initializeLoadButton());
+    }
+
+    private Component initializeFinalizeDraftDeckButton() {
         JButton finalizeDraftDeckButton = new JButton("Finalize");
-        add(finalizeDraftDeckButton);
         finalizeDraftDeckButton.addActionListener(e -> {
             brain.guiFinalizeDraftDeck();
             dispose();});
+        return finalizeDraftDeckButton;
+    }
 
+    private Component initializeSaveButton() {
         JButton saveButton = new JButton();
         try {
             Image img = ImageIO.read(getClass().getResource("icons/actions-document-save-icon.png"));
@@ -64,8 +78,61 @@ public class NewDraftDeckDialog extends JDialog {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        add(saveButton);
-        saveButton.addActionListener(e->brain.guiSaveFilterList());
+        saveButton.addActionListener(e->{
+            File directory = new File("cardFilter");
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            fc.setCurrentDirectory(directory);
+            int returnVal = fc.showOpenDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                String pathName = file.toPath().toString();
+                if (!pathName.endsWith(".txt")) {
+                    file = new File(pathName + ".txt");
+                }
+                brain.guiSaveFilterList(file);
+            }
+        });
+        return saveButton;
+    }
+
+    private Component initializeLoadButton() {
+        JButton loadButton = new JButton();
+        try {
+            Image img = ImageIO.read(getClass().getResource("icons/actions-document-open-folder-icon.png"));
+            loadButton.setIcon(new ImageIcon(img));
+            loadButton.setMargin(new Insets(0, 0, 0, 0));
+            loadButton.setBorder(null);
+            loadButton.setContentAreaFilled(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        loadButton.addActionListener(e->{
+            File directory = new File("cardFilter");
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            fc.setCurrentDirectory(directory);
+            fc.setAcceptAllFileFilterUsed(false);
+            fc.setFileFilter(new FileFilter() {
+                @Override
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt");
+                }
+
+                @Override
+                public String getDescription() {
+                    return "Text Files (*.txt)";
+                }
+            });
+            int returnVal = fc.showOpenDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                brain.guiLoadFilterList(file);
+            }
+        });
+        return loadButton;
     }
 
     public void addFilterToFilterList(CardFilter newCardFilter) {
