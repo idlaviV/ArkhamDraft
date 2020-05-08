@@ -78,10 +78,15 @@ public class CardCheckBoxList extends JList<Card>
                 JList<? extends Card> list, Card value, int index,
                 boolean isSelected, boolean cellHasFocus) {
             JCheckBox checkbox = new JCheckBox(value.getDraftInfo(false), jBoxStatus.get(value));
+            Color color = value.getGUIColor();
+            Color textColor = getForeground();
+            if (color.equals(Color.blue)) {
+                textColor = Color.white;
+            }
             checkbox.setBackground(isSelected ?
-                    getSelectionBackground() : value.getGUIColor());
+                    getSelectionBackground() : color);
             checkbox.setForeground(isSelected ?
-                    getSelectionForeground() : getForeground());
+                    getSelectionForeground() : textColor);
             checkbox.setEnabled(isEnabled());
             checkbox.setFont(getFont());
             checkbox.setFocusPainted(false);

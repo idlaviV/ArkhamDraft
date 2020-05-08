@@ -404,7 +404,6 @@ public class Card {
                 case "mystic":
                     return Color.MAGENTA;
                 case "neutral":
-                    return Color.WHITE;
                 default:
                     return Color.WHITE;
             }
