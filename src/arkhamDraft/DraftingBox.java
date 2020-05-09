@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class DraftingBox extends CardBox {
 
-    private ArrayList<Card> physicalDraftingBox = new ArrayList<>();
-    private ArrayList<ArrayList<CardFilter>> generatingFilters = new ArrayList<>();
+    private final ArrayList<Card> physicalDraftingBox = new ArrayList<>();
+    private final ArrayList<ArrayList<CardFilter>> generatingFilters = new ArrayList<>();
 
 
     public DraftingBox() {

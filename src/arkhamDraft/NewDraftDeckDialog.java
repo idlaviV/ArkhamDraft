@@ -146,9 +146,7 @@ public class NewDraftDeckDialog extends JDialog {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        deleteButton.addActionListener(e->{
-            brain.guiDeleteDeck();
-        });
+        deleteButton.addActionListener(e-> brain.guiDeleteDeck());
         return deleteButton;
     }
 

@@ -20,6 +20,7 @@ public class CardBox {
 
     public CardBox(CardBox cardBox) {
         this.cards = new HashSet<>(cardBox.getCards());
+        this.generatingFilters = cardBox.generatingFilters;
     }
 
     public CardBox(Set<Card> cards) {

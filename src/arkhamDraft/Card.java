@@ -83,7 +83,7 @@ public class Card {
     public List<String> getTraits() {
         if (traitsList == null) {
             if (traits != null && !traits.isEmpty()) {
-                if (traits.substring(traits.length() - 1).equals(".")) {
+                if (traits.endsWith(".")) {
                     traits = traits.substring(0, traits.length() - 1);
                 }
                 String[] traitsArray = traits.split(". ");
@@ -212,7 +212,7 @@ public class Card {
                 return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getType()),values), String.format("Type%s%s", relatorString, rewriteValues(values)));
             case "text":
             case "Text":
-                return new CardFilter((card) -> values.stream().anyMatch(value -> card.getText() != null && card.getText().contains(value)), String.format("Text", relatorString, rewriteValues(values)));
+                return new CardFilter((card) -> values.stream().anyMatch(value -> card.getText() != null && card.getText().contains(value)), String.format("Text%s%s", relatorString, rewriteValues(values)));
             default:
                 return nullFilter;
         }
@@ -274,60 +274,42 @@ public class Card {
     }
 
 
-    private static Comparator<Card> typeC = new Comparator<Card>() {
-        @Override
-        public int compare(Card card1, Card card2) {
-            Integer type1 = card1.getTypeValue();
-            Integer type2 = card2.getTypeValue();
-            return compareIntegers(type1, type2);
-        }
+    private static final Comparator<Card> typeC = (card1, card2) -> {
+        Integer type1 = card1.getTypeValue();
+        Integer type2 = card2.getTypeValue();
+        return compareIntegers(type1, type2);
     };
 
-    private static Comparator<Card> costC = new Comparator<Card>() {
-        @Override
-        public int compare(Card card1, Card card2) {
-            Integer cost1 = card1.getCost();
-            Integer cost2 = card2.getCost();
-            return compareIntegers(cost1, cost2);
-        }
+    private static final Comparator<Card> costC = (card1, card2) -> {
+        Integer cost1 = card1.getCost();
+        Integer cost2 = card2.getCost();
+        return compareIntegers(cost1, cost2);
     };
 
-    private static Comparator<Card> xpC = new Comparator<Card>() {
-        @Override
-        public int compare(Card card1, Card card2) {
-            Integer xp1 = card1.getXp();
-            Integer xp2 = card2.getXp();
-            return Integer.compare(xp1, xp2);
-        }
+    private static final Comparator<Card> xpC = (card1, card2) -> {
+        Integer xp1 = card1.getXp();
+        Integer xp2 = card2.getXp();
+        return Integer.compare(xp1, xp2);
     };
 
-    private static Comparator<Card> nameComp = new Comparator<Card>() {
-        @Override
-        public int compare(Card card1, Card card2) {
-            String name1 = card1.getReal_name();
-            String name2 = card2.getReal_name();
-            if (card1.getSubname() != null) String.format("%s%s",name1, card1.getSubname());
-            if (card2.getSubname() != null) String.format("%s%s",name2, card2.getSubname());
-            return name1.compareTo(name2);
-        }
+    private static final Comparator<Card> nameComp = (card1, card2) -> {
+        String name1 = card1.getReal_name();
+        String name2 = card2.getReal_name();
+        if (card1.getSubname() != null) name1 = String.format("%s%s",name1, card1.getSubname());
+        if (card2.getSubname() != null) name2 = String.format("%s%s",name2, card2.getSubname());
+        return name1.compareTo(name2);
     };
 
-    private static Comparator<Card> factionComp = new Comparator<Card>() {
-        @Override
-        public int compare(Card card1, Card card2) {
-            Integer faction1 = card1.getFactionValue();
-            Integer faction2 = card2.getFactionValue();
-            return compareIntegers(faction1, faction2);
-        }
+    private static final Comparator<Card> factionComp = (card1, card2) -> {
+        Integer faction1 = card1.getFactionValue();
+        Integer faction2 = card2.getFactionValue();
+        return compareIntegers(faction1, faction2);
     };
 
-    private static Comparator<Card> codeComp = new Comparator<Card>() {
-        @Override
-        public int compare(Card card1, Card card2) {
-            Integer code1 = Integer.parseInt(card1.getCode());
-            Integer code2 = Integer.parseInt(card2.getCode());
-            return compareIntegers(code1, code2);
-        }
+    private static final Comparator<Card> codeComp = (card1, card2) -> {
+        Integer code1 = Integer.parseInt(card1.getCode());
+        Integer code2 = Integer.parseInt(card2.getCode());
+        return compareIntegers(code1, code2);
     };
 
 
@@ -343,13 +325,10 @@ public class Card {
     /**
      * Note: this comparator imposes orderings that are inconsistent with equals.
      */
-    private static Comparator<Card> nullComp = new Comparator<Card>() {
-        @Override
-        public int compare(Card o1, Card o2) {
-            if (o1 == null) return -1;
-            if (o2 == null) return 1;
-            return 0;
-        }
+    private static final Comparator<Card> nullComp = (o1, o2) -> {
+        if (o1 == null) return -1;
+        if (o2 == null) return 1;
+        return 0;
     };
 
     public static Comparator<Card> xpNameC = nullComp.thenComparing(xpC.thenComparing(nameComp));
@@ -377,15 +356,15 @@ public class Card {
     }
 
     private static String rewriteValues(List<String> values) {
-        String returnString = "";
+        StringBuilder returnString = new StringBuilder();
         Iterator<String> iterator = values.iterator();
         while(iterator.hasNext()) {
-            returnString += iterator.next();
+            returnString.append(iterator.next());
             if (iterator.hasNext()) {
-                returnString += ", ";
+                returnString.append(", ");
             }
         }
-        return returnString;
+        return returnString.toString();
     }
 
     public Color getGUIColor() {

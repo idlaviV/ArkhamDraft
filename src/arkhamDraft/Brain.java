@@ -3,7 +3,6 @@ package arkhamDraft;
 import javax.swing.*;
 import java.io.*;
 import java.util.*;
-import java.sql.Timestamp;
 
 public class Brain {
     private Drafter drafter;
@@ -113,7 +112,7 @@ public class Brain {
                     System.out.println("Usable commands are: 'owned cards', 'regular cards' and 'quit'.");
                     break;
                 case "update":
-                    try {settingsManager.updateDatabaseFromAPI();} catch (java.net.MalformedURLException e){System.out.println(e);}
+                    try {settingsManager.updateDatabaseFromAPI();} catch (java.net.MalformedURLException e){e.printStackTrace();}
                     updateFromJson();
                     break;
                 case "quit":
@@ -158,7 +157,7 @@ public class Brain {
                         }
                     } catch (IOException e) {
                         System.out.println("Problem with file");
-                        System.out.println(e);
+                        e.printStackTrace();
                     }
                     break;
                 case "show sideboard":
@@ -376,10 +375,6 @@ public class Brain {
         }
     }
 
-    private boolean updateSettingsFromFile() {
-        return settingsManager.updateSettings(new File("data/packs.txt"));
-    }
-
     private void notWellFormatted() {
         System.out.println("Filter not well formatted! Type 'help' to get help on filters \n" +
                 "or 'quit' to discard the selected cards \n" +
@@ -400,13 +395,11 @@ public class Brain {
         switch (arguments.get(0)) {
             case "containsFilter":
                 newCardFilter = Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size()), arguments.get(1));
-                //drafter.filter(newCardFilter);
                 break;
             case "numericalFilter":
                 try {
                     int value = Integer.parseInt(arguments.get(3));
                     newCardFilter = Card.generateCardFilter(arguments.get(2), Relator.getNumericalRelator(arguments.get(1)), value, arguments.get(1));
-                    //drafter.filter(newCardFilter);
                 } catch (NumberFormatException e) {
                     System.out.println("Error: value of filter is not an integer.");
                 }
@@ -518,7 +511,7 @@ public class Brain {
             FileReader fr = new FileReader(file);
             BufferedReader reader = new BufferedReader(fr);
             drafter.initializeCardAddition();
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 if (line.matches("=*")) {
                     guiAddCards();

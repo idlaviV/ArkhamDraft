@@ -6,15 +6,15 @@ import java.util.List;
 
 
 public class Drafter {
-    private CardBox ownedCardBox; //all cards the drafter knows of
+    private final CardBox ownedCardBox; //all cards the drafter knows of
     private CardBox filteredCardBox; //can be filtered by the user, can be added to the draftingBox, only used by console
     private DraftingBox draftingBox = new DraftingBox(); //Box of cards which can be drafted from
 
     private Deck draftedCards = new Deck();
-    private Deck draftedDeck = new Deck();
-    private Deck sideboard = new Deck();
+    private final Deck draftedDeck = new Deck();
+    private final Deck sideboard = new Deck();
 
-    private boolean secondCore;
+    private final boolean secondCore;
     private ArrayList<CardFilter> filterList = new ArrayList<>(); //only used by gui
 
     public Drafter(CardBox ownedCardBox, boolean secondCore) {
@@ -65,8 +65,8 @@ public class Drafter {
         return draftedCards;
     }
 
-    public Deck redraftCard(Card card) {
-        return redraftCard(draftedCards.getIndex(card));
+    public void redraftCard(Card card) {
+        redraftCard(draftedCards.getIndex(card));
     }
 
     public void finalizeDraft() {
@@ -81,24 +81,24 @@ public class Drafter {
         return addCardFromDeckToDeck(draftedCards, draftedDeck, index);
     }
 
-    public boolean addCardToDeck(Card card) {
-        return addCardFromDeckToDeck(draftedCards, draftedDeck, card);
+    public void addCardToDeck(Card card) {
+        addCardFromDeckToDeck(draftedCards, draftedDeck, card);
     }
 
     public boolean addCardToSideboard(int index) {
         return addCardFromDeckToDeck(draftedCards, sideboard, index);
     }
 
-    public boolean addCardToSideboard(Card card) {
-        return addCardFromDeckToDeck(draftedCards, sideboard, card);
+    public void addCardToSideboard(Card card) {
+        addCardFromDeckToDeck(draftedCards, sideboard, card);
     }
 
     public boolean addCardToDeckFromSideboard(int index) {
         return addCardFromDeckToDeck(sideboard, draftedDeck, index);
     }
 
-    public boolean addCardToDeckFromSideboard(Card card) {
-        return addCardFromDeckToDeck(sideboard, draftedDeck, card);
+    public void addCardToDeckFromSideboard(Card card) {
+        addCardFromDeckToDeck(sideboard, draftedDeck, card);
     }
 
     private boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, int index) {
@@ -110,8 +110,8 @@ public class Drafter {
         return false;
     }
 
-    private boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, Card card) {
-        return addCardFromDeckToDeck(fromDeck, toDeck, fromDeck.getIndex(card));
+    private void addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, Card card) {
+        addCardFromDeckToDeck(fromDeck, toDeck, fromDeck.getIndex(card));
     }
 
 

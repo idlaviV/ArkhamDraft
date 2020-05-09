@@ -1,7 +1,6 @@
 package arkhamDraft;
 
 
-import javax.swing.*;
 import java.io.File;
 
 import java.io.IOException;
@@ -54,9 +53,4 @@ public class Main {
         System.out.println("finished");
     }
 
-    public static String getRelator(String input) {
-
-        return input.replaceFirst(".*(?=[<|>|!|[(?<!!)=]])","").replaceFirst(
-                "(?<=[=|[<(?!=)]|[>(?!=)]]).*","").trim();
-    }
 }

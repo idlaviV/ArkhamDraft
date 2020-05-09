@@ -21,22 +21,20 @@ public class SettingsManager {
     public SettingsManager() {
     }
 
-    public boolean updateDatabaseFromAPI() throws MalformedURLException {
+    public void updateDatabaseFromAPI() throws MalformedURLException {
         URL website = new URL("https://arkhamdb.com/api/public/cards/");
         try (InputStream in = website.openStream()) {
             Files.copy(in, Paths.get("data/cards.json"), StandardCopyOption.REPLACE_EXISTING);
         } catch (java.io.IOException e) {
-            System.out.println(e);
-            return false;
+            e.printStackTrace();
+            return;
         }
         website = new URL("https://arkhamdb.com/api/public/packs/");
         try (InputStream in = website.openStream()) {
             Files.copy(in, Paths.get("data/packs.json"), StandardCopyOption.REPLACE_EXISTING);
         } catch (java.io.IOException e) {
-            System.out.println(e);
-            return false;
+            e.printStackTrace();
         }
-        return true;
     }
 
     public CardBox updateDatabaseFromJSON() throws IOException {
@@ -82,7 +80,7 @@ public class SettingsManager {
                 useOnlyRegularCards = regular;
                 return true;
             } catch (IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
         return false;
@@ -198,7 +196,7 @@ public class SettingsManager {
         return ownedPacks;
     }
 
-    public boolean updateSettings(File file) {
+    public void updateSettings(File file) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             ownedPacks = new ArrayList<>();
@@ -216,10 +214,8 @@ public class SettingsManager {
                 if (line.equals("regular true")) useOnlyRegularCards = true;
                 if (line.equals("regular false")) useOnlyRegularCards = false;
             }
-            return true;
         } catch (IOException e) {
-            System.out.println(e);
-            return false;
+            e.printStackTrace();
         }
     }
 

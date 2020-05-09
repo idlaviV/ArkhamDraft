@@ -2,13 +2,10 @@ package arkhamDraft;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 
 
 public class Face extends JFrame{
-    private JPanel mainPanel;
     private JPanel draftPanel;
     private CardCheckBoxList deckList;
     private CardCheckBoxList sideboardList;
@@ -25,7 +22,7 @@ public class Face extends JFrame{
 
 
     public void initComponents() {
-        mainPanel = new JPanel();
+        JPanel mainPanel = new JPanel();
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -136,9 +133,7 @@ public class Face extends JFrame{
         draftButtonPanel.add(draftCardsButton);
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(3,1,100,1);
         draftButtonPanel.add(new JSpinner(spinnerModel));
-        draftCardsButton.addActionListener(e -> {
-            brain.guiDraftCards((int) spinnerModel.getNumber());
-        });
+        draftCardsButton.addActionListener(e -> brain.guiDraftCards((int) spinnerModel.getNumber()));
 
         JPanel otherButtonsPanel = new JPanel();
         JButton redraftButton = new JButton("Redraft");

@@ -6,7 +6,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class DeposableFilterList {
@@ -27,13 +26,10 @@ public class DeposableFilterList {
         guiList.setTableHeader(null);
         guiList.getColumnModel().getColumn(0).setPreferredWidth(300);
         guiList.getColumnModel().getColumn(1).setPreferredWidth(50);
-        guiList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (guiList.getSelectedRow()>-1) {
-                    if (guiList.getSelectedColumn() == 1) {
-                        removeCardFilterFromList(guiList.getSelectedRow());
-                    }
+        guiList.getSelectionModel().addListSelectionListener(e -> {
+            if (guiList.getSelectedRow()>-1) {
+                if (guiList.getSelectedColumn() == 1) {
+                    removeCardFilterFromList(guiList.getSelectedRow());
                 }
             }
         });

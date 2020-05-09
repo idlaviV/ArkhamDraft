@@ -3,8 +3,8 @@ package arkhamDraft;
 import java.util.function.Function;
 
 public class CardFilter {
-    private Function<Card, Boolean> filter;
-    private String name;
+    private final Function<Card, Boolean> filter;
+    private final String name;
 
     public CardFilter(Function<Card, Boolean> filter, String name) {
         this.filter = filter;
