@@ -84,7 +84,7 @@ public class NewDraftDeckDialog extends JDialog {
                 directory.mkdir();
             }
             fc.setCurrentDirectory(directory);
-            int returnVal = fc.showOpenDialog(this);
+            int returnVal = fc.showSaveDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 String pathName = file.toPath().toString();

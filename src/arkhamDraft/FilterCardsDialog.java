@@ -4,11 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class FilterCardsDialog extends JDialog {
     private Brain brain;
-    //private DefaultListModel<CardFilter> filterListModel;
     private DeposableFilterList filterList;
     private JComboBox<String> attributeSelector;
     private JComboBox<String> relatorSelector;
@@ -62,21 +63,19 @@ public class FilterCardsDialog extends JDialog {
     }
 
     private Component initializeFilterMenu() {
+        List<String> attributes = Arrays.asList("Select attribute", "XP", "Faction", "Type", "Trait", "Pack", "Text");
         JPanel filterAdditionPanel = new JPanel();
         DefaultComboBoxModel<String> attributeSelectorModel = new DefaultComboBoxModel<>();
-        attributeSelectorModel.addElement("Select attribute");
-        attributeSelectorModel.addElement("XP");
-        attributeSelectorModel.addElement("Faction");
-        attributeSelectorModel.addElement("Type");
-        attributeSelectorModel.addElement("Trait");
-        attributeSelectorModel.addElement("Pack");
-        attributeSelectorModel.addElement("Text");
+        for (String attribute : attributes) {
+            attributeSelectorModel.addElement(attribute);
+        }
         attributeSelector = new JComboBox<>(attributeSelectorModel);
         filterAdditionPanel.add(attributeSelector);
         attributeSelector.addActionListener(attributeSelectorActionListener());
 
         relatorSelector = new JComboBox<>();
         relatorSelector.setEnabled(false);
+        //I think it shows "contains not" since this is longer then "contains"-->better spacing
         relatorSelector.setPrototypeDisplayValue("contains not");
         filterAdditionPanel.add(relatorSelector);
 
@@ -104,7 +103,7 @@ public class FilterCardsDialog extends JDialog {
         relatorSelector.setEnabled(true);
         DefaultComboBoxModel<String> comboBoxModel= new DefaultComboBoxModel<>();
         comboBoxModel.addElement("Choose relator");
-        if (isNumerical) {
+        if (isNumerical) {//TODO: Use a list
             comboBoxModel.addElement("=");
             comboBoxModel.addElement(">");
             comboBoxModel.addElement("<");
@@ -121,6 +120,7 @@ public class FilterCardsDialog extends JDialog {
                 addFilterButton.setEnabled(false);
             } else {
                 valueSelector.setEnabled(true);
+                //TODO: Valueselector should have a formatter if (isNumerical)
                 addFilterButton.setEnabled(true);
             }
         });

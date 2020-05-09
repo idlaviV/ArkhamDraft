@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class CardBox {
     private Set<Card> cards = new HashSet<>();
 
-    private ArrayList<CardFilter> generatingFilters = new ArrayList<>();
+    private final ArrayList<CardFilter> generatingFilters = new ArrayList<>();
 
     public CardBox(Card[] cards){
         this.cards = new HashSet<>(Arrays.asList(cards));
@@ -20,7 +20,7 @@ public class CardBox {
 
     public CardBox(CardBox cardBox) {
         this.cards = new HashSet<>(cardBox.getCards());
-        this.generatingFilters = cardBox.generatingFilters;
+        this.generatingFilters.addAll(cardBox.getGeneratingFilters());
     }
 
     public CardBox(Set<Card> cards) {
