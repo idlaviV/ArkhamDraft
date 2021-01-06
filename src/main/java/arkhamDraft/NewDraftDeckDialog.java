@@ -70,7 +70,7 @@ public class NewDraftDeckDialog extends JDialog {
     private Component initializeSaveButton() {
         JButton saveButton = new JButton();
         try {
-            Image img = ImageIO.read(getClass().getResource("icons/actions-document-save-icon.png"));
+            Image img = ImageIO.read(getClass().getResource("/icons/actions-document-open-folder-icon.png"));
             saveButton.setIcon(new ImageIcon(img));
             saveButton.setMargin(new Insets(0, 0, 0, 0));
             saveButton.setBorder(null);
@@ -100,7 +100,7 @@ public class NewDraftDeckDialog extends JDialog {
     private Component initializeLoadButton() {
         JButton loadButton = new JButton();
         try {
-            Image img = ImageIO.read(getClass().getResource("icons/actions-document-open-folder-icon.png"));
+            Image img = ImageIO.read(getClass().getResource("/icons/actions-document-open-folder-icon.png"));
             loadButton.setIcon(new ImageIcon(img));
             loadButton.setMargin(new Insets(0, 0, 0, 0));
             loadButton.setBorder(null);
@@ -138,7 +138,7 @@ public class NewDraftDeckDialog extends JDialog {
     private Component initializeDeleteButton() {
         JButton deleteButton = new JButton();
         try {
-            Image img = ImageIO.read(getClass().getResource("icons/actions-edit-delete-icon.png"));
+            Image img = ImageIO.read(getClass().getResource("/icons/actions-edit-delete-icon.png"));
             deleteButton.setIcon(new ImageIcon(img));
             deleteButton.setMargin(new Insets(0, 0, 0, 0));
             deleteButton.setBorder(null);

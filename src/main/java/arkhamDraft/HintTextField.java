@@ -39,4 +39,8 @@ public class HintTextField extends JTextField {
             this.g = g;
         }
     }
+
+    protected void setGraphics(Graphics g) {
+        this.g = g;
+    }
 }
