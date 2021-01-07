@@ -440,9 +440,8 @@ public class Brain {
         face.printCardsToDraftPanel(drafter.getDraftedCards());
     }
 
-    public void guiDraftCards(int amount) {
+    public void guiDraftCardsNew(int amount) {
         drafter.draftCards(amount);
-        face.printCardsToDraftPanel(drafter.getDraftedCards());
     }
 
     public void removeCardFilterFromList(CardFilter cardFilter) {
@@ -454,31 +453,25 @@ public class Brain {
         for (Card currentCard : checkedCards) {
             drafter.redraftCard(currentCard);
         }
-        face.printCardsToDraftPanel(drafter.getDraftedCards());
     }
 
     public void guiAddToDeck(ArrayList<Card> checkedCards) {
         for (Card currentCard : checkedCards) {
             drafter.addCardToDeck(currentCard);
         }
-        face.printCardsToDraftPanel(drafter.getDraftedCards());
-        face.printCardsToDeckPanel(drafter.getDraftedDeck());
     }
 
     public void guiAddToSideboard(ArrayList<Card> checkedCards) {
         for (Card currentCard : checkedCards) {
             drafter.addCardToSideboard(currentCard);
         }
-        face.printCardsToDraftPanel(drafter.getDraftedCards());
-        face.printCardsToSideboardPanel(drafter.getSideboard());
     }
+
 
     public void guiAddFromSideboard(ArrayList<Card> checkedCards) {
         for (Card currentCard : checkedCards) {
             drafter.addCardToDeckFromSideboard(currentCard);
         }
-        face.printCardsToDeckPanel(drafter.getDraftedDeck());
-        face.printCardsToSideboardPanel(drafter.getSideboard());
     }
 
     public void guiSaveFilterList(File saveFile) {
@@ -531,5 +524,17 @@ public class Brain {
     public void guiDeleteDeck() {
         drafter.discardDraftingBox();
         face.draftingBoxWasDiscarded();
+    }
+
+    public Deck getDraftedCards() {
+        return drafter.getDraftedCards();
+    }
+
+    public Deck getDraftedDeck() {
+        return drafter.getDraftedDeck();
+    }
+
+    public Deck getSideboard() {
+        return drafter.getSideboard();
     }
 }

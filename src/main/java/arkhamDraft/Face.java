@@ -1,5 +1,7 @@
 package arkhamDraft;
 
+import arkhamDraft.workerPool.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
@@ -129,23 +131,15 @@ public class Face extends JFrame{
 
     private Component initializeDraftActionsPanel() {
         JPanel draftButtonPanel = new JPanel();
-        JButton draftCardsButton = new JButton("Draft");
-        draftButtonPanel.add(draftCardsButton);
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(3,1,100,1);
+        draftButtonPanel.add(initializeDraftCardsButton(spinnerModel));
         draftButtonPanel.add(new JSpinner(spinnerModel));
-        draftCardsButton.addActionListener(e -> brain.guiDraftCards((int) spinnerModel.getNumber()));
+
 
         JPanel otherButtonsPanel = new JPanel();
-        JButton redraftButton = new JButton("Redraft");
-        JButton addButton = new JButton("Add");
-        JButton addSideboardButton = new JButton("To Sideboard");
-        otherButtonsPanel.add(redraftButton);
-        otherButtonsPanel.add(addButton);
-        otherButtonsPanel.add(addSideboardButton);
-
-        redraftButton.addActionListener(e -> EventQueue.invokeLater(() -> brain.guiRedraft(draftedCardsList.getCheckedCards())));
-        addButton.addActionListener(e -> EventQueue.invokeLater(()-> brain.guiAddToDeck(draftedCardsList.getCheckedCards())));
-        addSideboardButton.addActionListener(e -> EventQueue.invokeLater(() -> brain.guiAddToSideboard(draftedCardsList.getCheckedCards())));
+        otherButtonsPanel.add(initializeRedraftButton());
+        otherButtonsPanel.add(initializeAddButton());
+        otherButtonsPanel.add(initializeAddSideboardButton());
 
         JPanel draftActionsPanel = new JPanel();
         draftActionsPanel.setLayout(new BoxLayout(draftActionsPanel, BoxLayout.Y_AXIS));
@@ -154,6 +148,72 @@ public class Face extends JFrame{
         draftActionsPanel.add(draftButtonPanel);
         draftActionsPanel.add(otherButtonsPanel);
         return draftActionsPanel;
+    }
+
+    private Component initializeAddSideboardButton() {
+        JButton addSideboardButton = new JButton("To Sideboard");
+        addSideboardButton.addActionListener(e -> new AddSideboardButtonWorker(
+                brain,
+                draftedCardsList,
+                (deck) -> {
+                    printCardsToDraftPanel(deck);
+                    return null;
+                },
+                (deck) -> {
+                    printCardsToSideboardPanel(deck);
+                    return null;
+                }
+        ).execute());
+        return addSideboardButton;
+    }
+
+    private Component initializeAddButton() {
+        JButton addButton = new JButton("Add");
+        addButton.addActionListener(
+                e -> new AddButtonWorker(
+                        brain,
+                        draftedCardsList,
+                        (deck) -> {
+                            printCardsToDraftPanel(deck);
+                            return null;
+                        },
+                        (deck) -> {
+                            printCardsToDeckPanel(deck);
+                            return null;
+                        }
+                ).execute());
+        return addButton;
+    }
+
+    private Component initializeRedraftButton() {
+        JButton redraftButton = new JButton("Redraft");
+        redraftButton.addActionListener(
+                e-> new RedraftButtonWorker(
+                        brain,
+                        draftedCardsList,
+                        (deck)-> {
+                            printCardsToDraftPanel(deck);
+                            return null;
+                        }
+                ).execute()
+        );
+        return redraftButton;
+    }
+
+    private Component initializeDraftCardsButton(SpinnerNumberModel spinnerModel) {
+        JButton draftCardsButton = new JButton("Draft");
+        draftCardsButton.addActionListener(
+            e -> new DraftCardsButtonWorker(
+                brain,
+                spinnerModel.getNumber().intValue(),
+                (deck, list) -> {
+                    printCardsToPanel(deck, list);
+                    return null;
+                },
+                draftedCardsList
+            ).execute()
+        );
+        return draftCardsButton;
     }
 
     private Component initializeDeckPanel(){
@@ -185,9 +245,7 @@ public class Face extends JFrame{
     private Component initializeSideBoardPanel() {
         JPanel sideboardPanel = new JPanel();
         JPanel sideboardButtonPanel = new JPanel();
-        JButton addFromSideBoardButton = new JButton("Add");
-        sideboardButtonPanel.add(addFromSideBoardButton);
-        addFromSideBoardButton.addActionListener(e -> EventQueue.invokeLater(() -> brain.guiAddFromSideboard(sideboardList.getCheckedCards())));
+        sideboardButtonPanel.add(initializeAddFromSideBoardButton());
         sideboardPanel.setLayout(new BoxLayout(sideboardPanel, BoxLayout.PAGE_AXIS));
         sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         sideboardPanel.add(new JLabel("sideboard panel"));
@@ -196,6 +254,24 @@ public class Face extends JFrame{
         sideboardPanel.add(sideboardScrollPane);
         sideboardPanel.add(sideboardButtonPanel);
         return sideboardPanel;
+    }
+
+    private Component initializeAddFromSideBoardButton() {
+        JButton addFromSideBoardButton = new JButton("Add");
+        addFromSideBoardButton.addActionListener(e ->
+                new AddFromSideBoardButtonWorker(
+                        brain,
+                        sideboardList,
+                        (deck) -> {
+                            printCardsToDeckPanel(deck);
+                            return null;
+                        },
+                        (deck) -> {
+                            printCardsToSideboardPanel(deck);
+                            return null;
+                        }
+                ).execute());
+        return addFromSideBoardButton;
     }
 
     public void enableDraftPanel(boolean b) {
