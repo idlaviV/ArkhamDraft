@@ -225,11 +225,9 @@ public class Face extends JFrame{
         JScrollPane deckScrollPane = new JScrollPane(deckList);
         deckPanel.add(deckScrollPane);
 
-        JButton sortDeckButton = new JButton("Sort Deck");
-        deckPanel.add(sortDeckButton);
-
         DefaultComboBoxModel<String> sortComboBoxModel = new DefaultComboBoxModel<>();
         JComboBox<String> sortComboBox = new JComboBox<>(sortComboBoxModel);
+        deckPanel.add(initializeSortDeckButton(sortComboBox));
         deckPanel.add(sortComboBox);
         sortComboBoxModel.addElement("Type, then name");
         sortComboBoxModel.addElement("Just name");
@@ -237,9 +235,21 @@ public class Face extends JFrame{
         sortComboBoxModel.addElement("Faction, then XP, then name");
         sortComboBoxModel.addElement("XP, then name");
         sortComboBoxModel.addElement("Cost, then name");
-        sortDeckButton.addActionListener(e -> brain.sortDeck((String) Objects.requireNonNull(sortComboBox.getSelectedItem())));
 
         return deckPanel;
+    }
+
+    private Component initializeSortDeckButton(JComboBox<String> sortComboBox) {
+        JButton sortDeckButton = new JButton("Sort Deck");
+        sortDeckButton.addActionListener(e -> new SortDeckButtonWorker(
+                brain,
+                sortComboBox,
+                (deck) -> {
+                    printCardsToDeckPanel(deck);
+                    return null;
+                }
+        ).execute());
+        return sortDeckButton;
     }
 
     private Component initializeSideBoardPanel() {

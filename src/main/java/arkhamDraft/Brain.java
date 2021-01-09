@@ -385,9 +385,13 @@ public class Brain {
         masterCardBox = settingsManager.updateDatabaseFromJSON();
     }
 
-    public void sortDeck(String sortBy) {
+    protected void sortDeck(String sortBy) {
         drafter.sortDeck(Decoder.decryptComparator(sortBy));
         face.printCardsToDeckPanel(drafter.getDraftedDeck());
+    }
+
+    public void sortDeckNew(String sortBy) {
+        drafter.sortDeck(Decoder.decryptComparator(sortBy));
     }
 
     public void addFilterFromGUI(ArrayList<String> arguments) {
