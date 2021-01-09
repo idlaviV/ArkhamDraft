@@ -186,4 +186,7 @@ public class Drafter {
         return draftingBox.getAllGeneratingFilters();
     }
 
+    public ArrayList<CardFilter> getFilterList() {
+        return filterList;
+    }
 }

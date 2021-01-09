@@ -176,16 +176,16 @@ public class Brain {
                                         "and smaller than amount of cards in draft deck.");
                             } else {
                                 printCardsEnumerated(draftedCards);
-                                face.printCardsToDraftPanel(draftedCards);
+                                //face.printCardsToDraftPanel(draftedCards);
                             }
                             break;
                         case "add":
                             int addCardIndex = Integer.parseInt(arguments.get(1));
                             if (drafter.addCardToDeck(addCardIndex)) {
                                 System.out.println(String.format("Card %d added to deck.", addCardIndex));
-                                face.printCardsToDeckPanel(drafter.getDraftedDeck());
+                                //face.printCardsToDeckPanel(drafter.getDraftedDeck());
                                 printCardsEnumerated(drafter.getDraftedCards());
-                                face.printCardsToDraftPanel(drafter.getDraftedCards());
+                                //face.printCardsToDraftPanel(drafter.getDraftedCards());
                             } else {
                                 System.out.println("There is no card at the specified position.");
                             }
@@ -194,15 +194,15 @@ public class Brain {
                             int redraftIndex = Integer.parseInt(arguments.get(1));
                             drafter.redraftCard(redraftIndex);
                             printCardsEnumerated(drafter.getDraftedCards());
-                            face.printCardsToDraftPanel(drafter.getDraftedCards());
+                            //face.printCardsToDraftPanel(drafter.getDraftedCards());
                             break;
                         case "addSideboard":
                             int addSideboardIndex = Integer.parseInt(arguments.get(1));
                             if(drafter.addCardToSideboard(addSideboardIndex)) {
                                 System.out.println(String.format("Card %d added to sideboard.",addSideboardIndex));
-                                face.printCardsToSideboardPanel(drafter.getSideboard());
+                                //face.printCardsToSideboardPanel(drafter.getSideboard());
                                 printCardsEnumerated(drafter.getDraftedCards());
-                                face.printCardsToDraftPanel(drafter.getDraftedCards());
+                                //face.printCardsToDraftPanel(drafter.getDraftedCards());
                             } else {
                                 System.out.println("There is no card at the specified position.");
                             }
@@ -231,9 +231,9 @@ public class Brain {
                             int addCardIndex = Integer.parseInt(arguments.get(1));
                             if (drafter.addCardToDeckFromSideboard(addCardIndex)) {
                                 System.out.println(String.format("Card %d added to deck from sideboard.", addCardIndex));
-                                face.printCardsToDeckPanel(drafter.getDraftedDeck());
+                                //face.printCardsToDeckPanel(drafter.getDraftedDeck());
                                 printSideboard();
-                                face.printCardsToSideboardPanel(drafter.getSideboard());
+                                //face.printCardsToSideboardPanel(drafter.getSideboard());
                             } else {
                                 System.out.println("There is no card in the sideboard on the specified position.");
                             }
@@ -243,7 +243,7 @@ public class Brain {
                             if (drafter.discardCardFromSideboard(discardCardIndex)) {
                                 System.out.println(String.format("Card %d discarded from sideboard.", discardCardIndex));
                                 printSideboard();
-                                face.printCardsToSideboardPanel(drafter.getSideboard());
+                                //face.printCardsToSideboardPanel(drafter.getSideboard());
                             } else {
                                 System.out.println("There is no card in the sideboard on the specified position.");
                             }
@@ -385,12 +385,7 @@ public class Brain {
         masterCardBox = settingsManager.updateDatabaseFromJSON();
     }
 
-    protected void sortDeck(String sortBy) {
-        drafter.sortDeck(Decoder.decryptComparator(sortBy));
-        face.printCardsToDeckPanel(drafter.getDraftedDeck());
-    }
-
-    public void sortDeckNew(String sortBy) {
+    public void sortDeck(String sortBy) {
         drafter.sortDeck(Decoder.decryptComparator(sortBy));
     }
 
@@ -410,8 +405,6 @@ public class Brain {
                 break;
         }
         drafter.addToFilterList(newCardFilter);
-        face.addFilterToFilterList(newCardFilter);
-        face.updateCurrentCardsFiltered(drafter.getNumberOfCardsLeftAfterFiltering());
     }
 
     public void guiEntersFilterCardsDialog() {
@@ -540,5 +533,13 @@ public class Brain {
 
     public Deck getSideboard() {
         return drafter.getSideboard();
+    }
+
+    public int getNumberOfCardsLeftAfterFiltering() {
+        return drafter.getNumberOfCardsLeftAfterFiltering();
+    }
+
+    public ArrayList<CardFilter> getFilterList() {
+        return drafter.getFilterList();
     }
 }

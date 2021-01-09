@@ -4,14 +4,15 @@ import arkhamDraft.Brain;
 import arkhamDraft.CardCheckBoxList;
 import arkhamDraft.Deck;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class AddFromSideBoardButtonWorker extends AbstractButtonWorker {
     private final CardCheckBoxList sideboardList;
-    private final Function<Deck, Void> printCardsToDeckPanel;
-    private final Function<Deck, Void> printCardsToSideboardPanel;
+    private final Consumer<Deck> printCardsToDeckPanel;
+    private final Consumer<Deck> printCardsToSideboardPanel;
 
-    public AddFromSideBoardButtonWorker(Brain brain, CardCheckBoxList sideboardList, Function<Deck, Void> printCardsToDeckPanel, Function<Deck, Void> printCardsToSideboardPanel) {
+    public AddFromSideBoardButtonWorker(Brain brain, CardCheckBoxList sideboardList, Consumer<Deck> printCardsToDeckPanel, Consumer<Deck> printCardsToSideboardPanel) {
         super(brain);
         this.sideboardList = sideboardList;
         this.printCardsToDeckPanel = printCardsToDeckPanel;
@@ -26,7 +27,7 @@ public class AddFromSideBoardButtonWorker extends AbstractButtonWorker {
 
     @Override
     protected void update() {
-        printCardsToDeckPanel.apply(brain.getDraftedDeck());
-        printCardsToSideboardPanel.apply(brain.getSideboard());
+        printCardsToDeckPanel.accept(brain.getDraftedDeck());
+        printCardsToSideboardPanel.accept(brain.getSideboard());
     }
 }

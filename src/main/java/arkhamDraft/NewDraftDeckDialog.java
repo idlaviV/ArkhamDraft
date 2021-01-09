@@ -176,4 +176,8 @@ public class NewDraftDeckDialog extends JDialog {
         draftDeckLog.setText(String.format("%s\n%s\n%s", draftDeckLog.getText(), "Discarded all cards.","Created new empty draft deck."));
         draftDeckSizeLabel.setText("Draft deck is empty.");
     }
+
+    public void updateFilterListFromBrain() {
+        filterCardsDialog.updateFilterListFromBrain();
+    }
 }

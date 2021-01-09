@@ -5,14 +5,15 @@ import arkhamDraft.Brain;
 import arkhamDraft.CardCheckBoxList;
 import arkhamDraft.Deck;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class AddSideboardButtonWorker extends AbstractButtonWorker {
     private final CardCheckBoxList draftedCardsList;
-    private final Function<Deck, Void> printCardsToDraftPanel;
-    private final Function<Deck, Void> printCardsToSideboardPanel;
+    private final Consumer<Deck> printCardsToDraftPanel;
+    private final Consumer<Deck> printCardsToSideboardPanel;
 
-    public AddSideboardButtonWorker(Brain brain, CardCheckBoxList draftedCardsList, Function<Deck, Void> printCardsToDraftPanel, Function<Deck, Void> printCardsToSideboardPanel) {
+    public AddSideboardButtonWorker(Brain brain, CardCheckBoxList draftedCardsList, Consumer<Deck> printCardsToDraftPanel, Consumer<Deck> printCardsToSideboardPanel) {
         super(brain);
         this.draftedCardsList = draftedCardsList;
         this.printCardsToDraftPanel = printCardsToDraftPanel;
@@ -27,8 +28,8 @@ public class AddSideboardButtonWorker extends AbstractButtonWorker {
 
     // Can safely update the GUI from this method.
     protected void update() {
-        printCardsToDraftPanel.apply(brain.getDraftedCards());
-        printCardsToSideboardPanel.apply(brain.getSideboard());
+        printCardsToDraftPanel.accept(brain.getDraftedCards());
+        printCardsToSideboardPanel.accept(brain.getSideboard());
 
     }
 }

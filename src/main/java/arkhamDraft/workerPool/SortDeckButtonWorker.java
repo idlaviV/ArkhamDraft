@@ -27,7 +27,7 @@ public class SortDeckButtonWorker extends AbstractButtonWorker{
 
     @Override
     protected Boolean doInBackground() {
-        brain.sortDeckNew((String) Objects.requireNonNull(sortComboBox.getSelectedItem()));
+        brain.sortDeck((String) Objects.requireNonNull(sortComboBox.getSelectedItem()));
         return true;
     }
 }

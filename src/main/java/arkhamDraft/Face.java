@@ -155,14 +155,8 @@ public class Face extends JFrame{
         addSideboardButton.addActionListener(e -> new AddSideboardButtonWorker(
                 brain,
                 draftedCardsList,
-                (deck) -> {
-                    printCardsToDraftPanel(deck);
-                    return null;
-                },
-                (deck) -> {
-                    printCardsToSideboardPanel(deck);
-                    return null;
-                }
+                this::printCardsToDraftPanel,
+                this::printCardsToSideboardPanel
         ).execute());
         return addSideboardButton;
     }
@@ -173,14 +167,8 @@ public class Face extends JFrame{
                 e -> new AddButtonWorker(
                         brain,
                         draftedCardsList,
-                        (deck) -> {
-                            printCardsToDraftPanel(deck);
-                            return null;
-                        },
-                        (deck) -> {
-                            printCardsToDeckPanel(deck);
-                            return null;
-                        }
+                        this::printCardsToDraftPanel,
+                        this::printCardsToDeckPanel
                 ).execute());
         return addButton;
     }
@@ -191,10 +179,7 @@ public class Face extends JFrame{
                 e-> new RedraftButtonWorker(
                         brain,
                         draftedCardsList,
-                        (deck)-> {
-                            printCardsToDraftPanel(deck);
-                            return null;
-                        }
+                        this::printCardsToDraftPanel
                 ).execute()
         );
         return redraftButton;
@@ -206,10 +191,7 @@ public class Face extends JFrame{
             e -> new DraftCardsButtonWorker(
                 brain,
                 spinnerModel.getNumber().intValue(),
-                (deck, list) -> {
-                    printCardsToPanel(deck, list);
-                    return null;
-                },
+                    this::printCardsToPanel,
                 draftedCardsList
             ).execute()
         );
@@ -272,14 +254,8 @@ public class Face extends JFrame{
                 new AddFromSideBoardButtonWorker(
                         brain,
                         sideboardList,
-                        (deck) -> {
-                            printCardsToDeckPanel(deck);
-                            return null;
-                        },
-                        (deck) -> {
-                            printCardsToSideboardPanel(deck);
-                            return null;
-                        }
+                        this::printCardsToDeckPanel,
+                        this::printCardsToSideboardPanel
                 ).execute());
         return addFromSideBoardButton;
     }
@@ -310,5 +286,9 @@ public class Face extends JFrame{
 
     public void draftingBoxWasDiscarded() {
         newDraftDeckDialog.draftingBoxWasDiscarded();
+    }
+
+    public void updateFilterListFromBrain() {
+        newDraftDeckDialog.updateFilterListFromBrain();
     }
 }

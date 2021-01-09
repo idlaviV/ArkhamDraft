@@ -1,5 +1,7 @@
 package arkhamDraft;
 
+import arkhamDraft.workerPool.AddFilterButtonWorker;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -34,12 +36,10 @@ public class FilterCardsDialog extends JDialog {
     private void initializeDialog() {
         add(new JLabel("Current Filters:"));
         add(initializeFilterList());
-        addFilterButton = new JButton("Add Filter");
-        addFilterButton.addActionListener(e -> {});
-        addFilterButton.setEnabled(false);
-        add(addFilterButton);
+
+
+        add(initializeAddFilterButton());
         add(initializeFilterMenu());
-        addFilterButton.addActionListener(addFilterButtonAL);
 
         JButton addCardsButton = new JButton("Add cards to draft deck");
         add(addCardsButton);
@@ -51,6 +51,21 @@ public class FilterCardsDialog extends JDialog {
 
         currentCardsFilteredLabel = new JLabel("Picked up all cards.");
         add(currentCardsFilteredLabel);
+    }
+
+    private Component initializeAddFilterButton() {
+        addFilterButton = new JButton("Add Filter");
+        addFilterButton.addActionListener(e -> {});
+        addFilterButton.setEnabled(false);
+        addFilterButton.addActionListener(e -> new AddFilterButtonWorker(
+                brain,
+                attributeSelector,
+                relatorSelector,
+                valueSelector,
+                this::updateFilterListFromBrain,
+                this::updateCurrentCardsFiltered
+        ).execute());
+        return addFilterButton;
     }
 
     private Component initializeFilterList() {
@@ -126,12 +141,7 @@ public class FilterCardsDialog extends JDialog {
         });
     }
 
-    private final ActionListener addFilterButtonAL = e -> EventQueue.invokeLater(() -> {
-        ArrayList<String> arguments = Decoder.decryptGUIFilter(attributeSelector.getItemAt(attributeSelector.getSelectedIndex()),
-                relatorSelector.getItemAt(relatorSelector.getSelectedIndex()),
-                valueSelector.getText());
-        brain.addFilterFromGUI(arguments);
-    });
+
 
     public void addFilterToFilterList(CardFilter newCardFilter) {
             filterList.addCardFilter(newCardFilter);
@@ -149,6 +159,19 @@ public class FilterCardsDialog extends JDialog {
 
     public void removeCardFilterFromList(CardFilter cardFilter) {
         brain.removeCardFilterFromList(cardFilter);
+        revalidate();
+        repaint();
+    }
+
+    public void updateFilterListFromBrain() {
+        setFilterList(brain.getFilterList());
+    }
+
+    private void setFilterList(ArrayList<CardFilter> newFilterList) {
+        filterList.clearList();
+        for (CardFilter filter:newFilterList) {
+            filterList.addCardFilter(filter);
+        }
         revalidate();
         repaint();
     }
