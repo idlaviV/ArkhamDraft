@@ -7,7 +7,6 @@ import arkhamDraft.HintTextField;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class AddFilterButtonWorker extends AbstractButtonWorker{
     private final JComboBox<String> attributeSelector;

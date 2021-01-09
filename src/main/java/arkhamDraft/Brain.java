@@ -413,16 +413,15 @@ public class Brain {
 
     public void guiLeavesFilterCardsDialog() {
         drafter.applyFilterList();
-        guiAddCards();
     }
 
-    private void guiAddCards() {
+    /*private void guiAddCards() {
         int preAdd = drafter.getDraftingBoxSize();
         drafter.addCards();
         System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.", drafter.getDraftingBoxSize() - preAdd));
         face.updateDraftDeckLog(String.format("%d card(s) added to draft deck.", drafter.getDraftingBoxSize() - preAdd));
-        face.updateDraftDeckSize(drafter.getDraftingBoxSize());
-    }
+        face.updateDraftDeckSize();
+    }*/
 
     public void guiOpensNewDraftDeckDialog() {
         startDraft();
@@ -504,13 +503,13 @@ public class Brain {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.matches("=*")) {
-                    guiAddCards();
+                    //guiAddCards();//TODO
                     drafter.initializeCardAddition();
                 } else {
                     generateFilter(line);
                 }
             }
-            guiAddCards();
+            //guiAddCards();//TODO
             reader.close();
             fr.close();
         } catch (IOException e) {
@@ -541,5 +540,13 @@ public class Brain {
 
     public ArrayList<CardFilter> getFilterList() {
         return drafter.getFilterList();
+    }
+
+    public int getDraftingBoxSize() {
+        return drafter.getDraftingBoxSize();
+    }
+
+    public void addCards() {
+        drafter.addCards();
     }
 }

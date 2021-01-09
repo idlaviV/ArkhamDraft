@@ -1,5 +1,6 @@
 package arkhamDraft;
 
+import arkhamDraft.workerPool.AddCardsButtonWorker;
 import arkhamDraft.workerPool.AddFilterButtonWorker;
 
 import javax.swing.*;
@@ -8,20 +9,23 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 
 public class FilterCardsDialog extends JDialog {
-    private Brain brain;
+    private final Brain brain;
     private DeposableFilterList filterList;
     private JComboBox<String> attributeSelector;
     private JComboBox<String> relatorSelector;
     private HintTextField valueSelector;
     private JButton addFilterButton;
     private JLabel currentCardsFilteredLabel;
+    private final Function<Boolean, Void> addCards;
 
-    public FilterCardsDialog(Brain brain) {
+    public FilterCardsDialog(Brain brain, Function<Boolean, Void> addCards) {
         super();
         this.brain = brain;
+        this.addCards = addCards;
         setTitle("Add Cards");
         setSize(500,300);
         setLocation(200,200);
@@ -36,21 +40,25 @@ public class FilterCardsDialog extends JDialog {
     private void initializeDialog() {
         add(new JLabel("Current Filters:"));
         add(initializeFilterList());
-
-
         add(initializeAddFilterButton());
         add(initializeFilterMenu());
-
-        JButton addCardsButton = new JButton("Add cards to draft deck");
-        add(addCardsButton);
-        addCardsButton.addActionListener(e-> EventQueue.invokeLater(()->{
-            brain.guiLeavesFilterCardsDialog();
-            valueSelector.resetToHint();
-            this.dispose();
-        }));
-
+        add(initializeAddCardButton());
         currentCardsFilteredLabel = new JLabel("Picked up all cards.");
         add(currentCardsFilteredLabel);
+    }
+
+    private Component initializeAddCardButton() {
+        JButton addCardsButton = new JButton("Add cards to draft deck");
+        addCardsButton.addActionListener(e -> {
+            new AddCardsButtonWorker(
+                    brain,
+                    valueSelector,
+                    this::dispose,
+                    addCards
+            ).execute();
+            System.out.println("pressed Button");
+        });
+        return addCardsButton;
     }
 
     private Component initializeAddFilterButton() {

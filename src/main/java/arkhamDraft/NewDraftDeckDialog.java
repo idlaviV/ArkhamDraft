@@ -6,6 +6,7 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class NewDraftDeckDialog extends JDialog {
     private final Brain brain;
@@ -44,7 +45,7 @@ public class NewDraftDeckDialog extends JDialog {
 
         JButton addCardsButton = new JButton("Add Cards");
         add(addCardsButton);
-        filterCardsDialog = new FilterCardsDialog(brain);
+        filterCardsDialog = new FilterCardsDialog(brain, this::addCards);
         addCardsButton.addActionListener(e -> {
             filterCardsDialog.tidyUp();
             brain.guiEntersFilterCardsDialog();
@@ -56,6 +57,32 @@ public class NewDraftDeckDialog extends JDialog {
         add(initializeSaveButton());
         add(initializeLoadButton());
         add(initializeDeleteButton());
+    }
+
+    private Void addCards(Boolean dummy) {
+        new SwingWorker<Integer, Void>() {
+            @Override
+            protected Integer doInBackground() {
+                int preAdd = brain.getDraftingBoxSize();
+                brain.addCards();
+                return brain.getDraftingBoxSize() - preAdd;
+            }
+
+            @Override
+            protected void done() {
+                Integer amountOfAddedCards;
+                try {
+                    amountOfAddedCards = get();
+                    if (amountOfAddedCards != null) {
+                        updateDraftDeckLog(String.format("%d card(s) added to draft deck.", amountOfAddedCards));
+                        updateDraftDeckSize(brain.getDraftingBoxSize());
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute();
+        return null;
     }
 
 

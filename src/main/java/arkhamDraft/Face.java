@@ -4,7 +4,6 @@ import arkhamDraft.workerPool.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 
 public class Face extends JFrame{
@@ -276,8 +275,8 @@ public class Face extends JFrame{
         newDraftDeckDialog.updateDraftDeckLog(newLabel);
     }
 
-    public void updateDraftDeckSize(int newSize) {
-        newDraftDeckDialog.updateDraftDeckSize(newSize);
+    public void updateDraftDeckSize() {
+        newDraftDeckDialog.updateDraftDeckSize(brain.getDraftingBoxSize());
     }
 
     public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
