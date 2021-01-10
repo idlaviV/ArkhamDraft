@@ -1,6 +1,6 @@
 package arkhamDraft;
 
-import arkhamDraft.workerPool.AddCardsButtonWorker;
+import arkhamDraft.workerPool.AddCardsToDraftDeckButtonWorker;
 import arkhamDraft.workerPool.AddFilterButtonWorker;
 
 import javax.swing.*;
@@ -20,9 +20,9 @@ public class FilterCardsDialog extends JDialog {
     private HintTextField valueSelector;
     private JButton addFilterButton;
     private JLabel currentCardsFilteredLabel;
-    private final Function<Boolean, Void> addCards;
+    private final Function<Boolean, SwingWorker<Integer, Void>> addCards;
 
-    public FilterCardsDialog(Brain brain, Function<Boolean, Void> addCards) {
+    public FilterCardsDialog(Brain brain, Function<Boolean, SwingWorker<Integer, Void>> addCards) {
         super();
         this.brain = brain;
         this.addCards = addCards;
@@ -42,23 +42,22 @@ public class FilterCardsDialog extends JDialog {
         add(initializeFilterList());
         add(initializeAddFilterButton());
         add(initializeFilterMenu());
-        add(initializeAddCardButton());
+        add(initializeAddCardsToDraftDeckButton());
         currentCardsFilteredLabel = new JLabel("Picked up all cards.");
         add(currentCardsFilteredLabel);
     }
 
-    private Component initializeAddCardButton() {
-        JButton addCardsButton = new JButton("Add cards to draft deck");
-        addCardsButton.addActionListener(e -> {
-            new AddCardsButtonWorker(
+    private Component initializeAddCardsToDraftDeckButton() {
+        JButton addCardsToDraftDeckButton = new JButton("Add cards to draft deck");
+        addCardsToDraftDeckButton.addActionListener(e -> {
+            new AddCardsToDraftDeckButtonWorker(
                     brain,
                     valueSelector,
                     this::dispose,
                     addCards
             ).execute();
-            System.out.println("pressed Button");
         });
-        return addCardsButton;
+        return addCardsToDraftDeckButton;
     }
 
     private Component initializeAddFilterButton() {

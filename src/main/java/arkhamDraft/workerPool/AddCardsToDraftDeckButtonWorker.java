@@ -3,14 +3,15 @@ package arkhamDraft.workerPool;
 import arkhamDraft.Brain;
 import arkhamDraft.HintTextField;
 
+import javax.swing.*;
 import java.util.function.Function;
 
-public class AddCardsButtonWorker extends AbstractButtonWorker{
+public class AddCardsToDraftDeckButtonWorker extends AbstractButtonWorker{
     private final HintTextField valueSelector;
     private final Runnable dispose;
-    private final Function<Boolean, Void> addCards;
+    private final Function<Boolean, SwingWorker<Integer, Void>> addCards;
 
-    public AddCardsButtonWorker(Brain brain, HintTextField valueSelector, Runnable dispose, Function<Boolean, Void> addCards) {
+    public AddCardsToDraftDeckButtonWorker(Brain brain, HintTextField valueSelector, Runnable dispose, Function<Boolean, SwingWorker<Integer, Void>> addCards) {
         super(brain);
         this.valueSelector = valueSelector;
         this.dispose = dispose;

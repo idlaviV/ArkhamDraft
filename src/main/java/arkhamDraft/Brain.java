@@ -3,6 +3,9 @@ package arkhamDraft;
 import javax.swing.*;
 import java.io.*;
 import java.util.*;
+import java.util.function.Function;
+
+import static java.lang.Thread.sleep;
 
 public class Brain {
     private Drafter drafter;
@@ -281,7 +284,7 @@ public class Brain {
         System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.", drafter.getDraftingBoxSize() - preAdd));
     }
 
-    private void generateFilter(String input) {
+    public void generateFilter(String input) {
         ArrayList<String> arguments = Decoder.watchFilterInputDecrypter(input);
         switch (arguments.get(0)) {
             case "containsFilter":
@@ -415,13 +418,30 @@ public class Brain {
         drafter.applyFilterList();
     }
 
-    /*private void guiAddCards() {
-        int preAdd = drafter.getDraftingBoxSize();
-        drafter.addCards();
-        System.out.println(String.format("%d card(s) added to draft deck. Finalize your deck via 'finalize draft deck' or add more cards.", drafter.getDraftingBoxSize() - preAdd));
-        face.updateDraftDeckLog(String.format("%d card(s) added to draft deck.", drafter.getDraftingBoxSize() - preAdd));
-        face.updateDraftDeckSize();
-    }*/
+    public void loadFilterList(File file, Function<Boolean, SwingWorker<Integer, Void>> addCards) {
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+                    initializeCardAddition();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        if (line.matches("=*")) {
+                            SwingWorker<Integer, Void> sw = addCards.apply(true);
+                            while(sw.getProgress()!=100) {
+                                sleep(100);//Todo
+                            }
+                            initializeCardAddition();
+                        } else {
+                            generateFilter(line);
+                        }
+                    }
+                    addCards.apply(true);
+                    reader.close();
+                    fr.close();
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void guiOpensNewDraftDeckDialog() {
         startDraft();
@@ -548,5 +568,9 @@ public class Brain {
 
     public void addCards() {
         drafter.addCards();
+    }
+
+    public void initializeCardAddition() {
+        drafter.initializeCardAddition();
     }
 }

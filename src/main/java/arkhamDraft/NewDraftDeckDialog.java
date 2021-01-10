@@ -4,9 +4,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
+
+import static java.lang.Thread.sleep;
 
 public class NewDraftDeckDialog extends JDialog {
     private final Brain brain;
@@ -59,10 +61,11 @@ public class NewDraftDeckDialog extends JDialog {
         add(initializeDeleteButton());
     }
 
-    private Void addCards(Boolean dummy) {
-        new SwingWorker<Integer, Void>() {
+    private SwingWorker<Integer, Void> addCards(Boolean dummy) {
+        SwingWorker<Integer,Void> sw = new SwingWorker<Integer, Void>() {
             @Override
             protected Integer doInBackground() {
+                setProgress(0);
                 int preAdd = brain.getDraftingBoxSize();
                 brain.addCards();
                 return brain.getDraftingBoxSize() - preAdd;
@@ -76,13 +79,15 @@ public class NewDraftDeckDialog extends JDialog {
                     if (amountOfAddedCards != null) {
                         updateDraftDeckLog(String.format("%d card(s) added to draft deck.", amountOfAddedCards));
                         updateDraftDeckSize(brain.getDraftingBoxSize());
+                        setProgress(100);
                     }
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
             }
-        }.execute();
-        return null;
+        };
+        sw.execute();
+        return sw;
     }
 
 
@@ -97,7 +102,7 @@ public class NewDraftDeckDialog extends JDialog {
     private Component initializeSaveButton() {
         JButton saveButton = new JButton();
         try {
-            Image img = ImageIO.read(getClass().getResource("/icons/actions-document-open-folder-icon.png"));
+            Image img = ImageIO.read(getClass().getResource("/icons/actions-document-save-icon.png"));
             saveButton.setIcon(new ImageIcon(img));
             saveButton.setMargin(new Insets(0, 0, 0, 0));
             saveButton.setBorder(null);
@@ -135,7 +140,7 @@ public class NewDraftDeckDialog extends JDialog {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        loadButton.addActionListener(e->{
+        loadButton.addActionListener(e -> {
             File directory = new File("cardFilter");
             if (!directory.exists()) {
                 directory.mkdir();
@@ -156,10 +161,21 @@ public class NewDraftDeckDialog extends JDialog {
             int returnVal = fc.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                brain.guiLoadFilterList(file);
+                loadFilterList(file);
             }
         });
         return loadButton;
+    }
+
+    private void loadFilterList(File file) {
+        Function<Boolean, SwingWorker<Integer, Void>> addCards = this::addCards;
+        new SwingWorker<Boolean, Void>() {
+            @Override
+            protected Boolean doInBackground() {
+                brain.loadFilterList(file, addCards);
+                return true;
+            }
+        }.execute();
     }
 
     private Component initializeDeleteButton() {
