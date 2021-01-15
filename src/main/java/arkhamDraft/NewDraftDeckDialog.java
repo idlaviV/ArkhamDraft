@@ -1,11 +1,15 @@
 package arkhamDraft;
 
+import arkhamDraft.workerPool.DeleteButtonWorker;
+import arkhamDraft.workerPool.FinalizeDraftDeckButtonWorker;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.*;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static java.lang.Thread.sleep;
@@ -16,10 +20,14 @@ public class NewDraftDeckDialog extends JDialog {
     private JLabel draftDeckSizeLabel;
     private FilterCardsDialog filterCardsDialog;
     private final JFileChooser fc = new JFileChooser();
+    private final Consumer<Deck> printCardsToDraftPanel;
+    private Runnable enableDraft;
 
-    public NewDraftDeckDialog(Brain brain) {
+    public NewDraftDeckDialog(Brain brain, Consumer<Deck> printCardsToDraftPanel, Runnable enableDraft) {
         super();
         this.brain = brain;
+        this.printCardsToDraftPanel = printCardsToDraftPanel;
+        this.enableDraft = enableDraft;
         initializeDialogue();
         //setVisible(true);
     }
@@ -94,8 +102,13 @@ public class NewDraftDeckDialog extends JDialog {
     private Component initializeFinalizeDraftDeckButton() {
         JButton finalizeDraftDeckButton = new JButton("Finalize");
         finalizeDraftDeckButton.addActionListener(e -> {
-            brain.guiFinalizeDraftDeck();
-            dispose();});
+                    new FinalizeDraftDeckButtonWorker(
+                            brain,
+                            this::dispose,
+                            printCardsToDraftPanel,
+                            enableDraft
+                    ).execute();
+                });
         return finalizeDraftDeckButton;
     }
 
@@ -189,7 +202,11 @@ public class NewDraftDeckDialog extends JDialog {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        deleteButton.addActionListener(e-> brain.guiDeleteDeck());
+        deleteButton.addActionListener(e->
+                new DeleteButtonWorker(
+                        brain,
+                        this::draftingBoxWasDiscarded
+                ).execute());
         return deleteButton;
     }
 

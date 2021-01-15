@@ -1,6 +1,7 @@
 package arkhamDraft;
 
 
+import javax.swing.*;
 import java.io.File;
 
 import java.io.IOException;
@@ -39,6 +40,14 @@ public class Main {
             SettingsManager.generateDefaultSettings();
         }
         Brain brain = new Brain(settingsManager);
+        Face face = new Face(brain);
+        face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        face.setTitle("ArkhamDraft");
+        face.setSize(1000,620);
+        face.setResizable(false);
+        face.setLocation(50,50);
+        face.setVisible(true);
+        face.initComponents();
         brain.updateFromJson();
         settingsManager.updateSettings(settingsFile);
 

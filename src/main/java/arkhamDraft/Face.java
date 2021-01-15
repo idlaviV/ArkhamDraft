@@ -14,6 +14,7 @@ public class Face extends JFrame{
     private final Brain brain;
     private NewDraftDeckDialog newDraftDeckDialog;
     EverythingDisablerAndReenabler draftEnabler;
+    private boolean draftEnabled = false;
 
 
     public Face(Brain brain) {
@@ -40,7 +41,7 @@ public class Face extends JFrame{
 
         JButton newDraftDeckButton = new JButton("New draft deck");
         buttonPanel.add(newDraftDeckButton);
-        newDraftDeckDialog = new NewDraftDeckDialog(brain);
+        newDraftDeckDialog = new NewDraftDeckDialog(brain, this::printCardsToDeckPanel, this::enableDraftPanel);
         newDraftDeckButton.addActionListener(e -> {
             brain.guiOpensNewDraftDeckDialog();
             newDraftDeckDialog.tidyUp();
@@ -259,7 +260,14 @@ public class Face extends JFrame{
         return addFromSideBoardButton;
     }
 
-    public void enableDraftPanel(boolean b) {
+    public void enableDraftPanel() {
+        if (!draftEnabled) {
+            draftEnabled = true;
+            enableDraftPanel(true);
+        }
+    }
+
+    private void enableDraftPanel(boolean b) {
         if (b) {
             draftEnabler.reenable();
         } else {
@@ -281,10 +289,6 @@ public class Face extends JFrame{
 
     public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
         newDraftDeckDialog.updateCurrentCardsFiltered(cardsFilteredByFilterListSize);
-    }
-
-    public void draftingBoxWasDiscarded() {
-        newDraftDeckDialog.draftingBoxWasDiscarded();
     }
 
     public void updateFilterListFromBrain() {

@@ -21,20 +21,10 @@ public class Brain {
     public static final String ANSI_MULTICLASS = "\u001B[90m";
     public static final String ANSI_WHITE = "\u001B[37m";
     private Scanner scanner;
-    private final Face face;
-    private boolean draftEnabled = false;
 
 
     public Brain(SettingsManager settingsManager) {
         this.settingsManager = settingsManager;
-        face = new Face(this);
-        face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        face.setTitle("ArkhamDraft");
-        face.setSize(1000,620);
-        face.setResizable(false);
-        face.setLocation(50,50);
-        face.setVisible(true);
-        face.initComponents();
     }
 
     public void watch() throws IOException {
@@ -449,11 +439,6 @@ public class Brain {
 
     public void guiFinalizeDraftDeck() {
         drafter.finalizeDraft();
-        if (!draftEnabled) {
-            face.enableDraftPanel(true);
-            draftEnabled = true;
-        }
-        face.printCardsToDraftPanel(drafter.getDraftedCards());
     }
 
     public void guiDraftCardsNew(int amount) {
@@ -462,7 +447,6 @@ public class Brain {
 
     public void removeCardFilterFromList(CardFilter cardFilter) {
         drafter.removeCardFilterFromList(cardFilter);
-        face.updateCurrentCardsFiltered(drafter.getNumberOfCardsLeftAfterFiltering());
     }
 
     public void guiRedraft(ArrayList<Card> checkedCards) {
@@ -539,7 +523,6 @@ public class Brain {
 
     public void guiDeleteDeck() {
         drafter.discardDraftingBox();
-        face.draftingBoxWasDiscarded();
     }
 
     public Deck getDraftedCards() {
