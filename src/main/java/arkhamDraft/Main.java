@@ -39,7 +39,7 @@ public class Main {
         if (!settingsFile.exists()) {
             SettingsManager.generateDefaultSettings();
         }
-        Brain brain = new Brain(settingsManager);
+        Brain brain = new ArkhamDraftBrain(settingsManager);
         Face face = new Face(brain);
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         face.setTitle("ArkhamDraft");

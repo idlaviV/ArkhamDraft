@@ -136,7 +136,7 @@ public class Card {
             name = String.format("%s [%d]", name, xp);
         }
         if (color) {
-            return String.format("%s%s (%s)%s", getFactionColor(), name, pack_name, Brain.ANSI_RESET);
+            return String.format("%s%s (%s)%s", getFactionColor(), name, pack_name, ArkhamDraftBrain.ANSI_RESET);
         } else {
             return String.format("%s (%s)", name, pack_name);
         }
@@ -148,23 +148,23 @@ public class Card {
 
     public String getFactionColor() {
         if (getFaction_code().size() != 1 ) {
-            return Brain.ANSI_MULTICLASS;
+            return ArkhamDraftBrain.ANSI_MULTICLASS;
         } else {
             switch (getFaction_code().get(0)) {
                 case "guardian":
-                    return Brain.ANSI_BLUE;
+                    return ArkhamDraftBrain.ANSI_BLUE;
                 case "seeker":
-                    return Brain.ANSI_YELLOW;
+                    return ArkhamDraftBrain.ANSI_YELLOW;
                 case "rogue":
-                    return Brain.ANSI_GREEN;
+                    return ArkhamDraftBrain.ANSI_GREEN;
                 case "survivor":
-                    return Brain.ANSI_RED;
+                    return ArkhamDraftBrain.ANSI_RED;
                 case "mystic":
-                    return Brain.ANSI_PURPLE;
+                    return ArkhamDraftBrain.ANSI_PURPLE;
                 case "neutral":
-                    return Brain.ANSI_WHITE;
+                    return ArkhamDraftBrain.ANSI_WHITE;
                 default:
-                    return Brain.ANSI_RESET;
+                    return ArkhamDraftBrain.ANSI_RESET;
             }
         }
     }

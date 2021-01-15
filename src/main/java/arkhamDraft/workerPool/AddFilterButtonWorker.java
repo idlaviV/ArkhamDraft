@@ -1,5 +1,6 @@
 package arkhamDraft.workerPool;
 
+import arkhamDraft.ArkhamDraftBrain;
 import arkhamDraft.Brain;
 import arkhamDraft.Decoder;
 import arkhamDraft.HintTextField;

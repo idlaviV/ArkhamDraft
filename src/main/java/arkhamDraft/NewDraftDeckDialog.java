@@ -21,7 +21,7 @@ public class NewDraftDeckDialog extends JDialog {
     private FilterCardsDialog filterCardsDialog;
     private final JFileChooser fc = new JFileChooser();
     private final Consumer<Deck> printCardsToDraftPanel;
-    private Runnable enableDraft;
+    private final Runnable enableDraft;
 
     public NewDraftDeckDialog(Brain brain, Consumer<Deck> printCardsToDraftPanel, Runnable enableDraft) {
         super();

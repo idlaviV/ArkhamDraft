@@ -1,11 +1,11 @@
 package arkhamDraft.workerPool;
 
+import arkhamDraft.ArkhamDraftBrain;
 import arkhamDraft.Brain;
 import arkhamDraft.CardCheckBoxList;
 import arkhamDraft.Deck;
 
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
 public class DraftCardsButtonWorker extends AbstractButtonWorker {
     private final int numberOfDraftedCards;
