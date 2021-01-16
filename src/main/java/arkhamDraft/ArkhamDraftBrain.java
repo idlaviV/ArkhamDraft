@@ -440,7 +440,9 @@ public class ArkhamDraftBrain implements Brain{
     }
 
     public void guiOpensNewDraftDeckDialog() {
-        startDraft();
+        if (drafter == null) {
+            startDraft();
+        }
     }
 
     public void guiFinalizeDraftDeck() {

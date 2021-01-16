@@ -45,7 +45,7 @@ public class Face extends JFrame{
 
         JButton newDraftDeckButton = new JButton("New draft deck");
         buttonPanel.add(newDraftDeckButton);
-        newDraftDeckDialog = new NewDraftDeckDialog(brain, this::printCardsToDeckPanel, this::enableDraftPanel);
+        newDraftDeckDialog = new NewDraftDeckDialog(brain, this::printCardsToDraftPanel, this::enableDraftPanel);
         newDraftDeckButton.addActionListener(e -> {
             brain.guiOpensNewDraftDeckDialog();
             newDraftDeckDialog.tidyUp();
@@ -252,8 +252,8 @@ public class Face extends JFrame{
                 String pathName = file.toPath().toString();
                 if (!pathName.endsWith(".txt")) {
                     file = new File(pathName + ".txt");
-                    new SaveDeckButtonWorker(brain, file).execute();
                 }
+                new SaveDeckButtonWorker(brain, file).execute();
             }
         });
         return loadButton;
