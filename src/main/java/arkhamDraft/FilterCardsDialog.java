@@ -2,7 +2,7 @@ package arkhamDraft;
 
 import arkhamDraft.workerPool.AddCardsToDraftDeckButtonWorker;
 import arkhamDraft.workerPool.AddFilterButtonWorker;
-import arkhamDraft.workerPool.RemoveCardFilterFromListWorker;
+import arkhamDraft.workerPool.RemoveCardFilterFromListButtonWorker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -167,7 +167,7 @@ public class FilterCardsDialog extends JDialog {
     }
 
     public void removeCardFilterFromList(CardFilter cardFilter) {
-        new RemoveCardFilterFromListWorker(brain,
+        new RemoveCardFilterFromListButtonWorker(brain,
                 cardFilter,
                 this::revalidate,
                 this::repaint,

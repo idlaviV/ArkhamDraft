@@ -6,13 +6,13 @@ import arkhamDraft.CardFilter;
 
 import java.util.function.Consumer;
 
-public class RemoveCardFilterFromListWorker extends AbstractButtonWorker{
+public class RemoveCardFilterFromListButtonWorker extends AbstractButtonWorker{
     private final CardFilter cardFilter;
     private final Runnable revalidate;
     private final Runnable repaint;
     private final Consumer<Integer> updateCurrentCardsFiltered;
 
-    public RemoveCardFilterFromListWorker(Brain brain, CardFilter cardFilter, Runnable revalidate, Runnable repaint, Consumer<Integer> updateCurrentCardsFiltered) {
+    public RemoveCardFilterFromListButtonWorker(Brain brain, CardFilter cardFilter, Runnable revalidate, Runnable repaint, Consumer<Integer> updateCurrentCardsFiltered) {
         super(brain);
         this.cardFilter = cardFilter;
         this.revalidate = revalidate;

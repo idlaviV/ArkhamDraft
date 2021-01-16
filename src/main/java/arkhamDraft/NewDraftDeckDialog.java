@@ -17,7 +17,7 @@ import static java.lang.Thread.sleep;
 public class NewDraftDeckDialog extends JDialog {
     private final Brain brain;
     private JTextArea draftDeckLog;
-    private JLabel draftDeckSizeLabel;
+    //private JLabel draftDeckSizeLabel;
     private FilterCardsDialog filterCardsDialog;
     private final JFileChooser fc = new JFileChooser();
     private final Consumer<Deck> printCardsToDraftPanel;
@@ -44,29 +44,50 @@ public class NewDraftDeckDialog extends JDialog {
         currentDraftDeckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         add(currentDraftDeckPanel);
 
-        draftDeckSizeLabel = new JLabel("Draft deck is empty");
-        currentDraftDeckPanel.add(draftDeckSizeLabel);
+        //draftDeckSizeLabel = new JLabel("Draft deck is empty");
+        currentDraftDeckPanel.add(initializeDraftDeckLog());
+        filterCardsDialog = new FilterCardsDialog(brain, this::addCards);
+        add(initializeButtonPanel());
 
+
+    }
+
+    private Component initializeButtonPanel() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridwidth=3;
+        c.gridx=0; c.gridy=0; c.weightx = 1;
+        buttonPanel.add(initializeAddCardsButton(), c);
+        c.gridx=0; c.gridy=1; c.weightx = 1;
+        buttonPanel.add(initializeFinalizeDraftDeckButton(), c);
+        c.gridwidth=1;
+        c.gridx=0; c.gridy=2; c.weightx = 0.5;
+        buttonPanel.add(initializeSaveButton(), c);
+        c.gridx=1; c.gridy=2; c.weightx = 0.5;
+        buttonPanel.add(initializeLoadButton(), c);
+        c.gridx=2; c.gridy=2; c.weightx = 0.5;
+        buttonPanel.add(initializeDeleteButton(), c);
+        return buttonPanel;
+    }
+
+    private JTextArea initializeDraftDeckLog() {
         draftDeckLog = new JTextArea("Created empty draft deck.", 5, 20);
         JScrollPane draftDeckLogScrollPane = new JScrollPane(draftDeckLog);
         draftDeckLogScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        currentDraftDeckPanel.add(draftDeckLogScrollPane);
         draftDeckLog.setBackground(this.getBackground());
+        return draftDeckLog;
+    }
 
-        JButton addCardsButton = new JButton("Add Cards");
-        add(addCardsButton);
-        filterCardsDialog = new FilterCardsDialog(brain, this::addCards);
+    private Component initializeAddCardsButton() {
+        JButton addCardsButton = new JButton("Add more Cards");
         addCardsButton.addActionListener(e -> {
             filterCardsDialog.tidyUp();
             brain.guiEntersFilterCardsDialog();
             filterCardsDialog.setVisible(true);
         });
-
-
-        add(initializeFinalizeDraftDeckButton());
-        add(initializeSaveButton());
-        add(initializeLoadButton());
-        add(initializeDeleteButton());
+        return addCardsButton;
     }
 
     private SwingWorker<Integer, Void> addCards(Boolean dummy) {
@@ -221,11 +242,11 @@ public class NewDraftDeckDialog extends JDialog {
 
     public void tidyUp() {
         draftDeckLog.setText("Created empty draft deck.");
-        draftDeckSizeLabel.setText("Draft deck is empty.");
+        //draftDeckSizeLabel.setText("Draft deck is empty.");
     }
 
     public void updateDraftDeckSize(int newSize) {
-        draftDeckSizeLabel.setText(String.format("Draft deck contains %d cards.", newSize));
+        //draftDeckSizeLabel.setText(String.format("Draft deck contains %d cards.", newSize));
     }
 
     public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
@@ -234,7 +255,7 @@ public class NewDraftDeckDialog extends JDialog {
 
     public void draftingBoxWasDiscarded() {
         draftDeckLog.setText(String.format("%s\n%s\n%s", draftDeckLog.getText(), "Discarded all cards.","Created new empty draft deck."));
-        draftDeckSizeLabel.setText("Draft deck is empty.");
+        //draftDeckSizeLabel.setText("Draft deck is empty.");
     }
 
     public void updateFilterListFromBrain() {

@@ -341,13 +341,7 @@ public class ArkhamDraftBrain implements Brain{
                 }
             }
         }
-        FileWriter fileWriter = new FileWriter(deckFile);
-        fileWriter.write(fileName + "\n" + "\n");
-        ArrayList<String> printInfo = drafter.getDraftedDeck().getPrintInfo(false);
-        for (String println: printInfo) {
-            fileWriter.write(println+"\n");
-        }
-        fileWriter.close();
+        guiSaveDeck(deckFile);
         return true;
     }
 
@@ -433,6 +427,18 @@ public class ArkhamDraftBrain implements Brain{
         }
     }
 
+    @Override
+    public void guiSaveDeck(File file) throws IOException {
+        String fileName = file.getName().split("\\.")[0];
+        FileWriter fileWriter = new FileWriter(file);
+        fileWriter.write(fileName + "\n" + "\n");
+        ArrayList<String> printInfo = drafter.getDraftedDeck().getPrintInfo(false);
+        for (String println: printInfo) {
+            fileWriter.write(println+"\n");
+        }
+        fileWriter.close();
+    }
+
     public void guiOpensNewDraftDeckDialog() {
         startDraft();
     }
@@ -497,28 +503,6 @@ public class ArkhamDraftBrain implements Brain{
             e.printStackTrace();
         }
 
-    }
-
-    public void guiLoadFilterList(File file) {
-        try {
-            FileReader fr = new FileReader(file);
-            BufferedReader reader = new BufferedReader(fr);
-            drafter.initializeCardAddition();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.matches("=*")) {
-                    //guiAddCards();//TODO
-                    drafter.initializeCardAddition();
-                } else {
-                    generateFilter(line);
-                }
-            }
-            //guiAddCards();//TODO
-            reader.close();
-            fr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void guiDeleteDeck() {

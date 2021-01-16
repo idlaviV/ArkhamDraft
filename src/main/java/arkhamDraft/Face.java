@@ -2,8 +2,11 @@ package arkhamDraft;
 
 import arkhamDraft.workerPool.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 
 public class Face extends JFrame{
@@ -15,6 +18,7 @@ public class Face extends JFrame{
     private NewDraftDeckDialog newDraftDeckDialog;
     EverythingDisablerAndReenabler draftEnabler;
     private boolean draftEnabled = false;
+    private final JFileChooser fc = new JFileChooser();
 
 
     public Face(Brain brain) {
@@ -207,18 +211,63 @@ public class Face extends JFrame{
         JScrollPane deckScrollPane = new JScrollPane(deckList);
         deckPanel.add(deckScrollPane);
 
-        DefaultComboBoxModel<String> sortComboBoxModel = new DefaultComboBoxModel<>();
+        DefaultComboBoxModel<String> sortComboBoxModel = initializeSortComboBoxModel();
         JComboBox<String> sortComboBox = new JComboBox<>(sortComboBoxModel);
         deckPanel.add(initializeSortDeckButton(sortComboBox));
         deckPanel.add(sortComboBox);
+
+        deckPanel.add(initializeSaveLoadDeckPanel());
+
+
+        return deckPanel;
+    }
+
+    private Component initializeSaveLoadDeckPanel() {
+        JPanel saveLoadDeckPanel = new JPanel();
+        saveLoadDeckPanel.add(initializeSaveButton());
+        return saveLoadDeckPanel;
+    }
+
+    private Component initializeSaveButton() {
+        JButton loadButton = new JButton();
+        try {
+            Image img = ImageIO.read(getClass().getResource("/icons/actions-document-save-icon.png"));
+            loadButton.setIcon(new ImageIcon(img));
+            loadButton.setMargin(new Insets(0, 0, 0, 0));
+            loadButton.setBorder(null);
+            loadButton.setContentAreaFilled(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        loadButton.addActionListener(e -> {
+            File directory = new File("decks");
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            fc.setCurrentDirectory(directory);
+            int returnVal = fc.showSaveDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                String pathName = file.toPath().toString();
+                if (!pathName.endsWith(".txt")) {
+                    file = new File(pathName + ".txt");
+                    new SaveDeckButtonWorker(brain, file).execute();
+                }
+            }
+        });
+        return loadButton;
+    }
+
+    private DefaultComboBoxModel<String> initializeSortComboBoxModel() {
+        DefaultComboBoxModel<String> sortComboBoxModel = new DefaultComboBoxModel<>();
         sortComboBoxModel.addElement("Type, then name");
         sortComboBoxModel.addElement("Just name");
         sortComboBoxModel.addElement("Faction, then name");
         sortComboBoxModel.addElement("Faction, then XP, then name");
         sortComboBoxModel.addElement("XP, then name");
         sortComboBoxModel.addElement("Cost, then name");
-
-        return deckPanel;
+        return sortComboBoxModel;
     }
 
     private Component initializeSortDeckButton(JComboBox<String> sortComboBox) {
@@ -275,23 +324,5 @@ public class Face extends JFrame{
         }
     }
 
-    public void addFilterToFilterList(CardFilter newCardFilter) {
-        newDraftDeckDialog.addFilterToFilterList(newCardFilter);
-    }
 
-    public void updateDraftDeckLog(String newLabel) {
-        newDraftDeckDialog.updateDraftDeckLog(newLabel);
-    }
-
-    public void updateDraftDeckSize() {
-        newDraftDeckDialog.updateDraftDeckSize(brain.getDraftingBoxSize());
-    }
-
-    public void updateCurrentCardsFiltered(int cardsFilteredByFilterListSize) {
-        newDraftDeckDialog.updateCurrentCardsFiltered(cardsFilteredByFilterListSize);
-    }
-
-    public void updateFilterListFromBrain() {
-        newDraftDeckDialog.updateFilterListFromBrain();
-    }
 }
