@@ -2,6 +2,9 @@ package arkhamDraft;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Decoder {
 
@@ -104,5 +107,28 @@ public class Decoder {
             arguments.add(parameter.trim());
         }
         return arguments;
+    }
+
+    public static List<Card> findCardInCardBoxFromString(CardBox cardBox, String input) {
+        Pattern pattern = Pattern.compile("x (.*?) \\(");
+        Matcher matcher = pattern.matcher(input);
+        String realInput = "";
+        if (matcher.find()) {
+            realInput = matcher.group(1);
+        }
+        String cardString = input.substring(0,input.indexOf("x"));
+        int cardinality = Integer.parseInt(cardString);
+        String wholeName = realInput;
+        int xp = 0;
+        String subName = null;
+        if (wholeName.contains("[")) {
+            xp = Integer.parseInt(wholeName.substring(wholeName.indexOf("[")+1,wholeName.indexOf("]")));
+            wholeName = wholeName.substring(0,wholeName.indexOf("[")).trim();
+        }
+        if (wholeName.contains(":")) {
+            subName = wholeName.substring(wholeName.indexOf(":")+1);
+            wholeName = wholeName.substring(0, wholeName.indexOf(":"));
+        }
+        return cardBox.findAllCardsWithGivenTraits(wholeName, subName, xp, cardinality);
     }
 }

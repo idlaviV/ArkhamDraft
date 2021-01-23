@@ -23,7 +23,7 @@ public class Deck  {
         String line;
         while ((line = br.readLine()) != null) {
             if (!line.equals("") && Character.isDigit(line.charAt(0))) {
-                physicalDeck.addAll(masterCardBox.findCardFromString(line));
+                physicalDeck.addAll(Decoder.findCardInCardBoxFromString(masterCardBox, line));
             }
         }
     }

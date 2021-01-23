@@ -64,7 +64,7 @@ public class Relator {
             case "!:":
                 return containsNotRelator();
             default:
-                return null;
+                throw new IllegalArgumentException(String.format("RelatorString is invalid. %s was given. Valid options are ':' and '!:'.",relatorString));
         }
     }
 

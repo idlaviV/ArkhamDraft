@@ -197,21 +197,16 @@ public class Card {
 
     public static CardFilter generateCardFilter(String attribute, BiFunction<List<String>, List<String>, Boolean> relator,
                                                              List<String> values, String relatorString) {
-        switch (attribute){
+        switch (attribute.toLowerCase()){
             case "faction":
-            case "Faction":
                 return new CardFilter((card) -> relator.apply(card.getFaction_code(),values), String.format("Faction%s%s", relatorString, rewriteValues(values)));
             case "trait":
-            case "Trait":
                 return new CardFilter((card) -> relator.apply(card.getTraits(),values), String.format("Trait%s%s", relatorString, rewriteValues(values)));
             case "pack":
-            case "Pack":
                 return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getPack()),values), String.format("Pack%s%s", relatorString, rewriteValues(values)));
             case "type":
-            case "Type":
                 return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getType()),values), String.format("Type%s%s", relatorString, rewriteValues(values)));
             case "text":
-            case "Text":
                 return new CardFilter((card) -> values.stream().anyMatch(value -> card.getText() != null && card.getText().contains(value)), String.format("Text%s%s", relatorString, rewriteValues(values)));
             default:
                 return nullFilter;

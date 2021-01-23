@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CardBox {
@@ -32,7 +30,7 @@ public class CardBox {
         String line;
         while ((line = br.readLine()) != null) {
             if (!line.equals("") && Character.isDigit(line.charAt(0))) {
-                cards.addAll(masterCardBox.findCardFromString(line));
+                cards.addAll(Decoder.findCardInCardBoxFromString(masterCardBox, line));
             }
         }
     }
@@ -50,29 +48,10 @@ public class CardBox {
         return cards.stream().anyMatch(c -> c.equals(cardSearch));
     }
 
-    public List<Card> findCardFromString(String input) {
-        Pattern pattern = Pattern.compile("x (.*?) \\(");
-        Matcher matcher = pattern.matcher(input);
-        String realInput = "";
-        if (matcher.find()) {
-            realInput = matcher.group(1);
-        }
-        String cardString = input.substring(0,input.indexOf("x"));
-        int cardinality = Integer.parseInt(cardString);
-        String wholeName = realInput;
-        int xp = 0;
-        String subname = null;
-        if (wholeName.contains("[")) {
-            xp = Integer.parseInt(wholeName.substring(wholeName.indexOf("[")+1,wholeName.indexOf("]")));
-            wholeName = wholeName.substring(0,wholeName.indexOf("[")).trim();
-        }
-        if (wholeName.contains(":")) {
-            subname = wholeName.substring(wholeName.indexOf(":")+1);
-            wholeName = wholeName.substring(0, wholeName.indexOf(":"));
-        }
+    public List<Card> findAllCardsWithGivenTraits(String wholeName, String subName, int xp, int cardinality){
         List<Card> physicalCards = new ArrayList<>();
         for (Card card : cards) {
-            if (card.getReal_name().equals(wholeName) && (card.getSubname() == null || card.getSubname().equals(subname)) && (card.getXp() == null ||card.getXp() == xp)) {
+            if (card.getReal_name().equals(wholeName) && (card.getSubname() == null || card.getSubname().equals(subName)) && (card.getXp() == null ||card.getXp() == xp)) {
                 for (int j=0; j < cardinality; j++) {
                     physicalCards.add(card.getPhysicalCard());
                 }
