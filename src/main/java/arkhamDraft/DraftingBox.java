@@ -23,6 +23,9 @@ public class DraftingBox extends CardBox {
             if (secondCore || !card.getPack().equals("core") || card.getQuantity() > 1) {
                 physicalDraftingBox.add(card.getPhysicalCard());
             }
+            if (card.getQuantity() == 2) {
+                physicalDraftingBox.add(card.getPhysicalCard());
+            }
             physicalDraftingBox.add(card.getPhysicalCard());
         }
     }

@@ -94,15 +94,15 @@ public class CardBoxTest {
 
     private void givenCardBoxWithGuardianCards() {
         Card[] setOfCards = new Card[]{
-                getDummyCardWithFaction("GUARDIAN"),
-                getDummyCardWithFaction("GUARDIAN")};
+                TestCommons.getDummyCardWithFaction("GUARDIAN"),
+                TestCommons.getDummyCardWithFaction("GUARDIAN")};
         testBox = new CardBox(setOfCards);
     }
 
     private void givenCardBoxWithGuardianAndOneSeekerCards() {
         Card[] setOfCards = new Card[]{
-                getDummyCardWithFaction("GUARDIAN"),
-                getDummyCardWithFaction("SEEKER")
+                TestCommons.getDummyCardWithFaction("GUARDIAN"),
+                TestCommons.getDummyCardWithFaction("SEEKER")
         };
         testBox = new CardBox(setOfCards);
     }
@@ -110,7 +110,7 @@ public class CardBoxTest {
     private void givenCardBoxWithRainbowXP() {
         Card[] setOfCards = new Card[6];
         for (int i =0; i<=5; i++) {
-            setOfCards[i] = getDummyCardWithXP(i);
+            setOfCards[i] = TestCommons.getDummyCardWithXP(i);
         }
         testBox = new CardBox(setOfCards);
     }
@@ -125,13 +125,5 @@ public class CardBoxTest {
 
     private void whenFilterXP(String relatorString, int value) {
         testBox.filter(Card.generateCardFilter("XP", Relator.getNumericalRelator(relatorString),value,relatorString));
-    }
-
-    private Card getDummyCardWithFaction(String factionName) {
-        return new Card(null, null, factionName, null, false, null, null, null, null, null);
-    }
-
-    private Card getDummyCardWithXP(int xpValue) {
-        return new Card(null, null, null, null, false, null, null, null, null, xpValue);
     }
 }
