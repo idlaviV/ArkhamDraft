@@ -186,9 +186,8 @@ public class Card {
     }
 
     public static CardFilter generateCardFilter(String attribute, BiFunction<Integer, Integer, Boolean> relator, int value, String relatorString) {
-        switch (attribute){
+        switch (attribute.toLowerCase()){
             case "xp":
-            case "XP":
                 return new CardFilter((it) -> relator.apply(it.getXp(),value), String.format("XP%s%d",relatorString, value));
             default:
                 return nullFilter;

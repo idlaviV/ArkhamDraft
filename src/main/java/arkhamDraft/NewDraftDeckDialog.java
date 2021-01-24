@@ -145,7 +145,7 @@ public class NewDraftDeckDialog extends JDialog {
             e.printStackTrace();
         }
         saveButton.addActionListener(e->{
-            File directory = new File("cardFilter");
+            File directory = new File("data/cardFilter");
             if (!directory.exists()) {
                 directory.mkdir();
             }

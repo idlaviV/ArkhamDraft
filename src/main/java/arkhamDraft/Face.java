@@ -241,7 +241,7 @@ public class Face extends JFrame{
         }
 
         loadButton.addActionListener(e -> {
-            File directory = new File("decks");
+            File directory = new File("data/decks");
             if (!directory.exists()) {
                 directory.mkdir();
             }

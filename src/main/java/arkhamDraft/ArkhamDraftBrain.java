@@ -432,6 +432,7 @@ public class ArkhamDraftBrain implements Brain{
         String fileName = file.getName().split("\\.")[0];
         FileWriter fileWriter = new FileWriter(file);
         fileWriter.write(fileName + "\n" + "\n");
+        fileWriter.write("This line must contain investigator name" + "\n" + "\n");
         ArrayList<String> printInfo = drafter.getDraftedDeck().getPrintInfo(false);
         for (String println: printInfo) {
             fileWriter.write(println+"\n");
