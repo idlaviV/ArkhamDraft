@@ -483,6 +483,12 @@ public class ArkhamDraftBrain implements Brain{
         }
     }
 
+    public void guiDiscardFromSideboard(ArrayList<Card> checkedCards) {
+        for (Card currentCard : checkedCards) {
+            drafter.discardCardFromSideboard(currentCard);
+        }
+    }
+
     public void guiSaveFilterList(File saveFile) {
         try {
             if(!saveFile.createNewFile()){

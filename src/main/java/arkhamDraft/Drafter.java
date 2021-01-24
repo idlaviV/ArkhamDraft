@@ -114,6 +114,7 @@ public class Drafter {
         addCardFromDeckToDeck(fromDeck, toDeck, fromDeck.getIndex(card));
     }
 
+    public void discardCardFromSideboard(Card card) {discardCardFromSideboard(sideboard.getIndex(card));}
 
     public boolean discardCardFromSideboard(int index) {
         if (index < sideboard.getSize() && index >= 0 && sideboard.getCard(index) != null) {

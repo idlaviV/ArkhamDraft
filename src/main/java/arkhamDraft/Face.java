@@ -285,16 +285,32 @@ public class Face extends JFrame{
 
     private Component initializeSideBoardPanel() {
         JPanel sideboardPanel = new JPanel();
-        JPanel sideboardButtonPanel = new JPanel();
-        sideboardButtonPanel.add(initializeAddFromSideBoardButton());
         sideboardPanel.setLayout(new BoxLayout(sideboardPanel, BoxLayout.PAGE_AXIS));
         sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         sideboardPanel.add(new JLabel("sideboard panel"));
         sideboardList = new CardCheckBoxList();
         JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
         sideboardPanel.add(sideboardScrollPane);
-        sideboardPanel.add(sideboardButtonPanel);
+        sideboardPanel.add(initializeSideboardButtonPanel());
         return sideboardPanel;
+    }
+
+    private JPanel initializeSideboardButtonPanel() {
+        JPanel sideboardButtonPanel = new JPanel();
+        sideboardButtonPanel.add(initializeAddFromSideBoardButton());
+        sideboardButtonPanel.add(initializeDiscardFromSideBoardButton());
+        return sideboardButtonPanel;
+    }
+
+    private Component initializeDiscardFromSideBoardButton() {
+        JButton removeFromSideBoardButton = new JButton("Discard");
+        removeFromSideBoardButton.addActionListener(e ->
+                new DiscardFromSideBoardButtonWorker(
+                        brain,
+                        sideboardList,
+                        this::printCardsToSideboardPanel
+                ).execute());
+        return removeFromSideBoardButton;
     }
 
     private Component initializeAddFromSideBoardButton() {

@@ -38,6 +38,8 @@ public interface Brain {
 
     void guiAddFromSideboard(ArrayList<Card> checkedCards);
 
+    void guiDiscardFromSideboard(ArrayList<Card> checkedCards);
+
     void guiAddToSideboard(ArrayList<Card> checkedCards);
 
     void guiDeleteDeck();
