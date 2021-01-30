@@ -283,7 +283,7 @@ public class Card {
     private static final Comparator<Card> xpC = (card1, card2) -> {
         Integer xp1 = card1.getXp();
         Integer xp2 = card2.getXp();
-        return Integer.compare(xp1, xp2);
+        return compareIntegers(xp1, xp2);
     };
 
     private static final Comparator<Card> nameComp = (card1, card2) -> {

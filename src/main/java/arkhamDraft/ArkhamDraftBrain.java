@@ -174,7 +174,7 @@ public class ArkhamDraftBrain implements Brain{
                             break;
                         case "add":
                             int addCardIndex = Integer.parseInt(arguments.get(1));
-                            if (drafter.addCardToDeck(addCardIndex)) {
+                            if (drafter.addCardToDeckFromDraftedCards(addCardIndex)) {
                                 System.out.println(String.format("Card %d added to deck.", addCardIndex));
                                 //face.printCardsToDeckPanel(drafter.getDraftedDeck());
                                 printCardsEnumerated(drafter.getDraftedCards());
@@ -440,6 +440,30 @@ public class ArkhamDraftBrain implements Brain{
         fileWriter.close();
     }
 
+    @Override
+    public void buildDeckFromFile(File file) {
+        try {
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (Decoder.isThisACardEntry(line)) {
+                    List<Card> foundCards = Decoder.findCardInCardBoxFromString(masterCardBox, line);
+                    if (!foundCards.isEmpty()) {
+                        drafter.addCardsToDeck(foundCards);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void disposeDeck() {
+        drafter.disposeDeck();
+    }
+
     public void guiOpensNewDraftDeckDialog() {
         if (drafter == null) {
             startDraft();
@@ -466,7 +490,7 @@ public class ArkhamDraftBrain implements Brain{
 
     public void guiAddToDeck(ArrayList<Card> checkedCards) {
         for (Card currentCard : checkedCards) {
-            drafter.addCardToDeck(currentCard);
+            drafter.addCardToDeckFromDraftedCards(currentCard);
         }
     }
 

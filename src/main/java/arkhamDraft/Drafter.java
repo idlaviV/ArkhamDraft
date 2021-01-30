@@ -11,7 +11,7 @@ public class Drafter {
     private DraftingBox draftingBox = new DraftingBox(); //Box of cards which can be drafted from
 
     private Deck draftedCards = new Deck();
-    private final Deck draftedDeck = new Deck();
+    private Deck draftedDeck = new Deck();
     private final Deck sideboard = new Deck();
 
     private final boolean secondCore;
@@ -77,11 +77,11 @@ public class Drafter {
         draftingBox = new DraftingBox();
     }
 
-    public boolean addCardToDeck(int index) {
+    public boolean addCardToDeckFromDraftedCards(int index) {
         return addCardFromDeckToDeck(draftedCards, draftedDeck, index);
     }
 
-    public void addCardToDeck(Card card) {
+    public void addCardToDeckFromDraftedCards(Card card) {
         addCardFromDeckToDeck(draftedCards, draftedDeck, card);
     }
 
@@ -189,5 +189,13 @@ public class Drafter {
 
     public ArrayList<CardFilter> getFilterList() {
         return filterList;
+    }
+
+    public void addCardsToDeck(List<Card> cards) {
+        draftedDeck.addCards(cards);
+    }
+
+    public void disposeDeck() {
+        draftedDeck = new Deck();
     }
 }

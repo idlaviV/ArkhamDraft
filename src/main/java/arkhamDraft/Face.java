@@ -4,6 +4,7 @@ import arkhamDraft.workerPool.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -225,8 +226,53 @@ public class Face extends JFrame{
     private Component initializeSaveLoadDeckPanel() {
         JPanel saveLoadDeckPanel = new JPanel();
         saveLoadDeckPanel.add(initializeSaveButton());
+        saveLoadDeckPanel.add(initializeLoadButton());
         return saveLoadDeckPanel;
     }
+
+    private Component initializeLoadButton() {
+        JButton saveButton = new JButton();
+        try {
+            Image img = ImageIO.read(getClass().getResource("/icons/actions-document-open-folder-icon.png"));
+            saveButton.setIcon(new ImageIcon(img));
+            saveButton.setMargin(new Insets(0, 0, 0, 0));
+            saveButton.setBorder(null);
+            saveButton.setContentAreaFilled(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        saveButton.addActionListener(e -> {
+            File directory = new File("data/decks");
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            fc.setCurrentDirectory(directory);
+            fc.setAcceptAllFileFilterUsed(false);
+            fc.setFileFilter(new FileFilter() {
+                @Override
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt");
+                }
+
+                @Override
+                public String getDescription() {
+                    return "Text Files (*.txt)";
+                }
+            });
+            int returnVal = fc.showOpenDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                new LoadDeckButtonWorker(
+                        brain,
+                        file,
+                        this::printCardsToDeckPanel
+                ).execute();
+            }
+        });
+        return saveButton;
+    }
+
 
     private Component initializeSaveButton() {
         JButton loadButton = new JButton();

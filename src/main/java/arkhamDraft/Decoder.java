@@ -109,16 +109,22 @@ public class Decoder {
         return arguments;
     }
 
+    public static boolean isThisACardEntry(String input) {
+        Pattern pattern = Pattern.compile("\\dx.*(.*)\\s*");
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches();
+    }
+
     public static List<Card> findCardInCardBoxFromString(CardBox cardBox, String input) {
-        Pattern pattern = Pattern.compile("x (.*?) \\(");
+        Pattern pattern = Pattern.compile("(?<=x).*(?=\\()"); //Matches anything which is preceded by x and succeeded by (
         Matcher matcher = pattern.matcher(input);
         String realInput = "";
         if (matcher.find()) {
-            realInput = matcher.group(1);
+            realInput = matcher.group(0);
         }
         String cardString = input.substring(0,input.indexOf("x"));
         int cardinality = Integer.parseInt(cardString);
-        String wholeName = realInput;
+        String wholeName = realInput.replaceAll("  "," ").trim();
         int xp = 0;
         String subName = null;
         if (wholeName.contains("[")) {

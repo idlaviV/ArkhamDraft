@@ -59,4 +59,8 @@ public interface Brain {
     void loadFilterList(File file, Function<Boolean, SwingWorker<Integer, Void>> addCards);
 
     void guiSaveDeck(File file) throws IOException;
+
+    void buildDeckFromFile(File file);
+
+    void disposeDeck();
 }
