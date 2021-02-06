@@ -49,12 +49,12 @@ public class DraftingBoxTest {
         };
         CardBox cardBox = new CardBox(cards);
         testBox.addCards(cardBox);
-        testBox.finalizeDraft(true);
+        testBox.finalizeDraft(true, new Deck());
     }
 
 
     private void givenInitializeEmptyCardBox() {
         testBox = new DraftingBox();
-        testBox.finalizeDraft(true);
+        testBox.finalizeDraft(true, new Deck());
     }
 }

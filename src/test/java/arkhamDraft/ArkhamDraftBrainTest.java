@@ -2,7 +2,12 @@ package arkhamDraft;
 
 
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.*;
 
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import java.io.File;
 import java.io.IOException;
 
@@ -10,7 +15,11 @@ import java.io.IOException;
 import static org.junit.Assert.*;
 
 public class ArkhamDraftBrainTest {
-  Brain testBrain;
+  private Brain testBrain;
+
+  @Mock
+  private SettingsManager manager;
+
 
   @Test
     public void readDeckFromFile() {
@@ -100,7 +109,12 @@ public class ArkhamDraftBrainTest {
     }
 
     private void givenInitializeBrain() {
-      SettingsManager manager = new SettingsManager();
+      SettingsManager manager = Mockito.mock(SettingsManager.class);
+        try {
+            Mockito.when(manager.updateDatabaseFromJSON()).thenReturn(new CardBox(TestCommons.getSmallCardBase()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         testBrain = new ArkhamDraftBrain(manager);
         try {
             testBrain.updateFromJson();

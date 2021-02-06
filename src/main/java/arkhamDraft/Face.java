@@ -8,19 +8,20 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class Face extends JFrame{
-    private JPanel draftPanel;
     private CardCheckBoxList deckList;
     private CardCheckBoxList sideboardList;
     private CardCheckBoxList draftedCardsList;
     private final Brain brain;
     private NewDraftDeckDialog newDraftDeckDialog;
-    EverythingDisablerAndReenabler draftEnabler;
+    private EverythingDisablerAndReenabler draftedCardsPanelEnabler;
+    private EverythingDisablerAndReenabler sideboardPanelEnabler;
     private boolean draftEnabled = false;
     private final JFileChooser fc = new JFileChooser();
-
+    private final ArrayList<Container> componentsToBeDisabled = new ArrayList<Container>();
 
     public Face(Brain brain) {
         super();
@@ -61,13 +62,13 @@ public class Face extends JFrame{
         mainPanel.add(initializeDraftPanel(), gbc);
 
         add(mainPanel);
-        draftEnabler = new EverythingDisablerAndReenabler(draftPanel, null);
-        draftEnabler.disable();
+        draftedCardsPanelEnabler.disable();
+        sideboardPanelEnabler.disable();
         setVisible(true);
     }
 
     private Component initializeDraftPanel() {
-        draftPanel = new JPanel();
+        JPanel draftPanel = new JPanel();
         draftPanel.setLayout(new GridBagLayout());
         draftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         GridBagConstraints gbcDraftPanel = new GridBagConstraints();
@@ -131,6 +132,7 @@ public class Face extends JFrame{
         draftedCardsPanel.add(draftScrollPane);
 
         draftedCardsPanel.add(initializeDraftActionsPanel());
+        draftedCardsPanelEnabler = new EverythingDisablerAndReenabler(draftedCardsPanel, null);
         return draftedCardsPanel;
     }
 
@@ -231,18 +233,18 @@ public class Face extends JFrame{
     }
 
     private Component initializeLoadButton() {
-        JButton saveButton = new JButton();
+        JButton loadButton = new JButton();
         try {
             Image img = ImageIO.read(getClass().getResource("/icons/actions-document-open-folder-icon.png"));
-            saveButton.setIcon(new ImageIcon(img));
-            saveButton.setMargin(new Insets(0, 0, 0, 0));
-            saveButton.setBorder(null);
-            saveButton.setContentAreaFilled(false);
+            loadButton.setIcon(new ImageIcon(img));
+            loadButton.setMargin(new Insets(0, 0, 0, 0));
+            loadButton.setBorder(null);
+            loadButton.setContentAreaFilled(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        saveButton.addActionListener(e -> {
+        loadButton.addActionListener(e -> {
             File directory = new File("data/decks");
             if (!directory.exists()) {
                 directory.mkdir();
@@ -270,7 +272,7 @@ public class Face extends JFrame{
                 ).execute();
             }
         });
-        return saveButton;
+        return loadButton;
     }
 
 
@@ -338,6 +340,7 @@ public class Face extends JFrame{
         JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
         sideboardPanel.add(sideboardScrollPane);
         sideboardPanel.add(initializeSideboardButtonPanel());
+        sideboardPanelEnabler = new EverythingDisablerAndReenabler(sideboardPanel, null);
         return sideboardPanel;
     }
 
@@ -380,9 +383,9 @@ public class Face extends JFrame{
 
     private void enableDraftPanel(boolean b) {
         if (b) {
-            draftEnabler.reenable();
+            draftedCardsPanelEnabler.reenable();
         } else {
-            draftEnabler.disable();
+            draftedCardsPanelEnabler.disable();
         }
     }
 

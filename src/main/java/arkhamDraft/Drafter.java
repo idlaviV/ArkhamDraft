@@ -17,6 +17,7 @@ public class Drafter {
     private final boolean secondCore;
     private ArrayList<CardFilter> filterList = new ArrayList<>(); //only used by gui
 
+
     public Drafter(CardBox ownedCardBox, boolean secondCore) {
         this.ownedCardBox = ownedCardBox;
         this.secondCore = secondCore;
@@ -70,7 +71,7 @@ public class Drafter {
     }
 
     public void finalizeDraft() {
-        draftingBox.finalizeDraft(secondCore);
+        draftingBox.finalizeDraft(secondCore, draftedDeck);
     }
 
     public void discardDraftingBox() {

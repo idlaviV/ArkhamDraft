@@ -1,6 +1,9 @@
 package arkhamDraft;
 
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 
 public class DraftingBox extends CardBox {
@@ -18,9 +21,9 @@ public class DraftingBox extends CardBox {
         getCards().addAll(filteredCardBox.getCards());
     }
 
-    public void finalizeDraft(boolean secondCore) {
+    public void finalizeDraft(boolean secondCore, Deck deck) {
         for (Card card : this.getCards()) {
-            if (secondCore || !card.getPack().equals("core") || card.getQuantity() > 1) {
+            if (secondCore || !card.getPack().equals("core") || card.getQuantity() > 1) {//TODO Überarbeiten
                 physicalDraftingBox.add(card.getPhysicalCard());
             }
             if (card.getQuantity() == 2) {
@@ -28,6 +31,15 @@ public class DraftingBox extends CardBox {
             }
             physicalDraftingBox.add(card.getPhysicalCard());
         }
+        for (Card searchCard : deck.getCards()) {
+            for (Card card : physicalDraftingBox) {
+                if (card.equals(searchCard)) {
+                    physicalDraftingBox.remove(card);
+                    break;
+                }
+            }
+        }
+
     }
 
     public int getPhysicalDraftingBoxSize() {

@@ -470,12 +470,12 @@ public class ArkhamDraftBrain implements Brain{
         }
     }
 
-    public void guiFinalizeDraftDeck() {
-        drafter.finalizeDraft();
-    }
-
     public void guiDraftCardsNew(int amount) {
         drafter.draftCards(amount);
+    }
+
+    public void guiFinalizeDraftDeck() {
+        drafter.finalizeDraft();
     }
 
     public void removeCardFilterFromList(CardFilter cardFilter) {
