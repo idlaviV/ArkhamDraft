@@ -9,9 +9,9 @@ import java.util.function.Consumer;
 
 public class RedraftButtonWorker extends AbstractButtonWorker {
     private final CardCheckBoxList draftedCardsList;
-    private final Consumer<Deck> printCardsToDraftPanel;
+    private final Runnable printCardsToDraftPanel;
 
-    public RedraftButtonWorker(Brain brain, CardCheckBoxList draftedCardsList, Consumer<Deck> printCardsToDraftPanel) {
+    public RedraftButtonWorker(Brain brain, CardCheckBoxList draftedCardsList, Runnable printCardsToDraftPanel) {
         super(brain);
         this.draftedCardsList = draftedCardsList;
         this.printCardsToDraftPanel = printCardsToDraftPanel;
@@ -24,6 +24,6 @@ public class RedraftButtonWorker extends AbstractButtonWorker {
     }
 
     protected void update() {
-        printCardsToDraftPanel.accept(brain.getDraftedCards());
+        printCardsToDraftPanel.run();
     }
 }

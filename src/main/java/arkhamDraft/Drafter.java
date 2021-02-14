@@ -41,7 +41,7 @@ public class Drafter {
         filteredCardBox = null;
     }
 
-    public void clear(){
+    public void clearFilter(){
         filteredCardBox = new DraftingBox();
     }
 
@@ -198,5 +198,12 @@ public class Drafter {
 
     public void disposeDeck() {
         draftedDeck = new Deck();
+    }
+
+    public void clear() {
+        draftingBox = new DraftingBox();
+        draftedCards.clear();
+        sideboard.clear();
+        filterList.clear();
     }
 }

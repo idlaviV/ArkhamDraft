@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public class Card {
-    public static Card nullCard = new Card("", "", "", "", false, "0000", "", "", null, 0);
+    public static Card nullCard = new Card("", "", "", "", "", false, "0000", "", "", null, 0, null);
     private String pack_code;
     private String pack_name;
     private String type_code;
@@ -23,7 +23,7 @@ public class Card {
     private String real_name;
     private String subname;
     private Integer cost;
-    private int quantity;
+    private Integer quantity;
     private int deck_limit;
     private String traits;
     private List<String> traitsList;
@@ -32,7 +32,8 @@ public class Card {
     private String real_text;
     private static CardFilter nullFilter = new CardFilter((card)->true, "null");
 
-    public Card(String pack_name, String type_name, String faction_code, String faction2_code, boolean exceptional, String code, String real_name, String subname, Integer cost, Integer xp) {
+    public Card(String pack_code, String pack_name, String type_name, String faction_code, String faction2_code, boolean exceptional, String code, String real_name, String subname, Integer cost, Integer xp, Integer quantity) {
+        this.pack_code = pack_code;
         this.pack_name = pack_name;
         this.type_name = type_name;
         this.faction_code = faction_code;
@@ -43,6 +44,7 @@ public class Card {
         this.subname = subname;
         this.cost = cost;
         this.xp = xp;
+        this.quantity = quantity;
     }
 
     public String getSubname() {
@@ -50,7 +52,7 @@ public class Card {
     }
 
     public Card getPhysicalCard() {
-        return new Card(pack_name, type_name, faction_code, faction2_code, exceptional, code, real_name, subname, cost, xp);
+        return new Card(pack_code, pack_name, type_name, faction_code, faction2_code, exceptional, code, real_name, subname, cost, xp, null);
     }
 
     public boolean compareTexts() {

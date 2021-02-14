@@ -19,6 +19,7 @@ public class Face extends JFrame{
     private NewDraftDeckDialog newDraftDeckDialog;
     private EverythingDisablerAndReenabler draftedCardsPanelEnabler;
     private EverythingDisablerAndReenabler sideboardPanelEnabler;
+    private final ArrayList<Runnable> deckComponentEnablers = new ArrayList<>();
     private boolean draftEnabled = false;
     private final JFileChooser fc = new JFileChooser();
     private final ArrayList<Container> componentsToBeDisabled = new ArrayList<Container>();
@@ -95,20 +96,25 @@ public class Face extends JFrame{
 
     public void fillWithCards(CardCheckBoxList list) {
         for (int i = 0; i<15; i++) {
-            list.addCard(new Card("Dunwich", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", null, 2));
+            list.addCard(new Card("Dunwich", "dun", "Skill", "Rogue", "", false, "ABC", "A card name", "A sbname", null, 2, null));
         }
     }
 
-    public void printCardsToDraftPanel(Deck deck) {
-        printCardsToPanel(deck, draftedCardsList);
+    public void printCardsToDraftPanel() {
+        printCardsToPanel(brain.getDraftedCards(), draftedCardsList);
     }
 
-    public void printCardsToDeckPanel(Deck deck) {
-        printCardsToPanel(deck, deckList);
+    public void printCardsToDeckPanel() {
+        printCardsToPanel(brain.getDraftedDeck(), deckList);
     }
 
-    public void printCardsToSideboardPanel(Deck deck) {
-        printCardsToPanel(deck, sideboardList);
+    public void printCardsToSideboardPanel() {
+        printCardsToPanel(brain.getSideboard(), sideboardList);
+    }
+
+    private void updateDraftingAndSideboardPanel() {
+        printCardsToDraftPanel();
+        printCardsToSideboardPanel();
     }
 
     private void printCardsToPanel(Deck deck, CardCheckBoxList list) {
@@ -219,6 +225,7 @@ public class Face extends JFrame{
         deckPanel.add(initializeSortDeckButton(sortComboBox));
         deckPanel.add(sortComboBox);
 
+
         deckPanel.add(initializeSaveLoadDeckPanel());
 
 
@@ -268,27 +275,38 @@ public class Face extends JFrame{
                 new LoadDeckButtonWorker(
                         brain,
                         file,
-                        this::printCardsToDeckPanel
+                        this::printCardsToDeckPanel,
+                        this::enableDeckComponents,
+                        this::updateDraftingAndSideboardPanel
                 ).execute();
             }
         });
         return loadButton;
     }
 
+    private void enableDeckComponents() {
+        for (Runnable e : deckComponentEnablers) {
+            e.run();
+        }
+        deckComponentEnablers.clear();
+    }
+
 
     private Component initializeSaveButton() {
-        JButton loadButton = new JButton();
+        JButton saveButton = new JButton();
+        saveButton.setEnabled(false);
+        deckComponentEnablers.add(() -> saveButton.setEnabled(true));
         try {
             Image img = ImageIO.read(getClass().getResource("/icons/actions-document-save-icon.png"));
-            loadButton.setIcon(new ImageIcon(img));
-            loadButton.setMargin(new Insets(0, 0, 0, 0));
-            loadButton.setBorder(null);
-            loadButton.setContentAreaFilled(false);
+            saveButton.setIcon(new ImageIcon(img));
+            saveButton.setMargin(new Insets(0, 0, 0, 0));
+            saveButton.setBorder(null);
+            saveButton.setContentAreaFilled(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        loadButton.addActionListener(e -> {
+        saveButton.addActionListener(e -> {
             File directory = new File("data/decks");
             if (!directory.exists()) {
                 directory.mkdir();
@@ -304,7 +322,7 @@ public class Face extends JFrame{
                 new SaveDeckButtonWorker(brain, file).execute();
             }
         });
-        return loadButton;
+        return saveButton;
     }
 
     private DefaultComboBoxModel<String> initializeSortComboBoxModel() {
@@ -320,13 +338,12 @@ public class Face extends JFrame{
 
     private Component initializeSortDeckButton(JComboBox<String> sortComboBox) {
         JButton sortDeckButton = new JButton("Sort Deck");
+        sortDeckButton.setEnabled(false);
+        deckComponentEnablers.add(()->sortDeckButton.setEnabled(true));
         sortDeckButton.addActionListener(e -> new SortDeckButtonWorker(
                 brain,
                 sortComboBox,
-                (deck) -> {
-                    printCardsToDeckPanel(deck);
-                    return null;
-                }
+                this::printCardsToDeckPanel
         ).execute());
         return sortDeckButton;
     }
@@ -384,8 +401,11 @@ public class Face extends JFrame{
     private void enableDraftPanel(boolean b) {
         if (b) {
             draftedCardsPanelEnabler.reenable();
+            sideboardPanelEnabler.reenable();
+            enableDeckComponents();
         } else {
             draftedCardsPanelEnabler.disable();
+            sideboardPanelEnabler.disable();
         }
     }
 

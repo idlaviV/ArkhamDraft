@@ -8,9 +8,9 @@ import java.util.function.Consumer;
 
 public class DiscardFromSideBoardButtonWorker extends AbstractButtonWorker{
     private final CardCheckBoxList sideBoardList;
-    private final Consumer<Deck> printCardsToSideboardPanel;
+    private final Runnable printCardsToSideboardPanel;
 
-    public DiscardFromSideBoardButtonWorker(Brain brain, CardCheckBoxList sideBoardList, Consumer<Deck> printCardsToSideboardPanel) {
+    public DiscardFromSideBoardButtonWorker(Brain brain, CardCheckBoxList sideBoardList, Runnable printCardsToSideboardPanel) {
         super(brain);
         this.sideBoardList = sideBoardList;
         this.printCardsToSideboardPanel = printCardsToSideboardPanel;
@@ -18,7 +18,7 @@ public class DiscardFromSideBoardButtonWorker extends AbstractButtonWorker{
 
     @Override
     protected void update() {
-        printCardsToSideboardPanel.accept(brain.getSideboard());
+        printCardsToSideboardPanel.run();
     }
 
     @Override

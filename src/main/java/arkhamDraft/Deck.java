@@ -112,4 +112,8 @@ public class Deck  {
     public int getIndex(Card card) {
         return physicalDeck.indexOf(card);
     }
+
+    public void clear() {
+        physicalDeck.clear();
+    }
 }

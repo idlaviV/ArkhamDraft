@@ -10,10 +10,10 @@ import java.util.function.Consumer;
 
 public class AddSideboardButtonWorker extends AbstractButtonWorker {
     private final CardCheckBoxList draftedCardsList;
-    private final Consumer<Deck> printCardsToDraftPanel;
-    private final Consumer<Deck> printCardsToSideboardPanel;
+    private final Runnable printCardsToDraftPanel;
+    private final Runnable printCardsToSideboardPanel;
 
-    public AddSideboardButtonWorker(Brain brain, CardCheckBoxList draftedCardsList, Consumer<Deck> printCardsToDraftPanel, Consumer<Deck> printCardsToSideboardPanel) {
+    public AddSideboardButtonWorker(Brain brain, CardCheckBoxList draftedCardsList, Runnable printCardsToDraftPanel, Runnable printCardsToSideboardPanel) {
         super(brain);
         this.draftedCardsList = draftedCardsList;
         this.printCardsToDraftPanel = printCardsToDraftPanel;
@@ -28,8 +28,8 @@ public class AddSideboardButtonWorker extends AbstractButtonWorker {
 
     // Can safely update the GUI from this method.
     protected void update() {
-        printCardsToDraftPanel.accept(brain.getDraftedCards());
-        printCardsToSideboardPanel.accept(brain.getSideboard());
+        printCardsToDraftPanel.run();
+        printCardsToSideboardPanel.run();
 
     }
 }

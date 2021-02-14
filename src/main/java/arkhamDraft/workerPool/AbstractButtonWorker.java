@@ -25,9 +25,11 @@ public abstract class AbstractButtonWorker extends SwingWorker<Boolean, Void> {
             }
         } catch (InterruptedException e) {
             // This is thrown if the thread's interrupted.
+            e.printStackTrace();
         } catch (ExecutionException e) {
             // This is thrown if we throw an exception
             // from doInBackground.
+            e.printStackTrace();
         }
     }
 

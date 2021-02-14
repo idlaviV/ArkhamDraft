@@ -255,7 +255,7 @@ public class ArkhamDraftBrain implements Brain{
             switch(input){
                 case "quit":
                     quit = true;
-                    drafter.clear();
+                    drafter.clearFilter();
                     break;
                 case "add cards":
                     quit = true;
@@ -572,5 +572,9 @@ public class ArkhamDraftBrain implements Brain{
 
     public void initializeCardAddition() {
         drafter.initializeCardAddition();
+    }
+
+    public void clearDrafter() {
+        drafter.clear();
     }
 }

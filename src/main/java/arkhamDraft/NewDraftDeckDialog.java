@@ -20,10 +20,10 @@ public class NewDraftDeckDialog extends JDialog {
     //private JLabel draftDeckSizeLabel;
     private FilterCardsDialog filterCardsDialog;
     private final JFileChooser fc = new JFileChooser();
-    private final Consumer<Deck> printCardsToDraftPanel;
+    private final Runnable printCardsToDraftPanel;
     private final Runnable enableDraft;
 
-    public NewDraftDeckDialog(Brain brain, Consumer<Deck> printCardsToDraftPanel, Runnable enableDraft) {
+    public NewDraftDeckDialog(Brain brain, Runnable printCardsToDraftPanel, Runnable enableDraft) {
         super();
         this.brain = brain;
         this.printCardsToDraftPanel = printCardsToDraftPanel;

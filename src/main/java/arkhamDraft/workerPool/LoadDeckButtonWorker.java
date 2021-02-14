@@ -10,23 +10,32 @@ public class LoadDeckButtonWorker extends AbstractButtonWorker{
 
 
     private final File file;
-    private final Consumer<Deck> printCardsToDeckPanel;
+    private final Runnable printCardsToDeckPanel;
+    private final Runnable enablers;
+    private final Runnable updateOtherPanels;
 
-    public LoadDeckButtonWorker(Brain brain, File file, Consumer<Deck> printCardsToDeckPanel) {
+    public LoadDeckButtonWorker(Brain brain, File file, Runnable printCardsToDeckPanel, Runnable enablers, Runnable updatePanelsAfterwards) {
         super(brain);
         this.file = file;
         this.printCardsToDeckPanel = printCardsToDeckPanel;
+        this.enablers = enablers;
+        this.updateOtherPanels = updatePanelsAfterwards;
     }
 
     @Override
     protected void update() {
-        printCardsToDeckPanel.accept(brain.getDraftedDeck());
+        printCardsToDeckPanel.run();
+        enablers.run();
+        updateOtherPanels.run();
+
     }
 
     @Override
     protected Boolean doInBackground() throws Exception {
+        brain.guiOpensNewDraftDeckDialog();
         brain.disposeDeck();
         brain.buildDeckFromFile(file);
+        brain.clearDrafter();
         return true;
     }
 }

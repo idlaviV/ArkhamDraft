@@ -17,42 +17,26 @@ public class DrafterTest {
     }
 
     @Test
-    public void filterDraftingDeckByFactionAndFinalize() {
+    public void filterDraftingDeckByFactionGuardian() {
 
         whenFilterDraftingDeckByFaction();
 
-        thenNumberOfCardsInDecksIsAsExpected(2,4);
+        thenNumberOfCardsInDraftingBoxIsAsExpected(2);
     }
 
     @Test
-    public void filterDraftingDeckByFactionAndFinalizeAgainstSingletonDeck() {
-        givenEmptyVessel();
+    public void filterDraftingDeckByXP() {
 
-        whenFilterDraftingDeckByFaction();
+        whenFilterDraftingDeckByXP();
 
-        thenNumberOfCardsInDecksIsAsExpected(2,3);
+        thenNumberOfCardsInDraftingBoxIsAsExpected(12);
     }
-
-    @Test
-    public void filterDraftingDeckByFactionAndFinalizeAgainstGuardianDeckWithDoubleCard() {
-        givenEmptyVessel();
-        givenEmptyVessel();
-
-        whenFilterDraftingDeckByFaction();
-
-        thenNumberOfCardsInDecksIsAsExpected(2,2);
-    }
-
 
 
     private void givenInitializedDrafter() {
         givenOwnedCardsSmallCardDataBase();
         drafter = new Drafter(ownedCards, true);
         drafter.initializeCardAddition();
-    }
-
-    private void givenEmptyVessel() {
-        drafter.addCardsToDeck(Collections.singletonList(TestCommons.getCardEmptyVessel()));
     }
 
     private void givenOwnedCardsSmallCardDataBase() {
@@ -66,12 +50,19 @@ public class DrafterTest {
                 Collections.singletonList("guardian"),
                 "contains"));
         drafter.addCards();
-        drafter.finalizeDraft();
     }
 
-    private void thenNumberOfCardsInDecksIsAsExpected(int expectedDraftingBoxSize, int expectedPhysicalDraftingBoxSize) {
-        assertEquals(expectedDraftingBoxSize,drafter.getDraftingBoxSize());
-        assertEquals(expectedPhysicalDraftingBoxSize,drafter.getPhysicalDraftingBoxSize());
+    private void whenFilterDraftingDeckByXP() {
+        drafter.filter(Card.generateCardFilter(
+                "XP",
+                Relator.getNumericalRelator("<"),
+                2,
+                "smaller"));
+        drafter.addCards();
+    }
+
+    private void thenNumberOfCardsInDraftingBoxIsAsExpected(int expected) {
+        assertEquals(expected, drafter.getDraftingBoxSize());
     }
 
 

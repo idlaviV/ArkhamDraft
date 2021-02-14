@@ -63,4 +63,6 @@ public interface Brain {
     void buildDeckFromFile(File file);
 
     void disposeDeck();
+
+    void clearDrafter();
 }

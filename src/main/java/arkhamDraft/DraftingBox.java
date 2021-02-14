@@ -21,12 +21,16 @@ public class DraftingBox extends CardBox {
         getCards().addAll(filteredCardBox.getCards());
     }
 
+    /**
+     * Creates two physical copies of each card, except if user does not own a second core
+     * and the core set only contains one physical copy of the card.
+     * Afterwards, all cards that are already in the deck are removed.
+     * @param secondCore True if user owns a second core
+     * @param deck The existing deck
+     */
     public void finalizeDraft(boolean secondCore, Deck deck) {
         for (Card card : this.getCards()) {
-            if (secondCore || !card.getPack().equals("core") || card.getQuantity() > 1) {//TODO Überarbeiten
-                physicalDraftingBox.add(card.getPhysicalCard());
-            }
-            if (card.getQuantity() == 2) {
+            if (secondCore || !card.getPack().equals("core") || card.getQuantity() > 1) {
                 physicalDraftingBox.add(card.getPhysicalCard());
             }
             physicalDraftingBox.add(card.getPhysicalCard());
@@ -44,6 +48,10 @@ public class DraftingBox extends CardBox {
 
     public int getPhysicalDraftingBoxSize() {
         return physicalDraftingBox.size();
+    }
+
+    public ArrayList<Card> getPhysicalDraftingBox() {
+        return physicalDraftingBox;
     }
 
     public ArrayList<Card> draftCards(int number) {

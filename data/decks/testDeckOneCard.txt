@@ -1,3 +1,4 @@
-testdeck
+testDeckOneCard
 
-1xArcane Research (Threads of Fate)
+This line must contain investigator name
+

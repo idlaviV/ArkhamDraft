@@ -8,10 +8,10 @@ import java.util.function.Consumer;
 
 public class FinalizeDraftDeckButtonWorker extends AbstractButtonWorker{
     private final Runnable dispose;
-    private final Consumer<Deck> printCardsToDraftPanel;
+    private final Runnable printCardsToDraftPanel;
     private final Runnable enableDraft;
 
-    public FinalizeDraftDeckButtonWorker(Brain brain, Runnable dispose, Consumer<Deck> printCardsToDraftPanel, Runnable enableDraft) {
+    public FinalizeDraftDeckButtonWorker(Brain brain, Runnable dispose, Runnable printCardsToDraftPanel, Runnable enableDraft) {
         super(brain);
         this.dispose = dispose;
         this.printCardsToDraftPanel = printCardsToDraftPanel;
@@ -20,7 +20,7 @@ public class FinalizeDraftDeckButtonWorker extends AbstractButtonWorker{
 
     @Override
     protected void update() {
-        printCardsToDraftPanel.accept(brain.getDraftedCards());
+        printCardsToDraftPanel.run();
         enableDraft.run();
         dispose.run();
     }

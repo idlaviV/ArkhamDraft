@@ -9,10 +9,10 @@ import java.util.function.Consumer;
 
 public class AddButtonWorker extends AbstractButtonWorker {
     private final CardCheckBoxList draftedCardsList;
-    private final Consumer<Deck> printCardsToDraftPanel;
-    private final Consumer<Deck> printCardsToDeckPanel;
+    private final Runnable printCardsToDraftPanel;
+    private final Runnable printCardsToDeckPanel;
 
-    public AddButtonWorker(Brain brain, CardCheckBoxList draftedCardsList, Consumer<Deck> printCardsToDraftPanel, Consumer<Deck> printCardsToDeckPanel) {
+    public AddButtonWorker(Brain brain, CardCheckBoxList draftedCardsList, Runnable printCardsToDraftPanel, Runnable printCardsToDeckPanel) {
         super(brain);
         this.draftedCardsList = draftedCardsList;
         this.printCardsToDraftPanel = printCardsToDraftPanel;
@@ -27,7 +27,7 @@ public class AddButtonWorker extends AbstractButtonWorker {
 
     @Override
     protected void update() {
-        printCardsToDraftPanel.accept(brain.getDraftedCards());
-        printCardsToDeckPanel.accept(brain.getDraftedDeck());
+        printCardsToDraftPanel.run();
+        printCardsToDeckPanel.run();
     }
 }

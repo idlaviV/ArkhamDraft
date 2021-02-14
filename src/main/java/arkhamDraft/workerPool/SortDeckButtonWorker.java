@@ -12,9 +12,9 @@ public class SortDeckButtonWorker extends AbstractButtonWorker{
 
 
     private final JComboBox<String> sortComboBox;
-    private final Function<Deck, Void> printCardsToDeckPanel;
+    private final Runnable printCardsToDeckPanel;
 
-    public SortDeckButtonWorker(Brain brain, JComboBox<String> sortComboBox, Function<Deck, Void> printCardsToDeckPanel) {
+    public SortDeckButtonWorker(Brain brain, JComboBox<String> sortComboBox, Runnable printCardsToDeckPanel) {
         super(brain);
         this.sortComboBox = sortComboBox;
         this.printCardsToDeckPanel = printCardsToDeckPanel;
@@ -23,7 +23,7 @@ public class SortDeckButtonWorker extends AbstractButtonWorker{
 
     @Override
     protected void update() {
-        printCardsToDeckPanel.apply(brain.getDraftedDeck());
+        printCardsToDeckPanel.run();
     }
 
     @Override
