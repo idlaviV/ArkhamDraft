@@ -1,7 +1,9 @@
-package arkhamDraft;
+package arkhamDraft.UI;
 
-import arkhamDraft.workerPool.DeleteButtonWorker;
-import arkhamDraft.workerPool.FinalizeDraftDeckButtonWorker;
+import arkhamDraft.Brain;
+import arkhamDraft.CardFilter;
+import arkhamDraft.UI.workerPool.DeleteButtonWorker;
+import arkhamDraft.UI.workerPool.FinalizeDraftDeckButtonWorker;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,7 +11,6 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.*;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static java.lang.Thread.sleep;

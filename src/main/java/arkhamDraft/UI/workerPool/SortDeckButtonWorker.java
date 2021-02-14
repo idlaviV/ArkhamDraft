@@ -1,12 +1,9 @@
-package arkhamDraft.workerPool;
+package arkhamDraft.UI.workerPool;
 
-import arkhamDraft.ArkhamDraftBrain;
 import arkhamDraft.Brain;
-import arkhamDraft.Deck;
 
 import javax.swing.*;
 import java.util.Objects;
-import java.util.function.Function;
 
 public class SortDeckButtonWorker extends AbstractButtonWorker{
 

@@ -1,8 +1,7 @@
-package arkhamDraft.workerPool;
+package arkhamDraft.UI.workerPool;
 
-import arkhamDraft.ArkhamDraftBrain;
 import arkhamDraft.Brain;
-import arkhamDraft.HintTextField;
+import arkhamDraft.UI.HintTextField;
 
 import javax.swing.*;
 import java.util.function.Function;

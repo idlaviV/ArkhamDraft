@@ -1,12 +1,8 @@
-package arkhamDraft.workerPool;
+package arkhamDraft.UI.workerPool;
 
 
-import arkhamDraft.ArkhamDraftBrain;
 import arkhamDraft.Brain;
-import arkhamDraft.CardCheckBoxList;
-import arkhamDraft.Deck;
-
-import java.util.function.Consumer;
+import arkhamDraft.UI.CardCheckBoxList;
 
 public class AddSideboardButtonWorker extends AbstractButtonWorker {
     private final CardCheckBoxList draftedCardsList;

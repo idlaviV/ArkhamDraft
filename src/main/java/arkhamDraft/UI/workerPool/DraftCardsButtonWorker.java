@@ -1,8 +1,7 @@
-package arkhamDraft.workerPool;
+package arkhamDraft.UI.workerPool;
 
-import arkhamDraft.ArkhamDraftBrain;
 import arkhamDraft.Brain;
-import arkhamDraft.CardCheckBoxList;
+import arkhamDraft.UI.CardCheckBoxList;
 import arkhamDraft.Deck;
 
 import java.util.function.BiConsumer;

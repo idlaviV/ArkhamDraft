@@ -1,4 +1,4 @@
-package arkhamDraft;
+package arkhamDraft.UI;
 
 import java.awt.*;
 import java.util.ArrayList;

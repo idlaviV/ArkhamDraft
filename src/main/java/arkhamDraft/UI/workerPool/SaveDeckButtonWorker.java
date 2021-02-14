@@ -1,4 +1,4 @@
-package arkhamDraft.workerPool;
+package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
 

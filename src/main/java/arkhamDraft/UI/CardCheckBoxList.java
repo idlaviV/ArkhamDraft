@@ -1,5 +1,7 @@
-package arkhamDraft;
+package arkhamDraft.UI;
 
+
+import arkhamDraft.Card;
 
 import javax.swing.*;
 import javax.swing.border.*;

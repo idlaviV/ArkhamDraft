@@ -1,6 +1,7 @@
-package arkhamDraft;
+package arkhamDraft.UI;
 
-import arkhamDraft.workerPool.*;
+import arkhamDraft.*;
+import arkhamDraft.UI.workerPool.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

@@ -1,8 +1,12 @@
-package arkhamDraft;
+package arkhamDraft.UI;
 
-import arkhamDraft.workerPool.AddCardsToDraftDeckButtonWorker;
-import arkhamDraft.workerPool.AddFilterButtonWorker;
-import arkhamDraft.workerPool.RemoveCardFilterFromListButtonWorker;
+import arkhamDraft.Brain;
+import arkhamDraft.CardFilter;
+import arkhamDraft.Decoder;
+import arkhamDraft.Faction;
+import arkhamDraft.UI.workerPool.AddCardsToDraftDeckButtonWorker;
+import arkhamDraft.UI.workerPool.AddFilterButtonWorker;
+import arkhamDraft.UI.workerPool.RemoveCardFilterFromListButtonWorker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,13 +19,16 @@ import java.util.function.Function;
 
 public class FilterCardsDialog extends JDialog {
     private final Brain brain;
-    private DeposableFilterList filterList;
+    private DisposableFilterList filterList;
     private JComboBox<String> attributeSelector;
     private JComboBox<String> relatorSelector;
     private HintTextField valueSelector;
     private JButton addFilterButton;
     private JLabel currentCardsFilteredLabel;
     private final Function<Boolean, SwingWorker<Integer, Void>> addCards;
+    private JPanel valueSelectorPanel;
+    private DefaultComboBoxModel<Faction> factionSelectorModel;
+    private boolean hasFactionSelected = false;
 
     public FilterCardsDialog(Brain brain, Function<Boolean, SwingWorker<Integer, Void>> addCards) {
         super();
@@ -68,17 +75,29 @@ public class FilterCardsDialog extends JDialog {
         addFilterButton.setEnabled(false);
         addFilterButton.addActionListener(e -> new AddFilterButtonWorker(
                 brain,
-                attributeSelector,
-                relatorSelector,
-                valueSelector,
                 this::updateFilterListFromBrain,
-                this::updateCurrentCardsFiltered
+                this::updateCurrentCardsFiltered,
+                this::addFilterFromUserSelection
         ).execute());
         return addFilterButton;
     }
 
+    private void addFilterFromUserSelection() {
+        ArrayList<String> arguments;
+        if (hasFactionSelected) {
+            arguments = Decoder.decryptGUIFilter(attributeSelector.getItemAt(attributeSelector.getSelectedIndex()),
+                    relatorSelector.getItemAt(relatorSelector.getSelectedIndex()),
+                    factionSelectorModel.getSelectedItem().toString());
+        } else {
+            arguments = Decoder.decryptGUIFilter(attributeSelector.getItemAt(attributeSelector.getSelectedIndex()),
+                    relatorSelector.getItemAt(relatorSelector.getSelectedIndex()),
+                    valueSelector.getText());
+        }
+        brain.addFilterFromGUI(arguments);
+    }
+
     private Component initializeFilterList() {
-        filterList = new DeposableFilterList(this);
+        filterList = new DisposableFilterList(this);
         //filterListModel = new DefaultListModel<>();
         //JList<CardFilter> filterList = new JList<>(filterListModel);
         //filterListModel.addElement(new CardFilter((card)->true, "null"));
@@ -103,12 +122,47 @@ public class FilterCardsDialog extends JDialog {
         relatorSelector.setPrototypeDisplayValue("contains not");
         filterAdditionPanel.add(relatorSelector);
 
-        valueSelector = new HintTextField("Value", 15);
-        valueSelector.setEnabled(false);
-        filterAdditionPanel.add(valueSelector);
+
+        filterAdditionPanel.add(initializeValueSelectorPanel());
 
         return filterAdditionPanel;
+
     }
+
+    private Component initializeValueSelectorPanel() {
+        CardLayout valueSelectorCardLayout = new CardLayout();
+        valueSelectorPanel = new JPanel(valueSelectorCardLayout);
+
+
+        valueSelector = new HintTextField("Value", 15);
+        valueSelector.setEnabled(false);
+        valueSelectorPanel.add(valueSelector);
+
+        valueSelectorPanel.add(initializeFactionSelectorComboBox());
+
+        return valueSelectorPanel;
+    }
+
+    private Component initializeFactionSelectorComboBox() {
+        factionSelectorModel = new DefaultComboBoxModel<>();
+        JComboBox<Faction> comboBox = new JComboBox<>(factionSelectorModel);
+        comboBox.setEditable(true);
+        for (Faction f : Faction.values()) {
+            factionSelectorModel.addElement(f);
+        }
+        return comboBox;
+    }
+
+    private void switchToDefaultValueSelector() {
+        ((CardLayout) valueSelectorPanel.getLayout()).first(valueSelectorPanel);
+        hasFactionSelected = false;
+    }
+
+    private void switchToFactionValueSelector() {
+        ((CardLayout) valueSelectorPanel.getLayout()).last(valueSelectorPanel);
+        hasFactionSelected = true;
+    }
+
 
     private ActionListener attributeSelectorActionListener() {
         return e -> {
@@ -119,6 +173,11 @@ public class FilterCardsDialog extends JDialog {
             } else {
                 valueSelector.setEnabled(false);
                 initializeRelatorSelector(attributeSelector.getSelectedItem().equals("XP"));
+            }
+            if (attributeSelector.getSelectedItem().equals("Faction")) {
+                switchToFactionValueSelector();
+            } else {
+                switchToDefaultValueSelector();
             }
         };
     }

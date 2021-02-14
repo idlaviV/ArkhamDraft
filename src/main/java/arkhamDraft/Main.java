@@ -1,6 +1,8 @@
 package arkhamDraft;
 
 
+import arkhamDraft.UI.Face;
+
 import javax.swing.*;
 import java.io.File;
 

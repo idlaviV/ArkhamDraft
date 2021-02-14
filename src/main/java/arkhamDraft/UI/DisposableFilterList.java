@@ -1,14 +1,14 @@
-package arkhamDraft;
+package arkhamDraft.UI;
+
+import arkhamDraft.CardFilter;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class DeposableFilterList {
+public class DisposableFilterList {
 
     private final ArrayList<CardFilter> filters;
     private final DefaultTableModel tableModel;
@@ -16,7 +16,7 @@ public class DeposableFilterList {
     private JScrollPane returnValue;
     private final FilterCardsDialog parentDialog;
 
-    public DeposableFilterList(FilterCardsDialog parentDialog){
+    public DisposableFilterList(FilterCardsDialog parentDialog){
         this.parentDialog = parentDialog;
         filters = new ArrayList<>();
         tableModel = new DefaultTableModel();

@@ -1,10 +1,8 @@
-package arkhamDraft.workerPool;
+package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
-import arkhamDraft.Deck;
 
 import java.io.File;
-import java.util.function.Consumer;
 
 public class LoadDeckButtonWorker extends AbstractButtonWorker{
 

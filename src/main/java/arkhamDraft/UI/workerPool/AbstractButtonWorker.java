@@ -1,6 +1,5 @@
-package arkhamDraft.workerPool;
+package arkhamDraft.UI.workerPool;
 
-import arkhamDraft.ArkhamDraftBrain;
 import arkhamDraft.Brain;
 
 import javax.swing.*;

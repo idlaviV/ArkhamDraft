@@ -1,10 +1,6 @@
-package arkhamDraft.workerPool;
+package arkhamDraft.UI.workerPool;
 
-import arkhamDraft.ArkhamDraftBrain;
 import arkhamDraft.Brain;
-import arkhamDraft.Deck;
-
-import java.util.function.Consumer;
 
 public class FinalizeDraftDeckButtonWorker extends AbstractButtonWorker{
     private final Runnable dispose;
