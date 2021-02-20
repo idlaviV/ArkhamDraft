@@ -2,11 +2,14 @@ package arkhamDraft.UI;
 
 import arkhamDraft.*;
 import arkhamDraft.UI.workerPool.*;
+import arkhamDraft.workerPool.OpenNewDraftDeckDialogWorker;
+import arkhamDraft.workerPool.StartDraftButtonWorker;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,25 +43,7 @@ public class Face extends JFrame{
         gbc.gridy = 0;
         gbc.insets = new Insets(2, 2, 2, 2);
 
-        JPanel buttonPanel = new JPanel();
-        mainPanel.add(buttonPanel, gbc);
-
-        JButton startDraftButton = new JButton("Start draft");
-        buttonPanel.add(startDraftButton);
-        buttonPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-
-        JButton newDraftDeckButton = new JButton("New draft deck");
-        buttonPanel.add(newDraftDeckButton);
-        newDraftDeckDialog = new NewDraftDeckDialog(brain, this::printCardsToDraftPanel, this::enableDraftPanel);
-        newDraftDeckButton.addActionListener(e -> {
-            brain.guiOpensNewDraftDeckDialog();
-            newDraftDeckDialog.tidyUp();
-            newDraftDeckDialog.setVisible(true);
-        });
-
-        JButton otherButton = new JButton("Something else");
-        buttonPanel.add(otherButton);
-        otherButton.addActionListener(e -> System.out.println("You pressed the other Button."));
+        mainPanel.add(initializeMenuButtonPanel(), gbc);
 
         gbc.gridy++;
         mainPanel.add(initializeDraftPanel(), gbc);
@@ -67,6 +52,69 @@ public class Face extends JFrame{
         draftedCardsPanelEnabler.disable();
         sideboardPanelEnabler.disable();
         setVisible(true);
+    }
+
+    private Component initializeMenuButtonPanel() {
+        JPanel menuButtonPanel = new JPanel();
+
+        menuButtonPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        menuButtonPanel.add(initializeNewDraftDeckButton());
+        menuButtonPanel.add(initializeLoadButton());
+        menuButtonPanel.add(initializeSaveButton());
+        menuButtonPanel.add(initializeStartDraftButton());
+
+        newDraftDeckDialog = new NewDraftDeckDialog(brain, this::printCardsToDraftPanel, this::enableDraftPanel);
+
+        return menuButtonPanel;
+    }
+
+    private Component initializeStartDraftButton() {
+        JButton startDraftButton = new JButton();
+        try {
+            Image img = ImageIO.read(getClass().getResource("/icons/Categories-applications-games-icon.png"));
+            startDraftButton.setIcon(new ImageIcon(img));
+            startDraftButton.setMargin(new Insets(0, 0, 0, 0));
+            startDraftButton.setBorder(null);
+            startDraftButton.setContentAreaFilled(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        startDraftButton.addActionListener(getStartDraftActionListener());
+        startDraftButton.setEnabled(false);
+        deckComponentEnablers.add(() -> startDraftButton.setEnabled(true));
+        return startDraftButton;
+    }
+
+    private Component initializeNewDraftDeckButton() {
+        JButton newDraftDeckButton = new JButton();
+        try {
+            Image img = ImageIO.read(getClass().getResource("/icons/Mimetypes-application-x-zerosize-icon.png"));
+            newDraftDeckButton.setIcon(new ImageIcon(img));
+            newDraftDeckButton.setMargin(new Insets(0, 0, 0, 0));
+            newDraftDeckButton.setBorder(null);
+            newDraftDeckButton.setContentAreaFilled(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        newDraftDeckButton.addActionListener(e-> new StartDraftButtonWorker(
+                brain,
+                this::openNewDraftDeckDialog
+        ).execute());
+        return newDraftDeckButton;
+    }
+
+    private ActionListener getStartDraftActionListener() {
+        return (e -> {
+            openNewDraftDeckDialog();
+        });
+    }
+
+    private void openNewDraftDeckDialog() {
+        new OpenNewDraftDeckDialogWorker(
+                brain,
+                newDraftDeckDialog
+        ).execute();
     }
 
     private Component initializeDraftPanel() {
@@ -227,7 +275,7 @@ public class Face extends JFrame{
         deckPanel.add(sortComboBox);
 
 
-        deckPanel.add(initializeSaveLoadDeckPanel());
+        //deckPanel.add(initializeSaveLoadDeckPanel());
 
 
         return deckPanel;

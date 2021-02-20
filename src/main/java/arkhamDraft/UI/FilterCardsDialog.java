@@ -29,6 +29,7 @@ public class FilterCardsDialog extends JDialog {
     private JPanel valueSelectorPanel;
     private DefaultComboBoxModel<Faction> factionSelectorModel;
     private boolean hasFactionSelected = false;
+    private JComboBox<Faction> factionSelectorBox;
 
     public FilterCardsDialog(Brain brain, Function<Boolean, SwingWorker<Integer, Void>> addCards) {
         super();
@@ -145,12 +146,13 @@ public class FilterCardsDialog extends JDialog {
 
     private Component initializeFactionSelectorComboBox() {
         factionSelectorModel = new DefaultComboBoxModel<>();
-        JComboBox<Faction> comboBox = new JComboBox<>(factionSelectorModel);
-        comboBox.setEditable(true);
+        factionSelectorBox = new JComboBox<>(factionSelectorModel);
+        factionSelectorBox.setEditable(true);
         for (Faction f : Faction.values()) {
             factionSelectorModel.addElement(f);
         }
-        return comboBox;
+        factionSelectorBox.setEnabled(false);
+        return factionSelectorBox;
     }
 
     private void switchToDefaultValueSelector() {
@@ -169,9 +171,11 @@ public class FilterCardsDialog extends JDialog {
             if (attributeSelector.getSelectedItem().equals("Select attribute")) {
                 relatorSelector.setEnabled(false);
                 valueSelector.setEnabled(false);
+                factionSelectorBox.setEnabled(false);
                 addFilterButton.setEnabled(false);
             } else {
                 valueSelector.setEnabled(false);
+                factionSelectorBox.setEnabled(false);
                 initializeRelatorSelector(attributeSelector.getSelectedItem().equals("XP"));
             }
             if (attributeSelector.getSelectedItem().equals("Faction")) {
@@ -200,9 +204,11 @@ public class FilterCardsDialog extends JDialog {
         relatorSelector.addActionListener(e -> {
             if (relatorSelector.getSelectedItem().equals("Choose relator")) {
                 valueSelector.setEnabled(false);
+                factionSelectorBox.setEnabled(false);
                 addFilterButton.setEnabled(false);
             } else {
                 valueSelector.setEnabled(true);
+                factionSelectorBox.setEnabled(true);
                 //TODO: Valueselector should have a formatter if (isNumerical)
                 addFilterButton.setEnabled(true);
             }

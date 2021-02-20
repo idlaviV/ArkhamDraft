@@ -28,6 +28,8 @@ public interface Brain {
 
     void guiLeavesFilterCardsDialog();
 
+    void guiCreateNewDeck();
+
     int getNumberOfCardsLeftAfterFiltering();
 
     void addFilterFromGUI(ArrayList<String> arguments);

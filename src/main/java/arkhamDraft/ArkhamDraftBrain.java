@@ -402,6 +402,12 @@ public class ArkhamDraftBrain implements Brain{
         drafter.applyFilterList();
     }
 
+    @Override
+    public void guiCreateNewDeck() {
+        guiOpensNewDraftDeckDialog();
+        clearDrafter();
+    }
+
     public void loadFilterList(File file, Function<Boolean, SwingWorker<Integer, Void>> addCards) {
         try {
             FileReader fr = new FileReader(file);
