@@ -583,4 +583,9 @@ public class ArkhamDraftBrain implements Brain{
     public void clearDrafter() {
         drafter.clear();
     }
+
+    @Override
+    public int getNumberOfCardsInDraftingDeck() {
+        return drafter.getNumberOfCardsInDraftingDeck();
+    }
 }

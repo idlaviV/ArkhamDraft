@@ -27,6 +27,7 @@ public class Face extends JFrame{
     private boolean draftEnabled = false;
     private final JFileChooser fc = new JFileChooser();
     private final ArrayList<Container> componentsToBeDisabled = new ArrayList<Container>();
+    private final JLabel labelCurrentCardsInDraftingDeck = new JLabel();
 
     public Face(Brain brain) {
         super();
@@ -64,7 +65,7 @@ public class Face extends JFrame{
         menuButtonPanel.add(initializeSaveButton());
         menuButtonPanel.add(initializeStartDraftButton());
 
-        newDraftDeckDialog = new NewDraftDeckDialog(brain, this::printCardsToDraftPanel, this::enableDraftPanel);
+        newDraftDeckDialog = new NewDraftDeckDialog(brain, this::printCardsToDraftPanel, this::enableDraftPanel, this::updateLabelCurrentCardsInDraftingDeck);
 
         return menuButtonPanel;
     }
@@ -196,6 +197,8 @@ public class Face extends JFrame{
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(3,1,100,1);
         draftButtonPanel.add(initializeDraftCardsButton(spinnerModel));
         draftButtonPanel.add(new JSpinner(spinnerModel));
+        draftButtonPanel.add(labelCurrentCardsInDraftingDeck);
+        resetLabelCurrentCardsInDraftingDeck();
 
 
         JPanel otherButtonsPanel = new JPanel();
@@ -210,6 +213,14 @@ public class Face extends JFrame{
         draftActionsPanel.add(draftButtonPanel);
         draftActionsPanel.add(otherButtonsPanel);
         return draftActionsPanel;
+    }
+
+    private void resetLabelCurrentCardsInDraftingDeck() {
+        labelCurrentCardsInDraftingDeck.setText("No cards yet.");
+    }
+
+    private void updateLabelCurrentCardsInDraftingDeck() {
+        labelCurrentCardsInDraftingDeck.setText(String.format("%d cards left.", brain.getNumberOfCardsInDraftingDeck()));
     }
 
     private Component initializeAddSideboardButton() {
@@ -253,7 +264,8 @@ public class Face extends JFrame{
             e -> new DraftCardsButtonWorker(
                 brain,
                 spinnerModel.getNumber().intValue(),
-                    this::printCardsToPanel,
+                this::printCardsToDraftPanel,
+                this::updateLabelCurrentCardsInDraftingDeck,
                 draftedCardsList
             ).execute()
         );

@@ -206,4 +206,8 @@ public class Drafter {
         sideboard.clear();
         filterList.clear();
     }
+
+    public int getNumberOfCardsInDraftingDeck() {
+        return draftingBox.getPhysicalDraftingBoxSize();
+    }
 }

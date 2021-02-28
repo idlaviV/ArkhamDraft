@@ -67,4 +67,6 @@ public interface Brain {
     void disposeDeck();
 
     void clearDrafter();
+
+    int getNumberOfCardsInDraftingDeck();
 }

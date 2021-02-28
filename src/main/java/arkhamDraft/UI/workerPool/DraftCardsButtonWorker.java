@@ -8,13 +8,15 @@ import java.util.function.BiConsumer;
 
 public class DraftCardsButtonWorker extends AbstractButtonWorker {
     private final int numberOfDraftedCards;
-    private final BiConsumer<Deck, CardCheckBoxList> printCardsToPanel;
+    private final Runnable printCardsToDraftPanel;
+    private final Runnable updateLabelCurrentNumberOfCardsInDraftingDeck;
     private final CardCheckBoxList panel;
 
-    public DraftCardsButtonWorker(Brain brain, int numberOfDraftedCards, BiConsumer<Deck, CardCheckBoxList> printCardsToPanel, CardCheckBoxList panel) {
+    public DraftCardsButtonWorker(Brain brain, int numberOfDraftedCards, Runnable printCardsToDraftPanel, Runnable updateLabelCurrentNumberOfCardsInDraftingDeck, CardCheckBoxList panel) {
         super(brain);
         this.numberOfDraftedCards = numberOfDraftedCards;
-        this.printCardsToPanel = printCardsToPanel;
+        this.printCardsToDraftPanel = printCardsToDraftPanel;
+        this.updateLabelCurrentNumberOfCardsInDraftingDeck = updateLabelCurrentNumberOfCardsInDraftingDeck;
         this.panel = panel;
     }
 
@@ -26,6 +28,7 @@ public class DraftCardsButtonWorker extends AbstractButtonWorker {
 
     @Override
     protected void update() {
-        printCardsToPanel.accept(brain.getDraftedCards(), panel);
+        printCardsToDraftPanel.run();
+        updateLabelCurrentNumberOfCardsInDraftingDeck.run();
     }
 }
