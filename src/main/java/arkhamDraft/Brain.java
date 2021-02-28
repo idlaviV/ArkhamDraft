@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface Brain {
 
@@ -58,7 +59,7 @@ public interface Brain {
 
     void guiSaveFilterList(File file);
 
-    void loadFilterList(File file, Function<Boolean, SwingWorker<Integer, Void>> addCards);
+    void loadFilterList(File file, Supplier<SwingWorker<Integer, Void>> addCards);
 
     void guiSaveDeck(File file) throws IOException;
 

@@ -265,8 +265,7 @@ public class Face extends JFrame{
                 brain,
                 spinnerModel.getNumber().intValue(),
                 this::printCardsToDraftPanel,
-                this::updateLabelCurrentCardsInDraftingDeck,
-                draftedCardsList
+                this::updateLabelCurrentCardsInDraftingDeck
             ).execute()
         );
         return draftCardsButton;

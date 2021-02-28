@@ -10,14 +10,12 @@ public class DraftCardsButtonWorker extends AbstractButtonWorker {
     private final int numberOfDraftedCards;
     private final Runnable printCardsToDraftPanel;
     private final Runnable updateLabelCurrentNumberOfCardsInDraftingDeck;
-    private final CardCheckBoxList panel;
 
-    public DraftCardsButtonWorker(Brain brain, int numberOfDraftedCards, Runnable printCardsToDraftPanel, Runnable updateLabelCurrentNumberOfCardsInDraftingDeck, CardCheckBoxList panel) {
+    public DraftCardsButtonWorker(Brain brain, int numberOfDraftedCards, Runnable printCardsToDraftPanel, Runnable updateLabelCurrentNumberOfCardsInDraftingDeck) {
         super(brain);
         this.numberOfDraftedCards = numberOfDraftedCards;
         this.printCardsToDraftPanel = printCardsToDraftPanel;
         this.updateLabelCurrentNumberOfCardsInDraftingDeck = updateLabelCurrentNumberOfCardsInDraftingDeck;
-        this.panel = panel;
     }
 
     @Override

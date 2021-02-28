@@ -12,6 +12,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static java.lang.Thread.sleep;
 
@@ -93,7 +94,7 @@ public class NewDraftDeckDialog extends JDialog {
         return addCardsButton;
     }
 
-    private SwingWorker<Integer, Void> addCards(Boolean dummy) {
+    private SwingWorker<Integer, Void> addCards() {
         SwingWorker<Integer,Void> sw = new SwingWorker<Integer, Void>() {
             @Override
             protected Integer doInBackground() {
@@ -206,7 +207,7 @@ public class NewDraftDeckDialog extends JDialog {
     }
 
     private void loadFilterList(File file) {
-        Function<Boolean, SwingWorker<Integer, Void>> addCards = this::addCards;
+        Supplier<SwingWorker<Integer, Void>> addCards = this::addCards;
         new SwingWorker<Boolean, Void>() {
             @Override
             protected Boolean doInBackground() {

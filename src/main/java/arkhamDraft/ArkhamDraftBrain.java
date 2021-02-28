@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static java.lang.Thread.sleep;
 
@@ -408,7 +409,7 @@ public class ArkhamDraftBrain implements Brain{
         clearDrafter();
     }
 
-    public void loadFilterList(File file, Function<Boolean, SwingWorker<Integer, Void>> addCards) {
+    public void loadFilterList(File file, Supplier<SwingWorker<Integer, Void>> addCards) {
         try {
             FileReader fr = new FileReader(file);
             BufferedReader reader = new BufferedReader(fr);
@@ -416,7 +417,7 @@ public class ArkhamDraftBrain implements Brain{
                     String line;
                     while ((line = reader.readLine()) != null) {
                         if (line.matches("=*")) {
-                            SwingWorker<Integer, Void> sw = addCards.apply(true);
+                            SwingWorker<Integer, Void> sw = addCards.get();
                             while(sw.getProgress()!=100) {
                                 sleep(100);//Todo
                             }
@@ -425,7 +426,7 @@ public class ArkhamDraftBrain implements Brain{
                             generateFilter(line);
                         }
                     }
-                    addCards.apply(true);
+                    addCards.get();
                     reader.close();
                     fr.close();
         } catch (InterruptedException | IOException e) {

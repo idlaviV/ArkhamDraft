@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 public class FilterCardsDialog extends JDialog {
@@ -25,13 +26,13 @@ public class FilterCardsDialog extends JDialog {
     private HintTextField valueSelector;
     private JButton addFilterButton;
     private JLabel currentCardsFilteredLabel;
-    private final Function<Boolean, SwingWorker<Integer, Void>> addCards;
+    private final Supplier<SwingWorker<Integer, Void>> addCards;
     private JPanel valueSelectorPanel;
     private DefaultComboBoxModel<Faction> factionSelectorModel;
     private boolean hasFactionSelected = false;
     private JComboBox<Faction> factionSelectorBox;
 
-    public FilterCardsDialog(Brain brain, Function<Boolean, SwingWorker<Integer, Void>> addCards) {
+    public FilterCardsDialog(Brain brain, Supplier<SwingWorker<Integer, Void>> addCards) {
         super();
         this.brain = brain;
         this.addCards = addCards;

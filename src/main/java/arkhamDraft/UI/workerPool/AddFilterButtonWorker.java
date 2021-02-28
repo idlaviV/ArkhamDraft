@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public class AddFilterButtonWorker extends AbstractButtonWorker{
     private final Runnable updateFilterListFromBrain;
     private final Consumer<Integer> updateCurrentCardsFiltered;
-    private Runnable addFilterFromUserSelection;
+    private final Runnable addFilterFromUserSelection;
 
     public AddFilterButtonWorker(Brain brain, Runnable updateFilterListFromBrain, Consumer<Integer> updateCurrentCardsFiltered, Runnable addFilterFromUserSelection) {
         super(brain);
