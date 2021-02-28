@@ -181,12 +181,15 @@ public class Face extends JFrame{
 
     private Component initializeDraftedCardsPanel() {
         JPanel draftedCardsPanel = new JPanel();
-        //draftedCardsPanel.setLayout(new GridLayout(0,1));
+
+
         draftedCardsPanel.setLayout(new BoxLayout(draftedCardsPanel, BoxLayout.PAGE_AXIS));
+        draftedCardsPanel.setPreferredSize(new Dimension(300,200));
+
         draftedCardsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftedCardsPanel.add(new JLabel("draft panel"));
         draftedCardsList = new CardCheckBoxList();
-        //draftedCardsList.setMinimumSize(new Dimension(1000, 1000));
+
         JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
         draftedCardsPanel.add(draftScrollPane);
 
@@ -276,7 +279,7 @@ public class Face extends JFrame{
 
     private Component initializeDeckPanel(){
         JPanel deckPanel = new JPanel();
-        //deckPanel.setMinimumSize(new Dimension(100, 500));
+        deckPanel.setMinimumSize(new Dimension(350, 500));
         BoxLayout mgr = new BoxLayout(deckPanel, BoxLayout.PAGE_AXIS);
         deckPanel.setLayout(mgr);
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -416,6 +419,7 @@ public class Face extends JFrame{
 
     private Component initializeSideBoardPanel() {
         JPanel sideboardPanel = new JPanel();
+        sideboardPanel.setPreferredSize(new Dimension(250,200));
         sideboardPanel.setLayout(new BoxLayout(sideboardPanel, BoxLayout.PAGE_AXIS));
         sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         sideboardPanel.add(new JLabel("sideboard panel"));

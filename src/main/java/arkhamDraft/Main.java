@@ -45,7 +45,7 @@ public class Main {
         Face face = new Face(brain);
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         face.setTitle("ArkhamDraft");
-        face.setSize(1000,620);
+        face.setSize(1500,800);
         face.setResizable(false);
         face.setLocation(50,50);
         face.setVisible(true);
