@@ -11,7 +11,6 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.*;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.lang.Thread.sleep;
@@ -22,15 +21,13 @@ public class NewDraftDeckDialog extends JDialog {
     //private JLabel draftDeckSizeLabel;
     private FilterCardsDialog filterCardsDialog;
     private final JFileChooser fc = new JFileChooser();
-    private final Runnable printCardsToDraftPanel;
+    private final Runnable updateAllPanels;
     private final Runnable enableDraft;
-    private final Runnable updateLabelCurrentCardsInDraftingDeck;
 
-    public NewDraftDeckDialog(Brain brain, Runnable printCardsToDraftPanel, Runnable enableDraft, Runnable updateLabelCurrentCardsInDraftingDeck) {
+    public NewDraftDeckDialog(Brain brain, Runnable updateAllPanels, Runnable enableDraft) {
         super();
         this.brain = brain;
-        this.printCardsToDraftPanel = printCardsToDraftPanel;
-        this.updateLabelCurrentCardsInDraftingDeck = updateLabelCurrentCardsInDraftingDeck;
+        this.updateAllPanels = updateAllPanels;
         this.enableDraft = enableDraft;
         initializeDialogue();
         //setVisible(true);
@@ -130,8 +127,7 @@ public class NewDraftDeckDialog extends JDialog {
                     new FinalizeDraftDeckButtonWorker(
                             brain,
                             this::dispose,
-                            printCardsToDraftPanel,
-                            updateLabelCurrentCardsInDraftingDeck,
+                            updateAllPanels,
                             enableDraft
                     ).execute();
                 });

@@ -50,7 +50,6 @@ public class CardCheckBoxList extends JList<Card>
         setListData(newList);*/
         jBoxStatus.put(card, false);
         listModel.addElement(card);
-        //repaint();
     }
 
     public ArrayList<Card> getCheckedCards() {

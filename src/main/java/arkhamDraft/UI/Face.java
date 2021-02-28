@@ -2,8 +2,8 @@ package arkhamDraft.UI;
 
 import arkhamDraft.*;
 import arkhamDraft.UI.workerPool.*;
-import arkhamDraft.workerPool.OpenNewDraftDeckDialogWorker;
-import arkhamDraft.workerPool.StartDraftButtonWorker;
+import arkhamDraft.UI.workerPool.OpenNewDraftDeckDialogWorker;
+import arkhamDraft.UI.workerPool.StartDraftButtonWorker;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -65,7 +65,7 @@ public class Face extends JFrame{
         menuButtonPanel.add(initializeSaveButton());
         menuButtonPanel.add(initializeStartDraftButton());
 
-        newDraftDeckDialog = new NewDraftDeckDialog(brain, this::printCardsToDraftPanel, this::enableDraftPanel, this::updateLabelCurrentCardsInDraftingDeck);
+        newDraftDeckDialog = new NewDraftDeckDialog(brain, this::updateAllPanels, this::enableDraftPanel);
 
         return menuButtonPanel;
     }
@@ -123,6 +123,7 @@ public class Face extends JFrame{
         draftPanel.setLayout(new GridBagLayout());
         draftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         GridBagConstraints gbcDraftPanel = new GridBagConstraints();
+
         gbcDraftPanel.gridx = 0;
         gbcDraftPanel.gridy = 0;
         gbcDraftPanel.insets = new Insets(2, 2, 2, 2);
@@ -180,10 +181,12 @@ public class Face extends JFrame{
 
     private Component initializeDraftedCardsPanel() {
         JPanel draftedCardsPanel = new JPanel();
+        //draftedCardsPanel.setLayout(new GridLayout(0,1));
         draftedCardsPanel.setLayout(new BoxLayout(draftedCardsPanel, BoxLayout.PAGE_AXIS));
         draftedCardsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftedCardsPanel.add(new JLabel("draft panel"));
         draftedCardsList = new CardCheckBoxList();
+        //draftedCardsList.setMinimumSize(new Dimension(1000, 1000));
         JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
         draftedCardsPanel.add(draftScrollPane);
 
@@ -273,10 +276,13 @@ public class Face extends JFrame{
 
     private Component initializeDeckPanel(){
         JPanel deckPanel = new JPanel();
-        deckPanel.setLayout(new BoxLayout(deckPanel, BoxLayout.PAGE_AXIS));
+        //deckPanel.setMinimumSize(new Dimension(100, 500));
+        BoxLayout mgr = new BoxLayout(deckPanel, BoxLayout.PAGE_AXIS);
+        deckPanel.setLayout(mgr);
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         deckPanel.add(new JLabel("deck panel"));
         deckList = new CardCheckBoxList();
+        deckList.setMinimumSize(new Dimension(100, 500));
         JScrollPane deckScrollPane = new JScrollPane(deckList);
         deckPanel.add(deckScrollPane);
 
@@ -449,6 +455,12 @@ public class Face extends JFrame{
                         this::printCardsToSideboardPanel
                 ).execute());
         return addFromSideBoardButton;
+    }
+
+    private void updateAllPanels() {
+        updateDraftingAndSideboardPanel();
+        printCardsToDeckPanel();
+        updateLabelCurrentCardsInDraftingDeck();
     }
 
     public void enableDraftPanel() {

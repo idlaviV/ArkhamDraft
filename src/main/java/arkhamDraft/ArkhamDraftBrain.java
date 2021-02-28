@@ -407,6 +407,7 @@ public class ArkhamDraftBrain implements Brain{
     public void guiCreateNewDeck() {
         guiOpensNewDraftDeckDialog();
         clearDrafter();
+        drafter.disposeDeck();
     }
 
     public void loadFilterList(File file, Supplier<SwingWorker<Integer, Void>> addCards) {
