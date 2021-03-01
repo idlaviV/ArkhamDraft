@@ -118,8 +118,20 @@ public class Drafter {
     public void discardCardFromSideboard(Card card) {discardCardFromSideboard(sideboard.getIndex(card));}
 
     public boolean discardCardFromSideboard(int index) {
-        if (index < sideboard.getSize() && index >= 0 && sideboard.getCard(index) != null) {
-            sideboard.setCard(index, Card.nullCard);
+        return discardCardFromAnyDeck(sideboard, index);
+    }
+
+    public void discardCardFromDraftedDeck(Card card) {
+        discardCardFromDraftedDeck(draftedDeck.getIndex(card));
+    }
+
+    private void discardCardFromDraftedDeck(int index) {
+        discardCardFromAnyDeck(draftedDeck, index);
+    }
+
+    private boolean discardCardFromAnyDeck(Deck deck, int index) {
+        if (index < deck.getSize() && index >= 0 && deck.getCard(index) != null) {
+            deck.setCard(index, Card.nullCard);
             return true;
         }
         return false;
@@ -210,4 +222,6 @@ public class Drafter {
     public int getNumberOfCardsInDraftingDeck() {
         return draftingBox.getPhysicalDraftingBoxSize();
     }
+
+
 }

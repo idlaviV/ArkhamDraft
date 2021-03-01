@@ -3,7 +3,6 @@ package arkhamDraft;
 import javax.swing.*;
 import java.io.*;
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.lang.Thread.sleep;
@@ -505,6 +504,13 @@ public class ArkhamDraftBrain implements Brain{
     public void guiAddToSideboard(ArrayList<Card> checkedCards) {
         for (Card currentCard : checkedCards) {
             drafter.addCardToSideboard(currentCard);
+        }
+    }
+
+    @Override
+    public void guiDiscardFromDraftedDeck(ArrayList<Card> checkedCards) {
+        for (Card currentCard : checkedCards) {
+            drafter.discardCardFromDraftedDeck(currentCard);
         }
     }
 

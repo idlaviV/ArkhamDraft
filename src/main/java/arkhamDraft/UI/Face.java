@@ -288,6 +288,7 @@ public class Face extends JFrame{
         deckList.setMinimumSize(new Dimension(100, 500));
         JScrollPane deckScrollPane = new JScrollPane(deckList);
         deckPanel.add(deckScrollPane);
+        deckPanel.add(initializeRemoveFromDeckButton());
 
         DefaultComboBoxModel<String> sortComboBoxModel = initializeSortComboBoxModel();
         JComboBox<String> sortComboBox = new JComboBox<>(sortComboBoxModel);
@@ -299,6 +300,16 @@ public class Face extends JFrame{
 
 
         return deckPanel;
+    }
+
+    private Component initializeRemoveFromDeckButton() {
+        JButton removeFromDeckButton = new JButton("Remove");
+        removeFromDeckButton.addActionListener(e -> new RemoveCardFromDeckButtonWorker(
+                brain,
+                this::updateAllPanels,
+                deckList
+        ).execute());
+        return removeFromDeckButton;
     }
 
     private Component initializeSaveLoadDeckPanel() {

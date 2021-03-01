@@ -45,6 +45,8 @@ public interface Brain {
 
     void guiAddToSideboard(ArrayList<Card> checkedCards);
 
+    void guiDiscardFromDraftedDeck(ArrayList<Card> checkedCards);
+
     void guiDeleteDeck();
 
     void guiDraftCardsNew(int numberOfDraftedCards);
@@ -70,4 +72,5 @@ public interface Brain {
     void clearDrafter();
 
     int getNumberOfCardsInDraftingDeck();
+
 }

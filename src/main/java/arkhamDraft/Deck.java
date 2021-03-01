@@ -41,13 +41,15 @@ public class Deck  {
         while (deckIterator.hasNext()) {
             before = current;
             current = deckIterator.next();
-            if (current.equals(before)) {
-                cardinality++;
-            } else {
-                if (before != null) {
-                    printInfo.add(String.format("%dx %s", cardinality, before.getDraftInfo(color)));
+            if (before == null || !before.equals(Card.nullCard)) {
+                if (current.equals(before)) {
+                    cardinality++;
+                } else {
+                    if (before != null) {
+                        printInfo.add(String.format("%dx %s", cardinality, before.getDraftInfo(color)));
+                    }
+                    cardinality = 1;
                 }
-                cardinality = 1;
             }
         }
         assert current != null;
