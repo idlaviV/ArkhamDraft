@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -45,7 +46,6 @@ public class FilterCardsDialog extends JDialog {
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         initializeDialog();
-        //setVisible(true);
     }
 
     private void initializeDialog() {
@@ -100,10 +100,6 @@ public class FilterCardsDialog extends JDialog {
 
     private Component initializeFilterList() {
         filterList = new DisposableFilterList(this);
-        //filterListModel = new DefaultListModel<>();
-        //JList<CardFilter> filterList = new JList<>(filterListModel);
-        //filterListModel.addElement(new CardFilter((card)->true, "null"));
-        //return new JScrollPane(filterList.getComponent());
         return filterList.getComponent();
     }
 
@@ -197,10 +193,15 @@ public class FilterCardsDialog extends JDialog {
             comboBoxModel.addElement("<");
             comboBoxModel.addElement(">=");
             comboBoxModel.addElement("<=");
+            comboBoxModel.setSelectedItem("=");
         } else {
             comboBoxModel.addElement("contains");
             comboBoxModel.addElement("contains not");
+            comboBoxModel.setSelectedItem("contains");
+            factionSelectorBox.setEnabled(true);
         }
+        setDefaultElementValueSelector();
+        valueSelector.setEnabled(true);
         relatorSelector.setModel(comboBoxModel);
         relatorSelector.addActionListener(e -> {
             if (relatorSelector.getSelectedItem().equals("Choose relator")) {
@@ -212,10 +213,22 @@ public class FilterCardsDialog extends JDialog {
                 factionSelectorBox.setEnabled(true);
                 //TODO: Valueselector should have a formatter if (isNumerical)
                 addFilterButton.setEnabled(true);
+                setDefaultElementValueSelector();
             }
         });
     }
 
+    private void setDefaultElementValueSelector() {
+        String selectedItem = (String) attributeSelector.getSelectedItem();
+        switch (Objects.requireNonNull(selectedItem)) {
+            case "XP":
+                valueSelector.setText("0");
+                break;
+            default:
+                valueSelector.resetToHint();
+        }
+
+    }
 
 
     public void addFilterToFilterList(CardFilter newCardFilter) {
