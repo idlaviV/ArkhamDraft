@@ -173,6 +173,7 @@ public class FilterCardsDialog extends JDialog {
             } else {
                 valueSelector.setEnabled(false);
                 factionSelectorBox.setEnabled(false);
+                addFilterButton.setEnabled(true);
                 initializeRelatorSelector(attributeSelector.getSelectedItem().equals("XP"));
             }
             if (attributeSelector.getSelectedItem().equals("Faction")) {
