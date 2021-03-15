@@ -104,7 +104,7 @@ public class FilterCardsDialog extends JDialog {
     }
 
     private Component initializeFilterMenu() {
-        List<String> attributes = Arrays.asList("Select attribute", "XP", "Faction", "Type", "Trait", "Pack", "Text");
+        List<String> attributes = Arrays.asList("Select attribute", "XP", "Faction", "Type", "Trait", "Pack", "Text", "Name");
         JPanel filterAdditionPanel = new JPanel();
         DefaultComboBoxModel<String> attributeSelectorModel = new DefaultComboBoxModel<>();
         for (String attribute : attributes) {

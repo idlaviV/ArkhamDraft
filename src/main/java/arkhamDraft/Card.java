@@ -209,6 +209,8 @@ public class Card {
                 return new CardFilter((card) -> relator.apply(Collections.singletonList(card.getType()),values), String.format("Type%s%s", relatorString, rewriteValues(values)));
             case "text":
                 return new CardFilter((card) -> values.stream().anyMatch(value -> card.getText() != null && card.getText().contains(value)), String.format("Text%s%s", relatorString, rewriteValues(values)));
+            case "name":
+                return new CardFilter((card) -> values.stream().anyMatch(value -> card.getReal_name() != null && card.getReal_name().contains(value)), String.format("Name%s%s", relatorString, rewriteValues(values)));
             default:
                 return nullFilter;
         }
