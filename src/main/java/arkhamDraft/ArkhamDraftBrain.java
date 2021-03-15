@@ -596,4 +596,9 @@ public class ArkhamDraftBrain implements Brain{
     public int getNumberOfCardsInDraftingDeck() {
         return drafter.getNumberOfCardsInDraftingDeck();
     }
+
+    @Override
+    public int getNumberOfCardsInDeck() {
+        return drafter.getNumberOfCardsInDeck();
+    }
 }

@@ -28,6 +28,7 @@ public class Face extends JFrame{
     private final JFileChooser fc = new JFileChooser();
     private final ArrayList<Container> componentsToBeDisabled = new ArrayList<Container>();
     private final JLabel labelCurrentCardsInDraftingDeck = new JLabel();
+    private final JLabel deckCountLabel = new JLabel("deck panel: 0");
 
     public Face(Brain brain) {
         super();
@@ -155,7 +156,8 @@ public class Face extends JFrame{
         printCardsToPanel(brain.getDraftedCards(), draftedCardsList);
     }
 
-    public void printCardsToDeckPanel() {
+    public void updateDeckPanel() {
+        updateDeckCountLabel();
         printCardsToPanel(brain.getDraftedDeck(), deckList);
     }
 
@@ -247,7 +249,7 @@ public class Face extends JFrame{
                         brain,
                         draftedCardsList,
                         this::printCardsToDraftPanel,
-                        this::printCardsToDeckPanel
+                        this::updateDeckPanel
                 ).execute());
         return addButton;
     }
@@ -283,7 +285,7 @@ public class Face extends JFrame{
         BoxLayout mgr = new BoxLayout(deckPanel, BoxLayout.PAGE_AXIS);
         deckPanel.setLayout(mgr);
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        deckPanel.add(new JLabel("deck panel"));
+        deckPanel.add(deckCountLabel);
         deckList = new CardCheckBoxList();
         deckList.setMinimumSize(new Dimension(100, 500));
         JScrollPane deckScrollPane = new JScrollPane(deckList);
@@ -355,7 +357,7 @@ public class Face extends JFrame{
                 new LoadDeckButtonWorker(
                         brain,
                         file,
-                        this::printCardsToDeckPanel,
+                        this::updateDeckPanel,
                         this::enableDeckComponents,
                         this::updateDraftingAndSideboardPanel
                 ).execute();
@@ -423,7 +425,7 @@ public class Face extends JFrame{
         sortDeckButton.addActionListener(e -> new SortDeckButtonWorker(
                 brain,
                 sortComboBox,
-                this::printCardsToDeckPanel
+                this::updateDeckPanel
         ).execute());
         return sortDeckButton;
     }
@@ -466,16 +468,19 @@ public class Face extends JFrame{
                 new AddFromSideBoardButtonWorker(
                         brain,
                         sideboardList,
-                        this::printCardsToDeckPanel,
-                        this::printCardsToSideboardPanel
+                        this::updateAllPanels
                 ).execute());
         return addFromSideBoardButton;
     }
 
     private void updateAllPanels() {
         updateDraftingAndSideboardPanel();
-        printCardsToDeckPanel();
+        updateDeckPanel();
         updateLabelCurrentCardsInDraftingDeck();
+    }
+
+    private void updateDeckCountLabel() {
+        deckCountLabel.setText(String.format("deck panel: %d", brain.getNumberOfCardsInDeck()));
     }
 
     public void enableDraftPanel() {

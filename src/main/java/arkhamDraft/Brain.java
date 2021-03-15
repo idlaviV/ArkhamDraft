@@ -73,4 +73,5 @@ public interface Brain {
 
     int getNumberOfCardsInDraftingDeck();
 
+    int getNumberOfCardsInDeck();
 }

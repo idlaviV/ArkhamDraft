@@ -5,14 +5,12 @@ import arkhamDraft.UI.CardCheckBoxList;
 
 public class AddFromSideBoardButtonWorker extends AbstractButtonWorker {
     private final CardCheckBoxList sideboardList;
-    private final Runnable printCardsToDeckPanel;
-    private final Runnable printCardsToSideboardPanel;
+    private final Runnable updatePanels;
 
-    public AddFromSideBoardButtonWorker(Brain brain, CardCheckBoxList sideboardList, Runnable printCardsToDeckPanel, Runnable printCardsToSideboardPanel) {
+    public AddFromSideBoardButtonWorker(Brain brain, CardCheckBoxList sideboardList, Runnable updatePanels) {
         super(brain);
         this.sideboardList = sideboardList;
-        this.printCardsToDeckPanel = printCardsToDeckPanel;
-        this.printCardsToSideboardPanel = printCardsToSideboardPanel;
+        this.updatePanels = updatePanels;
     }
 
     @Override
@@ -23,7 +21,6 @@ public class AddFromSideBoardButtonWorker extends AbstractButtonWorker {
 
     @Override
     protected void update() {
-        printCardsToDeckPanel.run();
-        printCardsToSideboardPanel.run();
+        updatePanels.run();
     }
 }
