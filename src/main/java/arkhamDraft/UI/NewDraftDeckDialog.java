@@ -23,6 +23,7 @@ public class NewDraftDeckDialog extends JDialog {
     private final JFileChooser fc = new JFileChooser();
     private final Runnable updateAllPanels;
     private final Runnable enableDraft;
+    private final String cardFilterDirectory = "data/cardFilter";
 
     public NewDraftDeckDialog(Brain brain, Runnable updateAllPanels, Runnable enableDraft) {
         super();
@@ -146,7 +147,7 @@ public class NewDraftDeckDialog extends JDialog {
             e.printStackTrace();
         }
         saveButton.addActionListener(e->{
-            File directory = new File("data/cardFilter");
+            File directory = new File(cardFilterDirectory);
             if (!directory.exists()) {
                 directory.mkdir();
             }
@@ -176,7 +177,7 @@ public class NewDraftDeckDialog extends JDialog {
             e.printStackTrace();
         }
         loadButton.addActionListener(e -> {
-            File directory = new File("cardFilter");
+            File directory = new File(cardFilterDirectory);
             if (!directory.exists()) {
                 directory.mkdir();
             }
