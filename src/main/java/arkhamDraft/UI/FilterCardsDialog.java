@@ -214,7 +214,7 @@ public class FilterCardsDialog extends JDialog {
                 factionSelectorBox.setEnabled(true);
                 //TODO: Valueselector should have a formatter if (isNumerical)
                 addFilterButton.setEnabled(true);
-                setDefaultElementValueSelector();
+                //setDefaultElementValueSelector();
             }
         });
     }
