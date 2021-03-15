@@ -186,13 +186,14 @@ public class Face extends JFrame{
 
 
         draftedCardsPanel.setLayout(new BoxLayout(draftedCardsPanel, BoxLayout.PAGE_AXIS));
-        draftedCardsPanel.setPreferredSize(new Dimension(300,200));
+        //draftedCardsPanel.setPreferredSize(new Dimension(300,500));
 
         draftedCardsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftedCardsPanel.add(new JLabel("draft panel"));
         draftedCardsList = new CardCheckBoxList();
 
         JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
+        draftScrollPane.setPreferredSize(new Dimension(300,400));
         draftedCardsPanel.add(draftScrollPane);
 
         draftedCardsPanel.add(initializeDraftActionsPanel());
@@ -281,14 +282,14 @@ public class Face extends JFrame{
 
     private Component initializeDeckPanel(){
         JPanel deckPanel = new JPanel();
-        deckPanel.setMinimumSize(new Dimension(350, 500));
+        deckPanel.setPreferredSize(new Dimension(350, 500));
         BoxLayout mgr = new BoxLayout(deckPanel, BoxLayout.PAGE_AXIS);
         deckPanel.setLayout(mgr);
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         deckPanel.add(deckCountLabel);
         deckList = new CardCheckBoxList();
-        deckList.setMinimumSize(new Dimension(100, 500));
         JScrollPane deckScrollPane = new JScrollPane(deckList);
+        deckScrollPane.setPreferredSize(new Dimension(100, 600));
         deckPanel.add(deckScrollPane);
         deckPanel.add(initializeRemoveFromDeckButton());
 
@@ -432,7 +433,7 @@ public class Face extends JFrame{
 
     private Component initializeSideBoardPanel() {
         JPanel sideboardPanel = new JPanel();
-        sideboardPanel.setPreferredSize(new Dimension(250,200));
+        sideboardPanel.setPreferredSize(new Dimension(250,500));
         sideboardPanel.setLayout(new BoxLayout(sideboardPanel, BoxLayout.PAGE_AXIS));
         sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         sideboardPanel.add(new JLabel("sideboard panel"));
