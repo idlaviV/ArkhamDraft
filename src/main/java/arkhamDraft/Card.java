@@ -386,4 +386,10 @@ public class Card {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return real_name + '[' + xp +
+                ']';
+    }
 }

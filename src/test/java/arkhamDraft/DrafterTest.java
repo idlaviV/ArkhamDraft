@@ -29,7 +29,7 @@ public class DrafterTest {
 
         whenFilterDraftingDeckByXP();
 
-        thenNumberOfCardsInDraftingBoxIsAsExpected(12);
+        thenNumberOfCardsInDraftingBoxIsAsExpected(13);
     }
 
 
