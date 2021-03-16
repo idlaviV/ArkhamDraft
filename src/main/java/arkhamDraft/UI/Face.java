@@ -12,10 +12,15 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 
 public class Face extends JFrame{
+
+
+    public static final Dimension DIMENSION_PHYSICAL_CARD = new Dimension(300, 419);
     private CardCheckBoxList deckList;
     private CardCheckBoxList sideboardList;
     private CardCheckBoxList draftedCardsList;
@@ -29,6 +34,14 @@ public class Face extends JFrame{
     private final ArrayList<Container> componentsToBeDisabled = new ArrayList<Container>();
     private final JLabel labelCurrentCardsInDraftingDeck = new JLabel();
     private final JLabel deckCountLabel = new JLabel("deck panel: 0");
+
+    //Dimensions
+    public static final Dimension DIMENSION_SCROLL_PANE_DRAFTED_CARDS = new Dimension(300, 400);
+    public static final Dimension DIMENSION_DECK_PANEL = new Dimension(350, 500);
+    public static final Dimension DIMENSION_SCROLL_PANE_DECK = new Dimension(100, 600);
+    public static final Dimension DIMENSION_SCROLL_PANE_SIDEBOARD = new Dimension(300, 400);
+    private JLabel previewLabel;
+    private final ImageCrawler imageCrawler = new ImageCrawler();
 
     public Face(Brain brain) {
         super();
@@ -50,10 +63,38 @@ public class Face extends JFrame{
         gbc.gridy++;
         mainPanel.add(initializeDraftPanel(), gbc);
 
+        gbc.gridx++;
+        mainPanel.add(initializePreviewPanel(), gbc);
+
         add(mainPanel);
         draftedCardsPanelEnabler.disable();
         sideboardPanelEnabler.disable();
         setVisible(true);
+    }
+
+    private Component initializePreviewPanel() {
+        JPanel previewPanel = new JPanel();
+        previewPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        previewLabel = new JLabel();
+        previewLabel.setPreferredSize(DIMENSION_PHYSICAL_CARD);
+        previewPanel.add(previewLabel);
+
+        previewCardFromDatabase("05040");
+
+        return previewPanel;
+    }
+
+    private void previewCardFromDatabase(String id) {
+        setPreviewPanelToCard(imageCrawler.getCard(id));
+    }
+
+    private void setPreviewPanelToDefault() {
+        previewLabel.setIcon(new ImageIcon());
+    }
+
+    private void setPreviewPanelToCard(Image img) {
+            previewLabel.setIcon(new ImageIcon(img));
     }
 
     private Component initializeMenuButtonPanel() {
@@ -124,6 +165,7 @@ public class Face extends JFrame{
         draftPanel.setLayout(new GridBagLayout());
         draftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         GridBagConstraints gbcDraftPanel = new GridBagConstraints();
+        gbcDraftPanel.anchor = GridBagConstraints.NORTH;
 
         gbcDraftPanel.gridx = 0;
         gbcDraftPanel.gridy = 0;
@@ -189,11 +231,11 @@ public class Face extends JFrame{
         //draftedCardsPanel.setPreferredSize(new Dimension(300,500));
 
         draftedCardsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        draftedCardsPanel.add(new JLabel("draft panel"));
+        draftedCardsPanel.add(new JLabel("drafted cards panel"));
         draftedCardsList = new CardCheckBoxList();
 
         JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
-        draftScrollPane.setPreferredSize(new Dimension(300,400));
+        draftScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DRAFTED_CARDS);
         draftedCardsPanel.add(draftScrollPane);
 
         draftedCardsPanel.add(initializeDraftActionsPanel());
@@ -282,14 +324,14 @@ public class Face extends JFrame{
 
     private Component initializeDeckPanel(){
         JPanel deckPanel = new JPanel();
-        deckPanel.setPreferredSize(new Dimension(350, 500));
+        deckPanel.setPreferredSize(DIMENSION_DECK_PANEL);
         BoxLayout mgr = new BoxLayout(deckPanel, BoxLayout.PAGE_AXIS);
         deckPanel.setLayout(mgr);
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         deckPanel.add(deckCountLabel);
         deckList = new CardCheckBoxList();
         JScrollPane deckScrollPane = new JScrollPane(deckList);
-        deckScrollPane.setPreferredSize(new Dimension(100, 600));
+        deckScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DECK);
         deckPanel.add(deckScrollPane);
         deckPanel.add(initializeRemoveFromDeckButton());
 
@@ -433,12 +475,13 @@ public class Face extends JFrame{
 
     private Component initializeSideBoardPanel() {
         JPanel sideboardPanel = new JPanel();
-        sideboardPanel.setPreferredSize(new Dimension(250,500));
+        //sideboardPanel.setPreferredSize(new Dimension(250,500));
         sideboardPanel.setLayout(new BoxLayout(sideboardPanel, BoxLayout.PAGE_AXIS));
         sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         sideboardPanel.add(new JLabel("sideboard panel"));
         sideboardList = new CardCheckBoxList();
         JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
+        sideboardScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_SIDEBOARD);
         sideboardPanel.add(sideboardScrollPane);
         sideboardPanel.add(initializeSideboardButtonPanel());
         sideboardPanelEnabler = new EverythingDisablerAndReenabler(sideboardPanel, null);

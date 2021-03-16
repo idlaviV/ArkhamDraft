@@ -5,6 +5,7 @@
 #This project specific
 cardFilter/*.txt
 decks/*.txt
+src/main/resources/cards/*.jpg
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
