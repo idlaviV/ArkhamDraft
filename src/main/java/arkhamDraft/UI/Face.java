@@ -12,9 +12,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 
 public class Face extends JFrame{
@@ -41,7 +40,6 @@ public class Face extends JFrame{
     public static final Dimension DIMENSION_SCROLL_PANE_DECK = new Dimension(100, 600);
     public static final Dimension DIMENSION_SCROLL_PANE_SIDEBOARD = new Dimension(300, 400);
     private JLabel previewLabel;
-    private final ImageCrawler imageCrawler = new ImageCrawler();
 
     public Face(Brain brain) {
         super();
@@ -80,22 +78,17 @@ public class Face extends JFrame{
         previewLabel.setPreferredSize(DIMENSION_PHYSICAL_CARD);
         previewPanel.add(previewLabel);
 
-        previewCardFromDatabase("05040");
+        previewCardFromDatabase("00000");
 
         return previewPanel;
     }
 
     private void previewCardFromDatabase(String id) {
-        setPreviewPanelToCard(imageCrawler.getCard(id));
+        ImageCrawler crawler = new ImageCrawler(id, previewLabel);
+        crawler.run();
     }
 
-    private void setPreviewPanelToDefault() {
-        previewLabel.setIcon(new ImageIcon());
-    }
 
-    private void setPreviewPanelToCard(Image img) {
-            previewLabel.setIcon(new ImageIcon(img));
-    }
 
     private Component initializeMenuButtonPanel() {
         JPanel menuButtonPanel = new JPanel();
