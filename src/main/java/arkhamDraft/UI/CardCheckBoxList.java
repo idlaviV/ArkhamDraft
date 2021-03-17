@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class CardCheckBoxList extends JList<Card>
 {
@@ -17,9 +18,11 @@ public class CardCheckBoxList extends JList<Card>
             new EmptyBorder(1, 1, 1, 1);
     private Map<Card, Boolean> jBoxStatus = new HashMap<>();
     private final DefaultListModel<Card> listModel = new DefaultListModel<>();
+    private final Consumer<String> previewCardFromDatabase;
 
-    public CardCheckBoxList()
+    public CardCheckBoxList(Consumer<String> previewCardFromDatabase)
     {
+        this.previewCardFromDatabase = previewCardFromDatabase;
         setCellRenderer(new CellRenderer());
         addMouseListener(new MouseAdapter()
                          {
@@ -28,8 +31,10 @@ public class CardCheckBoxList extends JList<Card>
                                  int index = locationToIndex(e.getPoint());
 
                                  if (index != -1) {
-                                     toggleCard(getModel().getElementAt(index));
+                                     Card card = getModel().getElementAt(index);
+                                     toggleCard(card);
                                      repaint();
+                                     previewCardFromDatabase.accept(card.getCode());
                                  }
                              }
                          }

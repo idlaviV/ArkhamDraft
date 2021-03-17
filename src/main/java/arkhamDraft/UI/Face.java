@@ -85,7 +85,7 @@ public class Face extends JFrame{
 
     private void previewCardFromDatabase(String id) {
         ImageCrawler crawler = new ImageCrawler(id, previewLabel);
-        crawler.run();
+        crawler.execute();
     }
 
 
@@ -225,7 +225,7 @@ public class Face extends JFrame{
 
         draftedCardsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftedCardsPanel.add(new JLabel("drafted cards panel"));
-        draftedCardsList = new CardCheckBoxList();
+        draftedCardsList = new CardCheckBoxList(this::previewCardFromDatabase);
 
         JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
         draftScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DRAFTED_CARDS);
@@ -322,7 +322,7 @@ public class Face extends JFrame{
         deckPanel.setLayout(mgr);
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         deckPanel.add(deckCountLabel);
-        deckList = new CardCheckBoxList();
+        deckList = new CardCheckBoxList(this::previewCardFromDatabase);
         JScrollPane deckScrollPane = new JScrollPane(deckList);
         deckScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DECK);
         deckPanel.add(deckScrollPane);
@@ -472,7 +472,7 @@ public class Face extends JFrame{
         sideboardPanel.setLayout(new BoxLayout(sideboardPanel, BoxLayout.PAGE_AXIS));
         sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         sideboardPanel.add(new JLabel("sideboard panel"));
-        sideboardList = new CardCheckBoxList();
+        sideboardList = new CardCheckBoxList(this::previewCardFromDatabase);
         JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
         sideboardScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_SIDEBOARD);
         sideboardPanel.add(sideboardScrollPane);

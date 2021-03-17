@@ -216,7 +216,7 @@ public class Card {
         }
     }
 
-    private String getCode() {
+    public String getCode() {
         return code;
     }
     public Integer getCost() {return cost;}

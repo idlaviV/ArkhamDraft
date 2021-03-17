@@ -29,33 +29,34 @@ public class ImageCrawler extends SwingWorker<Image, Image> {
         String urlPath1 = String.format("https://arkhamdb.com/bundles/cards/%s", fileName);
         String urlPath2 = String.format("https://arkhamdb.com/bundles/cards/%s.png", id);
         File file = filePath.toFile();
-        try {
-            if (!file.exists()) {
-                if (id.length() == 5 && id.matches("[0-9]+")) {
-                    InputStream in = new URL(urlPath1).openStream();
-                    Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
-                } else {
-                    throw new RuntimeException(String.format("Tried to load image with illegal id %s", id));
-                }
-            }
-            return ImageIO.read(file);
-        } catch (IOException e) {
+
+        if (id.length() != 5 || !id.matches("[0-9]+")) {
+            throw new RuntimeException(String.format("Tried to load image with illegal id %s", id));
+        }
+
+        if (!file.exists()) {
             try {
-                if (!file.exists()) {
-                    if (id.length() == 5 && id.matches("[0-9]+")) {
-                        InputStream in = new URL(urlPath2).openStream();
-                        Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
-                    } else {
-                        throw new RuntimeException(String.format("Tried to load image with illegal id %s", id));
-                    }
+                extractURLtoFile(filePath, urlPath1, file);
+            } catch (IOException e) {
+                try {
+                    extractURLtoFile(filePath, urlPath2, file);
+                } catch (IOException e2) {
+                    e.printStackTrace();
+                    e2.printStackTrace();
                 }
-                return ImageIO.read(file);
-            } catch (IOException e2) {
-                e.printStackTrace();
-                e2.printStackTrace();
             }
         }
+        try {
+            return ImageIO.read(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
+    }
+
+    private void extractURLtoFile(Path filePath, String urlPath1, File file) throws IOException {
+                InputStream in = new URL(urlPath1).openStream();
+                Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
     }
 
 
