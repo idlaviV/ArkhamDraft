@@ -78,8 +78,6 @@ public class Face extends JFrame{
         previewLabel.setPreferredSize(DIMENSION_PHYSICAL_CARD);
         previewPanel.add(previewLabel);
 
-        previewCardFromDatabase("00000");
-
         return previewPanel;
     }
 

@@ -41,8 +41,11 @@ public class ImageCrawler extends SwingWorker<Image, Image> {
                 try {
                     extractURLtoFile(filePath, urlPath2, file);
                 } catch (IOException e2) {
-                    e.printStackTrace();
-                    e2.printStackTrace();
+                    try {
+                        return ImageIO.read(Paths.get("src/main/resources/cards/00000.jpg").toFile());
+                    } catch (IOException e3) {
+                        e3.printStackTrace();
+                    }
                 }
             }
         }
