@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 
 public class Face extends JFrame{
@@ -25,6 +24,7 @@ public class Face extends JFrame{
     private CardCheckBoxList draftedCardsList;
     private final Brain brain;
     private NewDraftDeckDialog newDraftDeckDialog;
+    private SettingsDialog settingsDialog;
     private EverythingDisablerAndReenabler draftedCardsPanelEnabler;
     private EverythingDisablerAndReenabler sideboardPanelEnabler;
     private final ArrayList<Runnable> deckComponentEnablers = new ArrayList<>();
@@ -45,6 +45,7 @@ public class Face extends JFrame{
     public Face(Brain brain) {
         super();
         this.brain = brain;
+        settingsDialog = new SettingsDialog(brain.getSettingsManager());
     }
 
 
@@ -109,10 +110,26 @@ public class Face extends JFrame{
         menuButtonPanel.add(initializeLoadButton());
         menuButtonPanel.add(initializeSaveButton());
         menuButtonPanel.add(initializeStartDraftButton());
+        menuButtonPanel.add(initializeSettingsButton());
 
         newDraftDeckDialog = new NewDraftDeckDialog(brain, this::updateAllPanels, this::enableDraftPanel);
 
         return menuButtonPanel;
+    }
+
+    private Component initializeSettingsButton() {
+        JButton settingsButton = new JButton();
+        try {
+            Image img = ImageIO.read(getClass().getResource("/icons/Categories-preferences-system-icon.png"));
+            settingsButton.setIcon(new ImageIcon(img));
+            settingsButton.setMargin(new Insets(0, 0, 0, 0));
+            settingsButton.setBorder(null);
+            settingsButton.setContentAreaFilled(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        settingsButton.addActionListener(getOpenSettingsButtonActionListener());
+        return settingsButton;
     }
 
     private Component initializeStartDraftButton() {
@@ -153,6 +170,12 @@ public class Face extends JFrame{
     private ActionListener getStartDraftActionListener() {
         return (e -> {
             openNewDraftDeckDialog();
+        });
+    }
+
+    private ActionListener getOpenSettingsButtonActionListener() {
+        return (e -> {
+            new OpenSettingsButtonWorker(brain, settingsDialog).execute();
         });
     }
 
@@ -201,11 +224,6 @@ public class Face extends JFrame{
         printCardsToPanel(brain.getDraftedCards(), draftedCardsList);
     }
 
-    public void updateDeckPanel() {
-        updateDeckCountLabel();
-        printCardsToPanel(brain.getDraftedDeck(), deckList);
-    }
-
     public void printCardsToSideboardPanel() {
         printCardsToPanel(brain.getSideboard(), sideboardList);
     }
@@ -213,6 +231,11 @@ public class Face extends JFrame{
     private void updateDraftingAndSideboardPanel() {
         printCardsToDraftPanel();
         printCardsToSideboardPanel();
+    }
+
+    public void updateDeckPanel() {
+        updateDeckCountLabel();
+        printCardsToPanel(brain.getDraftedDeck(), deckList);
     }
 
     private void printCardsToPanel(Deck deck, CardCheckBoxList list) {

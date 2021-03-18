@@ -75,7 +75,7 @@ public class ArkhamDraftBrain implements Brain{
             String input = scanner.nextLine();
             switch (input) {
                 case "owned cards":
-                    if (settingsManager.setOwnedPacks(scanner, new File("data/packs.txt"))) {
+                    if (settingsManager.setOwnedPacks(scanner)) {
                         System.out.println("Owned packs updated.");
                     }
                     break;
@@ -86,13 +86,13 @@ public class ArkhamDraftBrain implements Brain{
                         String input2 = scanner.nextLine();
                         switch (input2) {
                             case "y":
-                                if (settingsManager.toggleRegular(new File("data/packs.txt"),true)) {
+                                if (settingsManager.toggleRegular(true)) {
                                     answered = true;
                                     System.out.println("Using only regular cards now.");
                                 }
                                 break;
                             case "n":
-                                if (settingsManager.toggleRegular(new File("data/packs.txt"),false)) {
+                                if (settingsManager.toggleRegular(false)) {
                                     answered = true;
                                     System.out.println("Using all cards now.");
                                 }
@@ -379,6 +379,8 @@ public class ArkhamDraftBrain implements Brain{
         drafter.sortDraftedCards(Decoder.decryptComparator(sortBy));
     }
 
+
+
     public void addFilterFromGUI(ArrayList<String> arguments) {
         CardFilter newCardFilter = null;
         switch (arguments.get(0)) {
@@ -603,5 +605,10 @@ public class ArkhamDraftBrain implements Brain{
     @Override
     public int getNumberOfCardsInDeck() {
         return drafter.getNumberOfCardsInDeck();
+    }
+
+    @Override
+    public SettingsManager getSettingsManager() {
+        return settingsManager;
     }
 }

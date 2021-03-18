@@ -18,6 +18,7 @@ public class SettingsManager {
     private boolean secondCore;
     private boolean useOnlyRegularCards;
     private CardBox blackList;
+    private static final File file = new File("data/packs.txt");
 
     public SettingsManager() {
     }
@@ -68,7 +69,7 @@ public class SettingsManager {
         return blackList;
     }
 
-    public boolean toggleRegular(File file, boolean regular) {
+    public boolean toggleRegular(boolean regular) {
         if (file.exists() && file.isFile()) {
             try {
                 String content = new String(Files.readAllBytes(file.toPath()));
@@ -111,7 +112,7 @@ public class SettingsManager {
         return false;
     }
 
-    public boolean setOwnedPacks(Scanner scanner, File file) {
+    public boolean setOwnedPacks(Scanner scanner) {
         if (file.exists() && file.isFile()) {
             List<Pack> newOwnedPacks = new ArrayList<>();
             try {
@@ -154,7 +155,7 @@ public class SettingsManager {
             } catch (IOException e) {
                 return false;
             }
-            updateSettings(file);
+            updateSettings();
             return true;
         }
         return false;
@@ -197,7 +198,7 @@ public class SettingsManager {
         return ownedPacks;
     }
 
-    public void updateSettings(File file) {
+    public void updateSettings() {
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             ownedPacks = new ArrayList<>();
@@ -263,10 +264,13 @@ public class SettingsManager {
     }
 
     public static void generateDefaultSettings() throws IOException {
-        File settings = new File("data/packs.txt");
-        settings.delete();
-        settings.createNewFile();
+        file.delete();
+        file.createNewFile();
         String input = "core\ndwl\ntmm\ntece\nbota\nuau\nwda\nlitas\nptc\neotp\ntuo\napot\ntpm\nbsr\ndca\ntfa\ntof\ntbb\nhote\ntcoa\ntdoy\nsha\ntcu\ntsn\nwos\nfgg\nuad\nicc\nbbt\ntde\nsfk\ntsh\ndsm\npnr\nwgd\nwoc\nrtnotz\nrtdwl\nrtptc\ncotr\ncoh\nlol\nguardians\nhotel\nbooks\npromo\ncore2\nregular true\n";
-        Files.copy(new ByteArrayInputStream(input.getBytes()), settings.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(new ByteArrayInputStream(input.getBytes()), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    public boolean getRegularCardsFlag() {
+        return useOnlyRegularCards;
     }
 }

@@ -121,7 +121,7 @@ public class ArkhamDraftBrainTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        manager.updateSettings(new File("data/packs.txt"));
+        manager.updateSettings();
         testBrain.guiOpensNewDraftDeckDialog();
     }
 }

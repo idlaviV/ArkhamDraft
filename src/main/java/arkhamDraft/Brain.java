@@ -76,4 +76,6 @@ public interface Brain {
     int getNumberOfCardsInDeck();
 
     void sortDraftedCards(String requireNonNull);
+
+    SettingsManager getSettingsManager();
 }

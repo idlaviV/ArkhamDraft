@@ -51,7 +51,7 @@ public class Main {
         face.setVisible(true);
         face.initComponents();
         brain.updateFromJson();
-        settingsManager.updateSettings(settingsFile);
+        settingsManager.updateSettings();
 
         /*File deckFile = new File("data/deck.txt"); // This part reads the deck in "data/deck" and prints it
         Deck deck = new Deck(deckFile, face.getMasterCardBox());
