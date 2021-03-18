@@ -38,9 +38,6 @@ public class Main {
         if (!(packsFile.exists() || cardsFile.exists())) {
             settingsManager.updateDatabaseFromAPI();
         }
-        if (!settingsFile.exists()) {
-            SettingsManager.generateDefaultSettings();
-        }
         Brain brain = new ArkhamDraftBrain(settingsManager);
         Face face = new Face(brain);
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -51,6 +48,9 @@ public class Main {
         face.setVisible(true);
         face.initComponents();
         brain.updateFromJson();
+        if (!settingsFile.exists()) {
+            settingsManager.generateDefaultSettings();
+        }
         settingsManager.updateSettings();
 
         /*File deckFile = new File("data/deck.txt"); // This part reads the deck in "data/deck" and prints it

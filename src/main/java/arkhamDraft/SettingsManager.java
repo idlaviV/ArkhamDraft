@@ -263,11 +263,28 @@ public class SettingsManager {
         return secondCore;
     }
 
-    public static void generateDefaultSettings() throws IOException {
+    public void generateDefaultSettings() throws IOException {
         file.delete();
         file.createNewFile();
-        String input = "core\ndwl\ntmm\ntece\nbota\nuau\nwda\nlitas\nptc\neotp\ntuo\napot\ntpm\nbsr\ndca\ntfa\ntof\ntbb\nhote\ntcoa\ntdoy\nsha\ntcu\ntsn\nwos\nfgg\nuad\nicc\nbbt\ntde\nsfk\ntsh\ndsm\npnr\nwgd\nwoc\nrtnotz\nrtdwl\nrtptc\ncotr\ncoh\nlol\nguardians\nhotel\nbooks\npromo\ncore2\nregular true\n";
-        Files.copy(new ByteArrayInputStream(input.getBytes()), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        //String input = "core\ndwl\ntmm\ntece\nbota\nuau\nwda\nlitas\nptc\neotp\ntuo\napot\ntpm\nbsr\ndca\ntfa\ntof\ntbb\nhote\ntcoa\ntdoy\nsha\ntcu\ntsn\nwos\nfgg\nuad\nicc\nbbt\ntde\nsfk\ntsh\ndsm\npnr\nwgd\nwoc\nrtnotz\nrtdwl\nrtptc\ncotr\ncoh\nlol\nguardians\nhotel\nbooks\npromo\ncore2\nregular true\n";
+        ownAllPacks();
+    }
+
+    private void ownAllPacks() {
+        ArrayList<Pack> newOwnedPacks = new ArrayList<>();
+        newOwnedPacks.addAll(packs);
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            for (Pack pack : newOwnedPacks) {
+                fileWriter.write(pack.getCode() + "\n");
+            }
+            fileWriter.write("core2\n");
+            fileWriter.write("regular true\n");
+            fileWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean getRegularCardsFlag() {
