@@ -40,6 +40,7 @@ public class Face extends JFrame{
     public static final Dimension DIMENSION_SCROLL_PANE_DECK = new Dimension(100, 600);
     public static final Dimension DIMENSION_SCROLL_PANE_SIDEBOARD = new Dimension(300, 400);
     private JLabel previewLabel;
+    private JComboBox<String> sortComboBox;
 
     public Face(Brain brain) {
         super();
@@ -248,13 +249,30 @@ public class Face extends JFrame{
         otherButtonsPanel.add(initializeAddButton());
         otherButtonsPanel.add(initializeAddSideboardButton());
 
+        JPanel sortButtonPanel = new JPanel();
+        sortButtonPanel.add(initializeSortDraftedCardsButton());
+
         JPanel draftActionsPanel = new JPanel();
         draftActionsPanel.setLayout(new BoxLayout(draftActionsPanel, BoxLayout.Y_AXIS));
         draftButtonPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         otherButtonsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftActionsPanel.add(draftButtonPanel);
         draftActionsPanel.add(otherButtonsPanel);
+        draftActionsPanel.add(sortButtonPanel);
+
         return draftActionsPanel;
+    }
+
+    private Component initializeSortDraftedCardsButton() {
+        JButton sortDraftedCardsButton = new JButton("Sort Drafted Cards");
+        sortDraftedCardsButton.setEnabled(false);
+        deckComponentEnablers.add(()->sortDraftedCardsButton.setEnabled(true));
+        sortDraftedCardsButton.addActionListener(e -> new SortDraftedCardsButtonWorker(
+                brain,
+                sortComboBox,
+                this::updateDraftingAndSideboardPanel
+        ).execute());
+        return sortDraftedCardsButton;
     }
 
     private void resetLabelCurrentCardsInDraftingDeck() {
@@ -326,16 +344,18 @@ public class Face extends JFrame{
         deckPanel.add(deckScrollPane);
         deckPanel.add(initializeRemoveFromDeckButton());
 
-        DefaultComboBoxModel<String> sortComboBoxModel = initializeSortComboBoxModel();
-        JComboBox<String> sortComboBox = new JComboBox<>(sortComboBoxModel);
+
+        deckPanel.add(initializeSortComboBox());
+
         deckPanel.add(initializeSortDeckButton(sortComboBox));
-        deckPanel.add(sortComboBox);
-
-
-        //deckPanel.add(initializeSaveLoadDeckPanel());
-
 
         return deckPanel;
+    }
+
+    private Component initializeSortComboBox() {
+        DefaultComboBoxModel<String> sortComboBoxModel = initializeSortComboBoxModel();
+        sortComboBox = new JComboBox<>(sortComboBoxModel);
+        return sortComboBox;
     }
 
     private Component initializeRemoveFromDeckButton() {

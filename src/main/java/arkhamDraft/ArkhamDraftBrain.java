@@ -375,6 +375,9 @@ public class ArkhamDraftBrain implements Brain{
     public void sortDeck(String sortBy) {
         drafter.sortDeck(Decoder.decryptComparator(sortBy));
     }
+    public void sortDraftedCards(String sortBy) {
+        drafter.sortDraftedCards(Decoder.decryptComparator(sortBy));
+    }
 
     public void addFilterFromGUI(ArrayList<String> arguments) {
         CardFilter newCardFilter = null;

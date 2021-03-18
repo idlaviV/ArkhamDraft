@@ -145,6 +145,10 @@ public class Drafter {
         draftedDeck.sortDeck(comparator);
     }
 
+    public void sortDraftedCards(Comparator<Card> comparator) {
+        draftedCards.sortDeck(comparator);
+    }
+
     public void addToFilterList(CardFilter cardFilter) {
         filterList.add(cardFilter);
     }
