@@ -65,10 +65,21 @@ public class Face extends JFrame{
         gbc.gridx++;
         mainPanel.add(initializePreviewPanel(), gbc);
 
+        gbc.gridy++;
+        gbc.gridx = 0;
+        mainPanel.add(initializeSortComboBoxPanel(), gbc);
+
         add(mainPanel);
         draftedCardsPanelEnabler.disable();
         sideboardPanelEnabler.disable();
         setVisible(true);
+    }
+
+    private Component initializeSortComboBoxPanel() {
+        JPanel sortComboBoxPanel = new JPanel();
+        sortComboBoxPanel.add(new JLabel("Sort by"));
+        sortComboBoxPanel.add(initializeSortComboBox());
+        return sortComboBoxPanel;
     }
 
     private Component initializePreviewPanel() {
@@ -265,8 +276,7 @@ public class Face extends JFrame{
 
     private Component initializeSortDraftedCardsButton() {
         JButton sortDraftedCardsButton = new JButton("Sort Drafted Cards");
-        sortDraftedCardsButton.setEnabled(false);
-        deckComponentEnablers.add(()->sortDraftedCardsButton.setEnabled(true));
+
         sortDraftedCardsButton.addActionListener(e -> new SortDraftedCardsButtonWorker(
                 brain,
                 sortComboBox,
@@ -342,12 +352,12 @@ public class Face extends JFrame{
         JScrollPane deckScrollPane = new JScrollPane(deckList);
         deckScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DECK);
         deckPanel.add(deckScrollPane);
-        deckPanel.add(initializeRemoveFromDeckButton());
 
+        JPanel deckButtonPanel = new JPanel();
+        deckButtonPanel.add(initializeRemoveFromDeckButton());
+        deckButtonPanel.add(initializeSortDeckButton());
 
-        deckPanel.add(initializeSortComboBox());
-
-        deckPanel.add(initializeSortDeckButton(sortComboBox));
+        deckPanel.add(deckButtonPanel);
 
         return deckPanel;
     }
@@ -360,19 +370,14 @@ public class Face extends JFrame{
 
     private Component initializeRemoveFromDeckButton() {
         JButton removeFromDeckButton = new JButton("Remove");
+        removeFromDeckButton.setEnabled(false);
+        deckComponentEnablers.add(()->removeFromDeckButton.setEnabled(true));
         removeFromDeckButton.addActionListener(e -> new RemoveCardFromDeckButtonWorker(
                 brain,
                 this::updateAllPanels,
                 deckList
         ).execute());
         return removeFromDeckButton;
-    }
-
-    private Component initializeSaveLoadDeckPanel() {
-        JPanel saveLoadDeckPanel = new JPanel();
-        saveLoadDeckPanel.add(initializeSaveButton());
-        saveLoadDeckPanel.add(initializeLoadButton());
-        return saveLoadDeckPanel;
     }
 
     private Component initializeLoadButton() {
@@ -469,10 +474,11 @@ public class Face extends JFrame{
         sortComboBoxModel.addElement("Faction, then XP, then name");
         sortComboBoxModel.addElement("XP, then name");
         sortComboBoxModel.addElement("Cost, then name");
+        sortComboBoxModel.setSelectedItem("Faction, then XP, then name");
         return sortComboBoxModel;
     }
 
-    private Component initializeSortDeckButton(JComboBox<String> sortComboBox) {
+    private Component initializeSortDeckButton() {
         JButton sortDeckButton = new JButton("Sort Deck");
         sortDeckButton.setEnabled(false);
         deckComponentEnablers.add(()->sortDeckButton.setEnabled(true));
