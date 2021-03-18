@@ -14,6 +14,7 @@ import java.util.*;
 public class SettingsManager {
 
     private List<Pack> packs;
+    private final ArrayList<Cycle> cycles = new ArrayList<>();
     private List<Pack> ownedPacks;
     private boolean secondCore;
     private boolean useOnlyRegularCards;
@@ -50,6 +51,7 @@ public class SettingsManager {
         this.packs = Arrays.asList(gson.fromJson(fileReaderPacks, Pack[].class));
         Collections.sort(packs);
         fileReaderPacks.close();
+        buildCycles();
         return masterCardBox;
     }
 
@@ -126,8 +128,7 @@ public class SettingsManager {
                         newOwnedPacks.addAll(packs);
                         break;
                     default:
-                        List<Integer> cycles = getCycles();
-                        for (Integer cycle : cycles) {
+                        for (Cycle cycle : cycles) {
                             newOwnedPacks.addAll(isThisCycleOwned(scanner, cycle));
                         }
                 }
@@ -161,8 +162,8 @@ public class SettingsManager {
         return false;
     }
 
-    private List<Pack> isThisCycleOwned(Scanner scanner, Integer cycle) {
-        System.out.println(String.format("Do you own the cycle %s? 'y' for 'yes', 'n' for 'no', 'p' for 'partially'.",getCycleName(cycle)));
+    private List<Pack> isThisCycleOwned(Scanner scanner, Cycle cycle) {
+        System.out.println(String.format("Do you own the cycle %s? 'y' for 'yes', 'n' for 'no', 'p' for 'partially'.", cycle.getName()));
         boolean answered = false;
         while (!answered) {
             String input = scanner.nextLine();
@@ -170,7 +171,7 @@ public class SettingsManager {
                 case "n":
                     return new ArrayList<>();
                 case "y":
-                    return listCycle(cycle);
+                    return cycle.getPacks();
                 case "p":
                     answered = true;
                 default:
@@ -178,9 +179,9 @@ public class SettingsManager {
         }
         /*p-case*/
         List<Pack> ownedPacks = new ArrayList<>();
-        List<Pack> cyclePacks = listCycle(cycle);
+        List<Pack> cyclePacks = cycle.getPacks();
         for (Pack pack : cyclePacks) {
-            System.out.println(String.format("Do you own %s? (y/n)",pack.getName()));
+            System.out.println(String.format("Do you own %s? (y/n)", pack.getName()));
             String input = scanner.nextLine();
             answered = false;
             while(!answered) {
@@ -221,34 +222,35 @@ public class SettingsManager {
         }
     }
 
-    public List<Pack> listCycle(int cycle) {
-        List<Pack> cyclePacks = new ArrayList<>();
-        for (Pack pack : packs) {
-            if (pack.getCycle() == cycle) {
-                cyclePacks.add(pack);
-            }
-        }
-        return cyclePacks;
-    }
-
-    public List<Integer> getCycles() {
-        List<Integer> cycles = new ArrayList<>();
+    public void buildCycles() {
+        Map<Integer, List<Pack>> cycleMap = new HashMap<>();
         for (Pack pack: packs) {
-            if (!cycles.contains(pack.getCycle())) {
-                cycles.add(pack.getCycle());
+            int i = pack.getCycle();
+            if (cycleMap.containsKey(i)) {
+                cycleMap.get(i).add(pack);
+            } else {
+                cycleMap.put(i, new ArrayList<>(Collections.singletonList(pack)));
             }
         }
-        return cycles;
+
+        for (Integer i : cycleMap.keySet()) {
+            Cycle cycle = new Cycle(i,getCycleName(i), cycleMap.get(i));
+            cycles.add(cycle);
+        }
     }
 
     public String getCycleName(int cycle) {
         switch (cycle) {
             case 50:
                 return "Return to...";
+            case 60:
+                return "Investigators";
             case 70:
                 return "Standalone";
             case 80:
                 return "Promo/Books";
+            case 90:
+                return "Parallel";
             default:
                 for (Pack pack : packs) {
                     if (pack.getCycle() == cycle && pack.getPosition() == 1) {
@@ -287,7 +289,13 @@ public class SettingsManager {
         }
     }
 
+
     public boolean getRegularCardsFlag() {
         return useOnlyRegularCards;
     }
+
+    public List<Cycle> getCycles() {
+        return cycles;
+    }
+
 }

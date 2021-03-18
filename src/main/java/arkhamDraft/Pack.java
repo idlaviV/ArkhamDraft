@@ -31,4 +31,9 @@ public class Pack implements Comparable<Pack> {
     public int compareTo(Pack otherPack) {
         return this.getOrder() - otherPack.getOrder();
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s[%d/%d]", code, cycle_position, position);
+    }
 }

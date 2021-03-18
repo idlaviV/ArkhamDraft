@@ -1,15 +1,25 @@
 package arkhamDraft.UI;
 
+import arkhamDraft.Cycle;
+import arkhamDraft.Pack;
 import arkhamDraft.SettingsManager;
 import arkhamDraft.UI.workerPool.applySettingsButtonWorker;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import java.awt.*;
+import java.util.List;
+
 
 public class SettingsDialog extends JDialog {
+    private static final Dimension DIMENSION_SCROLL_PANE_PACK_SELECTOR_TREE = new Dimension(300, 300);
     private final SettingsManager settingsManager;
     private JCheckBox regularCardsCheckBox;
     private JButton applyButton;
+    private JCheckBoxTree packSelectorCheckBoxTree;
 
 
     public SettingsDialog(SettingsManager settingsManager) {
@@ -24,7 +34,7 @@ public class SettingsDialog extends JDialog {
 
     private void initializeSettingsDialog() {
         setTitle("Settings");
-        setSize(300,300);
+        setSize(500,500);
         setLocation(100,100);
         setModal(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -43,8 +53,25 @@ public class SettingsDialog extends JDialog {
         gbc.gridy++;
         mainPanel.add(initializeRegularCardsPanel(), gbc);
         gbc.gridy++;
+        mainPanel.add(initializePackSelectorPanel(), gbc);
+        gbc.gridy++;
         mainPanel.add(initializeCloseButtonsPanel(), gbc);
         add(mainPanel);
+    }
+
+    private Component initializePackSelectorPanel() {
+        JPanel packSelectorPanel = new JPanel();
+        packSelectorPanel.setBorder(BorderFactory.createCompoundBorder());
+        packSelectorPanel.setPreferredSize(new Dimension(300,300));
+
+
+        packSelectorCheckBoxTree = new JCheckBoxTree();
+
+        JScrollPane packSelectorScrollPane = new JScrollPane(packSelectorCheckBoxTree);
+        packSelectorScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_PACK_SELECTOR_TREE);
+
+        packSelectorPanel.add(packSelectorScrollPane);
+        return packSelectorPanel;
     }
 
     private Component initializeCloseButtonsPanel() {
@@ -85,6 +112,23 @@ public class SettingsDialog extends JDialog {
 
     private void readSettings() {
         regularCardsCheckBox.setSelected(settingsManager.getRegularCardsFlag());
+        populatePackTree();
+    }
+
+    private void populatePackTree() {
+        DefaultMutableTreeNode top = new DefaultMutableTreeNode("Packs");
+        List<Cycle> cycles = settingsManager.getCycles();
+        for (Cycle cycle : cycles) {
+            DefaultMutableTreeNode child = new DefaultMutableTreeNode(cycle);
+            top.add(child);
+            List<Pack> packs = cycle.getPacks();
+            for (Pack pack : packs) {
+                child.add(new DefaultMutableTreeNode(pack));
+            }
+        }
+
+        DefaultTreeModel model = new DefaultTreeModel(top);
+        packSelectorCheckBoxTree.setModel(model);
     }
 
     private void changesWereMaid(boolean flag) {

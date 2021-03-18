@@ -168,15 +168,11 @@ public class Face extends JFrame{
     }
 
     private ActionListener getStartDraftActionListener() {
-        return (e -> {
-            openNewDraftDeckDialog();
-        });
+        return (e -> openNewDraftDeckDialog());
     }
 
     private ActionListener getOpenSettingsButtonActionListener() {
-        return (e -> {
-            new OpenSettingsButtonWorker(brain, settingsDialog).execute();
-        });
+        return (e -> new OpenSettingsButtonWorker(brain, settingsDialog).execute());
     }
 
     private void openNewDraftDeckDialog() {
