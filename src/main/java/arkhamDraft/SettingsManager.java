@@ -223,7 +223,7 @@ public class SettingsManager {
     }
 
     public void buildCycles() {
-        Map<Integer, List<Pack>> cycleMap = new HashMap<>();
+        Map<Integer, List<Pack>> cycleMap = new LinkedHashMap<>();
         for (Pack pack: packs) {
             int i = pack.getCycle();
             if (cycleMap.containsKey(i)) {
@@ -234,12 +234,14 @@ public class SettingsManager {
         }
 
         for (Integer i : cycleMap.keySet()) {
-            Cycle cycle = new Cycle(i,getCycleName(i), cycleMap.get(i));
+            Cycle cycle = new Cycle(i, getCycleName(cycleMap.get(i)), cycleMap.get(i));
             cycles.add(cycle);
         }
     }
 
-    public String getCycleName(int cycle) {
+    public String getCycleName(List<Pack> packs) {
+        Pack pack = packs.get(0);
+        int cycle = pack.getCycle();
         switch (cycle) {
             case 50:
                 return "Return to...";
@@ -252,13 +254,8 @@ public class SettingsManager {
             case 90:
                 return "Parallel";
             default:
-                for (Pack pack : packs) {
-                    if (pack.getCycle() == cycle && pack.getPosition() == 1) {
-                        return pack.getName();
-                    }
-                }
+                return pack.getName();
         }
-        return "";
     }
 
     public boolean getSecondCore() {

@@ -62,10 +62,11 @@ public class SettingsDialog extends JDialog {
     private Component initializePackSelectorPanel() {
         JPanel packSelectorPanel = new JPanel();
         packSelectorPanel.setBorder(BorderFactory.createCompoundBorder());
-        packSelectorPanel.setPreferredSize(new Dimension(300,300));
+        //packSelectorPanel.setPreferredSize(new Dimension(300,300));
 
 
         packSelectorCheckBoxTree = new JCheckBoxTree();
+        packSelectorCheckBoxTree.setPreferredSize(new Dimension(150, 600));
 
         JScrollPane packSelectorScrollPane = new JScrollPane(packSelectorCheckBoxTree);
         packSelectorScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_PACK_SELECTOR_TREE);

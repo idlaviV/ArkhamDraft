@@ -1,7 +1,6 @@
 package arkhamDraft.UI;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.EventListener;
@@ -122,6 +121,7 @@ public class JCheckBoxTree extends JTree {
             super();
             this.setLayout(new BorderLayout());
             checkBox = new JCheckBox();
+            checkBox.setPreferredSize(new Dimension(250, 20));
             add(checkBox, BorderLayout.CENTER);
             setOpaque(false);
         }
