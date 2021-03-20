@@ -36,4 +36,13 @@ public class Pack implements Comparable<Pack> {
     public String toString() {
         return String.format("%s[%d/%d]", code, cycle_position, position);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Pack other = (Pack) o;
+        return getOrder().equals(other.getOrder());
+    }
 }

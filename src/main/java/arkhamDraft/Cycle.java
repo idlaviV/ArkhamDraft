@@ -2,6 +2,7 @@ package arkhamDraft;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Cycle {
     private final int index;
@@ -31,5 +32,25 @@ public class Cycle {
         return "Cycle " +
                 name + '[' +
                 index + ']';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cycle cycle = (Cycle) o;
+
+        if (index != cycle.getIndex()) return false;
+        if (!Objects.equals(name, cycle.getName())) return false;
+        return Objects.equals(packs, cycle.getPacks());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = index;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (packs != null ? packs.hashCode() : 0);
+        return result;
     }
 }

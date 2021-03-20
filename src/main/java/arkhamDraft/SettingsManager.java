@@ -115,51 +115,54 @@ public class SettingsManager {
     }
 
     public boolean setOwnedPacks(Scanner scanner) {
-        if (file.exists() && file.isFile()) {
-            List<Pack> newOwnedPacks = new ArrayList<>();
-            try {
-                file.delete();
-                file.createNewFile();
-                FileWriter fileWriter = new FileWriter(file);
-                System.out.println("Do you own all cycles? (y/n)");
-                String input = scanner.nextLine();
+        List<Pack> newOwnedPacks = new ArrayList<>();
+        System.out.println("Do you own all cycles? (y/n)");
+        String input = scanner.nextLine();
+        switch (input) {
+            case "y":
+                    newOwnedPacks.addAll(packs);
+                    break;
+                    default:
+                    for (Cycle cycle : cycles) {
+                        newOwnedPacks.addAll(isThisCycleOwned(scanner, cycle));
+                    }
+        }
+
+            System.out.println("Do you own a second core? (y/n)");
+            boolean answered = false;
+            while (!answered) {
+                input = scanner.nextLine();
                 switch (input) {
                     case "y":
-                        newOwnedPacks.addAll(packs);
+                        secondCore = true;
+                        answered = true;
                         break;
+                    case "n":
+                        secondCore = false;
+                        answered = true;
                     default:
-                        for (Cycle cycle : cycles) {
-                            newOwnedPacks.addAll(isThisCycleOwned(scanner, cycle));
-                        }
                 }
-                for (Pack pack : newOwnedPacks) {
-                    fileWriter.write(pack.getCode() + "\n");
-                }
-                System.out.println("Do you own a second core? (y/n)");
-                boolean answered = false;
-                while (!answered) {
-                    input = scanner.nextLine();
-                    switch (input) {
-                        case "y":
-                            secondCore = true;
-                            answered = true;
-                            fileWriter.write("core2\n");
-                            break;
-                        case "n":
-                            secondCore = false;
-                            answered = true;
-                        default:
-                    }
-                }
-                fileWriter.write(String.format("regular %b\n", useOnlyRegularCards));
-                fileWriter.close();
-            } catch (IOException e) {
-                return false;
             }
-            updateSettings();
+            saveSettingsToFile();
             return true;
+    }
+
+    public void saveSettingsToFile()  {
+        try {
+            file.delete();
+            file.createNewFile();
+            FileWriter fileWriter = new FileWriter(file);
+            for (Pack pack : ownedPacks) {
+                fileWriter.write(pack.getCode() + "\n");
+            }
+            if (secondCore) {
+                fileWriter.write("core2\n");
+            }
+            fileWriter.write(String.format("regular %b\n", useOnlyRegularCards));
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return false;
     }
 
     private List<Pack> isThisCycleOwned(Scanner scanner, Cycle cycle) {
@@ -270,20 +273,8 @@ public class SettingsManager {
     }
 
     private void ownAllPacks() {
-        ArrayList<Pack> newOwnedPacks = new ArrayList<>();
-        newOwnedPacks.addAll(packs);
-        try {
-            FileWriter fileWriter = new FileWriter(file);
-            for (Pack pack : newOwnedPacks) {
-                fileWriter.write(pack.getCode() + "\n");
-            }
-            fileWriter.write("core2\n");
-            fileWriter.write("regular true\n");
-            fileWriter.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ArrayList<Pack> newOwnedPacks = new ArrayList<>(packs);
+        saveSettingsToFile();
     }
 
 
@@ -295,4 +286,19 @@ public class SettingsManager {
         return cycles;
     }
 
+    public List<Pack> getOwnedPacks(){
+        return ownedPacks;
+    }
+
+    public void setOwnedPacks(List<Pack> ownedPacks) {
+        this.ownedPacks = ownedPacks;
+    }
+
+    public List<Pack> getPacks() {
+        return packs;
+    }
+
+    public void toggleSecondCore(boolean secondCore) {
+        this.secondCore = secondCore;
+    }
 }

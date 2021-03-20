@@ -4,13 +4,12 @@ import arkhamDraft.Cycle;
 import arkhamDraft.Pack;
 import arkhamDraft.SettingsManager;
 import arkhamDraft.UI.workerPool.applySettingsButtonWorker;
+import com.sun.corba.se.impl.orbutil.closure.Future;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,6 +19,11 @@ public class SettingsDialog extends JDialog {
     private JCheckBox regularCardsCheckBox;
     private JButton applyButton;
     private JCheckBoxTree packSelectorCheckBoxTree;
+    private final List<DefaultMutableTreeNode> leaves = new ArrayList<>();
+    private final List<DefaultMutableTreeNode> cycleNodes = new ArrayList<>();
+    private final DefaultMutableTreeNode top = new DefaultMutableTreeNode("Packs");
+    private JPanel packSelectorPanel;
+    private JCheckBox secondCoreCheckBox;
 
 
     public SettingsDialog(SettingsManager settingsManager) {
@@ -55,24 +59,40 @@ public class SettingsDialog extends JDialog {
         gbc.gridy++;
         mainPanel.add(initializePackSelectorPanel(), gbc);
         gbc.gridy++;
+        mainPanel.add(initializeSecondCorePanel(), gbc);
+        gbc.gridy++;
+
         mainPanel.add(initializeCloseButtonsPanel(), gbc);
         add(mainPanel);
     }
 
+    private Component initializeSecondCorePanel() {
+        JPanel secondCorePanel = new JPanel();
+        secondCorePanel.setBorder(BorderFactory.createCompoundBorder());
+
+        secondCoreCheckBox = new JCheckBox("Second Core");
+        secondCoreCheckBox.addActionListener(e -> changesWereMaid(true));
+        secondCorePanel.add(secondCoreCheckBox);
+        return secondCorePanel;
+    }
+
     private Component initializePackSelectorPanel() {
-        JPanel packSelectorPanel = new JPanel();
+        packSelectorPanel = new JPanel();
         packSelectorPanel.setBorder(BorderFactory.createCompoundBorder());
         //packSelectorPanel.setPreferredSize(new Dimension(300,300));
 
+        buildPackSelectorScrollPane();
+        return packSelectorPanel;
+    }
 
+    private void buildPackSelectorScrollPane() {
         packSelectorCheckBoxTree = new JCheckBoxTree();
         packSelectorCheckBoxTree.setPreferredSize(new Dimension(150, 600));
+        packSelectorCheckBoxTree.addCheckChangeEventListener(e -> SwingUtilities.invokeLater(() -> changesWereMaid(true)));
 
         JScrollPane packSelectorScrollPane = new JScrollPane(packSelectorCheckBoxTree);
         packSelectorScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_PACK_SELECTOR_TREE);
-
         packSelectorPanel.add(packSelectorScrollPane);
-        return packSelectorPanel;
     }
 
     private Component initializeCloseButtonsPanel() {
@@ -98,7 +118,7 @@ public class SettingsDialog extends JDialog {
     }
 
     private void applyChanges() {
-        new applySettingsButtonWorker(settingsManager, regularCardsCheckBox.isSelected(), this::changesWereMaid).execute();
+        new applySettingsButtonWorker(settingsManager, regularCardsCheckBox.isSelected(), secondCoreCheckBox.isSelected(), packSelectorCheckBoxTree.getCheckedPaths(), this::changesWereMaid).execute();
     }
 
     private Component initializeRegularCardsPanel() {
@@ -113,23 +133,54 @@ public class SettingsDialog extends JDialog {
 
     private void readSettings() {
         regularCardsCheckBox.setSelected(settingsManager.getRegularCardsFlag());
+        secondCoreCheckBox.setSelected(settingsManager.getSecondCore());
         populatePackTree();
     }
 
     private void populatePackTree() {
-        DefaultMutableTreeNode top = new DefaultMutableTreeNode("Packs");
+        top.removeAllChildren();
+        leaves.clear();
+        cycleNodes.clear();
         List<Cycle> cycles = settingsManager.getCycles();
         for (Cycle cycle : cycles) {
             DefaultMutableTreeNode child = new DefaultMutableTreeNode(cycle);
             top.add(child);
+            cycleNodes.add(child);
             List<Pack> packs = cycle.getPacks();
             for (Pack pack : packs) {
-                child.add(new DefaultMutableTreeNode(pack));
+                DefaultMutableTreeNode leaf = new DefaultMutableTreeNode(pack);
+                child.add(leaf);
+                leaves.add(leaf);
             }
         }
 
         DefaultTreeModel model = new DefaultTreeModel(top);
         packSelectorCheckBoxTree.setModel(model);
+
+        readOwnedPacksFromSettings();
+        packSelectorCheckBoxTree.repaint();
+    }
+
+    private void readOwnedPacksFromSettings() {
+        List<Pack> ownedPacks = settingsManager.getOwnedPacks();
+        for (Pack pack : ownedPacks) {
+            DefaultMutableTreeNode leaf = leaves.stream().filter(node -> node.getUserObject().equals(pack)).findAny().orElse(null);
+            assert leaf != null;
+            TreePath tp = new TreePath(leaf.getPath());
+            packSelectorCheckBoxTree.checkSubTree(tp, true);
+        }
+        boolean allCyclesOwned = true;
+        for (DefaultMutableTreeNode cycleNode : cycleNodes) {
+            if (ownedPacks.containsAll(((Cycle) cycleNode.getUserObject()).getPacks())) {
+                TreePath tp = new TreePath(cycleNode.getPath());
+                packSelectorCheckBoxTree.checkSubTree(tp, true);
+            } else {
+                allCyclesOwned = false;
+            }
+        }
+        if (allCyclesOwned) {
+            packSelectorCheckBoxTree.checkSubTree(new TreePath(top), true);
+        }
     }
 
     private void changesWereMaid(boolean flag) {
