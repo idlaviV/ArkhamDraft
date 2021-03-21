@@ -1,8 +1,3 @@
-blacklist
-
-Lola Hayes
-Packs: From Core Set to Dim Carcosa
-
 Assets
 2x Lockpicks (Winifred Habbamock)
 2x Knife (Core Set)
@@ -22,7 +17,3 @@ Assets
 
 Event
 2x Emergency Cache (Core Set)
-
-
-
-

@@ -269,11 +269,13 @@ public class SettingsManager {
         file.delete();
         file.createNewFile();
         //String input = "core\ndwl\ntmm\ntece\nbota\nuau\nwda\nlitas\nptc\neotp\ntuo\napot\ntpm\nbsr\ndca\ntfa\ntof\ntbb\nhote\ntcoa\ntdoy\nsha\ntcu\ntsn\nwos\nfgg\nuad\nicc\nbbt\ntde\nsfk\ntsh\ndsm\npnr\nwgd\nwoc\nrtnotz\nrtdwl\nrtptc\ncotr\ncoh\nlol\nguardians\nhotel\nbooks\npromo\ncore2\nregular true\n";
+        useOnlyRegularCards = true;
+        secondCore = true;
         ownAllPacks();
     }
 
     private void ownAllPacks() {
-        ArrayList<Pack> newOwnedPacks = new ArrayList<>(packs);
+        ownedPacks = new ArrayList<>(packs);
         saveSettingsToFile();
     }
 

@@ -24,8 +24,15 @@ public class ImageCrawler extends SwingWorker<Image, Image> {
     }
 
     public Image getCard() {
+        String dir = "data/cards";
+        File directory = new File(dir);
+        if (!directory.exists())
+        {
+            directory.mkdir();
+        }
+
         String fileName = String.format("%s.jpg", id);
-        Path filePath = Paths.get(String.format("src/main/resources/cards/%s", fileName));
+        Path filePath = Paths.get(String.format("%s/%s", dir, fileName));
         String urlPath1 = String.format("https://arkhamdb.com/bundles/cards/%s", fileName);
         String urlPath2 = String.format("https://arkhamdb.com/bundles/cards/%s.png", id);
         File file = filePath.toFile();

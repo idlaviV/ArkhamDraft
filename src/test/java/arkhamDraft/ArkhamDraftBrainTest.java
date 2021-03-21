@@ -89,23 +89,23 @@ public class ArkhamDraftBrainTest {
     }
 
     private void whenReadDeckFromFileMulticlass() {
-        testBrain.buildDeckFromFile(new File("data/decks/testDeckMulticlass.txt"));
+        testBrain.buildDeckFromFile(new File("src/test/testdecks/testDeckMulticlass.txt"));
     }
 
     private void whenReadDeckFromFile() {
-        testBrain.buildDeckFromFile(new File("data/decks/testDeckOneCard.txt"));
+        testBrain.buildDeckFromFile(new File("src/test/testdecks/testDeckOneCard.txt"));
     }
 
     private void whenReadDeckFromLongFile() {
-        testBrain.buildDeckFromFile(new File("data/decks/testDeckLong.txt"));
+        testBrain.buildDeckFromFile(new File("src/test/testdeck/testDeckLong.txt"));
     }
 
     private void whenReadDeckFromEmptyFile() {
-      testBrain.buildDeckFromFile(new File("data/decks/testDeckNoCard.txt"));
+      testBrain.buildDeckFromFile(new File("src/test/testdecks/testDeckNoCard.txt"));
     }
 
     private void whenReadDeckFromFileWithErrors() {
-        testBrain.buildDeckFromFile(new File("data/decks/testDeckWithErrors.txt"));
+        testBrain.buildDeckFromFile(new File("src/test/testdecks/testDeckWithErrors.txt"));
     }
 
     private void givenInitializeBrain() {
