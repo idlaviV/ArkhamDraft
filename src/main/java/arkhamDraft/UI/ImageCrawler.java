@@ -11,8 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.concurrent.ExecutionException;
 
-public class ImageCrawler extends SwingWorker<Image, Image> {
+public class ImageCrawler extends SwingWorker<Boolean, Void> {
     private final String id;
     private Image im;
     private final JLabel previewLabel;
@@ -49,7 +50,7 @@ public class ImageCrawler extends SwingWorker<Image, Image> {
                     extractURLtoFile(filePath, urlPath2, file);
                 } catch (IOException e2) {
                     try {
-                        return ImageIO.read(Paths.get("src/main/resources/cards/00000.jpg").toFile());
+                        return ImageIO.read(getClass().getResource("/cards/00000.jpg"));
                     } catch (IOException e3) {
                         e3.printStackTrace();
                     }
@@ -71,13 +72,32 @@ public class ImageCrawler extends SwingWorker<Image, Image> {
 
 
     @Override
-    protected Image doInBackground() throws Exception {
+    protected Boolean doInBackground() throws Exception {
+
         im = getCard();
-        return im;
+        return true;
     }
 
     @Override
     protected void done() {
+        boolean status;
+        try {
+            // Retrieve the return value of doInBackground.
+            status = get();
+            if (status) {
+                update();
+            }
+        } catch (InterruptedException e) {
+            // This is thrown if the thread's interrupted.
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            // This is thrown if we throw an exception
+            // from doInBackground.
+            e.printStackTrace();
+        }
+    }
+
+    protected void update() {
         previewLabel.setIcon(new ImageIcon(im));
     }
 }

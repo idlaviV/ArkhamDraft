@@ -3,10 +3,12 @@ package arkhamDraft;
 
 import com.google.gson.Gson;
 
+import javax.imageio.ImageIO;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
@@ -20,6 +22,7 @@ public class SettingsManager {
     private boolean useOnlyRegularCards;
     private CardBox blackList;
     private static final File file = new File("data/packs.txt");
+    public static final File BLACK_LIST_FILE = new File("data/blacklist.txt");
 
     public SettingsManager() {
     }
@@ -57,10 +60,9 @@ public class SettingsManager {
 
     private CardBox getBlackList(CardBox masterCardBox) {
         if (blackList == null) {
-            File blackListFile = new File("data/blacklist.txt");
-            if (blackListFile.exists()) {
+            if (BLACK_LIST_FILE.exists()) {
                 try {
-                    blackList = new CardBox(blackListFile, masterCardBox);
+                    blackList = new CardBox(BLACK_LIST_FILE, masterCardBox);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -302,5 +304,17 @@ public class SettingsManager {
 
     public void toggleSecondCore(boolean secondCore) {
         this.secondCore = secondCore;
+    }
+
+    public void generateDefaultBlacklist() {
+        try {
+            Path copied = BLACK_LIST_FILE.toPath();
+
+            Path originalPath = new File("src/main/resources/defaultBlacklist.txt").toPath();
+            Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

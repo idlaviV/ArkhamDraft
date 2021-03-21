@@ -4,6 +4,7 @@ import arkhamDraft.Cycle;
 import arkhamDraft.Pack;
 import arkhamDraft.SettingsManager;
 import arkhamDraft.UI.workerPool.applySettingsButtonWorker;
+import arkhamDraft.UI.workerPool.generateBlacklistButtonWorker;
 import com.sun.corba.se.impl.orbutil.closure.Future;
 
 import javax.swing.*;
@@ -38,7 +39,7 @@ public class SettingsDialog extends JDialog {
 
     private void initializeSettingsDialog() {
         setTitle("Settings");
-        setSize(500,500);
+        setSize(500,600);
         setLocation(100,100);
         setModal(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -61,9 +62,20 @@ public class SettingsDialog extends JDialog {
         gbc.gridy++;
         mainPanel.add(initializeSecondCorePanel(), gbc);
         gbc.gridy++;
+        mainPanel.add(initializeGenerateBlacklistButton(), gbc);
+        gbc.gridy++;
 
         mainPanel.add(initializeCloseButtonsPanel(), gbc);
         add(mainPanel);
+    }
+
+    private Component initializeGenerateBlacklistButton() {
+        JPanel generateBlacklistPanel = new JPanel();
+        JButton generateBlacklistButton = new JButton("Generate Default Blacklist");
+        generateBlacklistButton.addActionListener(e -> new generateBlacklistButtonWorker(settingsManager).execute());
+
+        generateBlacklistPanel.add(generateBlacklistButton);
+        return generateBlacklistPanel;
     }
 
     private Component initializeSecondCorePanel() {
@@ -87,7 +99,7 @@ public class SettingsDialog extends JDialog {
 
     private void buildPackSelectorScrollPane() {
         packSelectorCheckBoxTree = new JCheckBoxTree();
-        packSelectorCheckBoxTree.setPreferredSize(new Dimension(150, 600));
+        //packSelectorCheckBoxTree.setPreferredSize(new Dimension(150, 600));
         packSelectorCheckBoxTree.addCheckChangeEventListener(e -> SwingUtilities.invokeLater(() -> changesWereMaid(true)));
 
         JScrollPane packSelectorScrollPane = new JScrollPane(packSelectorCheckBoxTree);
