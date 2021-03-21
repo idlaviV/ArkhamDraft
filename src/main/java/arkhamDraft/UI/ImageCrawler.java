@@ -25,7 +25,7 @@ public class ImageCrawler extends SwingWorker<Boolean, Void> {
     }
 
     public Image getCard() {
-        String dir = "data/cards";
+        String dir = "./data/cards";
         File directory = new File(dir);
         if (!directory.exists())
         {

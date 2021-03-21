@@ -412,7 +412,7 @@ public class Face extends JFrame{
         }
 
         loadButton.addActionListener(e -> {
-            File directory = new File("data/decks");
+            File directory = new File("./data/decks");
             if (!directory.exists()) {
                 directory.mkdir();
             }
@@ -467,7 +467,7 @@ public class Face extends JFrame{
         }
 
         saveButton.addActionListener(e -> {
-            File directory = new File("data/decks");
+            File directory = new File("./data/decks");
             if (!directory.exists()) {
                 directory.mkdir();
             }

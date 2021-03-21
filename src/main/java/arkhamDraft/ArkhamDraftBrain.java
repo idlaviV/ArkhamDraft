@@ -324,7 +324,7 @@ public class ArkhamDraftBrain implements Brain{
     private boolean saveDeck(Scanner scanner) throws IOException {
         System.out.println("Please type the name of the deck:");
         String fileName = scanner.nextLine();
-        File deckFile = new File(String.format("data/decks/%s.txt", fileName));
+        File deckFile = new File(String.format("./data/decks/%s.txt", fileName));
         if (deckFile.exists()) {
             boolean overwrite = false;
             while (!overwrite) {

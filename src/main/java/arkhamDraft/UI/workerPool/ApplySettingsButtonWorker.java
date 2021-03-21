@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class applySettingsButtonWorker extends AbstractButtonWorker{
+public class ApplySettingsButtonWorker extends AbstractButtonWorker{
     private final SettingsManager manager;
     private final boolean regularCards;
     private final boolean secondCore;
@@ -21,7 +21,7 @@ public class applySettingsButtonWorker extends AbstractButtonWorker{
     private final Consumer<Boolean> changesWereMaid;
 
 
-    public applySettingsButtonWorker(SettingsManager manager, boolean regularCards, boolean secondCore, TreePath[] checkedPaths, Consumer<Boolean> changesWereMaid) {
+    public ApplySettingsButtonWorker(SettingsManager manager, boolean regularCards, boolean secondCore, TreePath[] checkedPaths, Consumer<Boolean> changesWereMaid) {
         super(null);
         this.manager = manager;
         this.regularCards = regularCards;
@@ -46,8 +46,7 @@ public class applySettingsButtonWorker extends AbstractButtonWorker{
 
     private void updateOwnedPacks() {
         List<Pack> ownedPacks = new ArrayList<>();
-        List<TreePath> checkedPathsList = Arrays.asList(checkedPaths.clone());
-        for (TreePath path : checkedPathsList) {
+        for (TreePath path : checkedPaths) {
             DefaultMutableTreeNode lastNode = (DefaultMutableTreeNode) path.getLastPathComponent();
             if (lastNode.getUserObject() instanceof Pack) {
                 Pack pack = (Pack) lastNode.getUserObject();

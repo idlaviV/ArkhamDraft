@@ -21,8 +21,8 @@ public class SettingsManager {
     private boolean secondCore;
     private boolean useOnlyRegularCards;
     private CardBox blackList;
-    private static final File file = new File("data/packs.txt");
-    public static final File BLACK_LIST_FILE = new File("data/blacklist.txt");
+    private static final File file = new File("./data/packs.txt");
+    public static final File BLACK_LIST_FILE = new File("./data/blacklist.txt");
 
     public SettingsManager() {
     }
@@ -45,11 +45,11 @@ public class SettingsManager {
 
     public CardBox updateDatabaseFromJSON() throws IOException {
         Gson gson = new Gson();
-        File jsonCards = new File("data/cards.json");
+        File jsonCards = new File("./data/cards.json");
         FileReader fileReader = new FileReader(jsonCards);
         CardBox masterCardBox = new CardBox(gson.fromJson(fileReader, Card[].class));
         fileReader.close();
-        File jsonPacks = new File("data/packs.json");
+        File jsonPacks = new File("./data/packs.json");
         FileReader fileReaderPacks = new FileReader(jsonPacks);
         this.packs = Arrays.asList(gson.fromJson(fileReaderPacks, Pack[].class));
         Collections.sort(packs);

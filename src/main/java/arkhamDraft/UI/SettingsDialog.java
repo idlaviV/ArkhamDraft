@@ -3,9 +3,8 @@ package arkhamDraft.UI;
 import arkhamDraft.Cycle;
 import arkhamDraft.Pack;
 import arkhamDraft.SettingsManager;
-import arkhamDraft.UI.workerPool.applySettingsButtonWorker;
+import arkhamDraft.UI.workerPool.ApplySettingsButtonWorker;
 import arkhamDraft.UI.workerPool.generateBlacklistButtonWorker;
-import com.sun.corba.se.impl.orbutil.closure.Future;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -20,8 +19,6 @@ public class SettingsDialog extends JDialog {
     private JCheckBox regularCardsCheckBox;
     private JButton applyButton;
     private JCheckBoxTree packSelectorCheckBoxTree;
-    private final List<DefaultMutableTreeNode> leaves = new ArrayList<>();
-    private final List<DefaultMutableTreeNode> cycleNodes = new ArrayList<>();
     private final DefaultMutableTreeNode top = new DefaultMutableTreeNode("Packs");
     private JPanel packSelectorPanel;
     private JCheckBox secondCoreCheckBox;
@@ -130,7 +127,7 @@ public class SettingsDialog extends JDialog {
     }
 
     private void applyChanges() {
-        new applySettingsButtonWorker(settingsManager, regularCardsCheckBox.isSelected(), secondCoreCheckBox.isSelected(), packSelectorCheckBoxTree.getCheckedPaths(), this::changesWereMaid).execute();
+        new ApplySettingsButtonWorker(settingsManager, regularCardsCheckBox.isSelected(), secondCoreCheckBox.isSelected(), packSelectorCheckBoxTree.getCheckedPaths(), this::changesWereMaid).execute();
     }
 
     private Component initializeRegularCardsPanel() {
@@ -150,48 +147,42 @@ public class SettingsDialog extends JDialog {
     }
 
     private void populatePackTree() {
+        List<Pack> ownedPacks = settingsManager.getOwnedPacks();
         top.removeAllChildren();
-        leaves.clear();
-        cycleNodes.clear();
+        List<TreePath> checkedPaths = new ArrayList<>();
+
         List<Cycle> cycles = settingsManager.getCycles();
+
         for (Cycle cycle : cycles) {
             DefaultMutableTreeNode child = new DefaultMutableTreeNode(cycle);
             top.add(child);
-            cycleNodes.add(child);
             List<Pack> packs = cycle.getPacks();
             for (Pack pack : packs) {
                 DefaultMutableTreeNode leaf = new DefaultMutableTreeNode(pack);
                 child.add(leaf);
-                leaves.add(leaf);
+                if (ownedPacks.contains(pack)) {
+                    TreePath tp = new TreePath(leaf.getPath());
+                    checkedPaths.add(tp);
+                }
             }
+            if (ownedPacks.containsAll(cycle.getPacks())) {
+                checkedPaths.add(new TreePath(child.getPath()));
+            }
+        }
+        if (ownedPacks.containsAll(settingsManager.getPacks())) {
+            checkedPaths.add(new TreePath(top.getPath()));
         }
 
         DefaultTreeModel model = new DefaultTreeModel(top);
         packSelectorCheckBoxTree.setModel(model);
+        checkPathsInPackSelectorTree(checkedPaths);
 
-        readOwnedPacksFromSettings();
         packSelectorCheckBoxTree.repaint();
     }
 
-    private void readOwnedPacksFromSettings() {
-        List<Pack> ownedPacks = settingsManager.getOwnedPacks();
-        for (Pack pack : ownedPacks) {
-            DefaultMutableTreeNode leaf = leaves.stream().filter(node -> node.getUserObject().equals(pack)).findAny().orElse(null);
-            assert leaf != null;
-            TreePath tp = new TreePath(leaf.getPath());
+    private void checkPathsInPackSelectorTree(List<TreePath> checkedPaths) {
+        for (TreePath tp : checkedPaths) {
             packSelectorCheckBoxTree.checkSubTree(tp, true);
-        }
-        boolean allCyclesOwned = true;
-        for (DefaultMutableTreeNode cycleNode : cycleNodes) {
-            if (ownedPacks.containsAll(((Cycle) cycleNode.getUserObject()).getPacks())) {
-                TreePath tp = new TreePath(cycleNode.getPath());
-                packSelectorCheckBoxTree.checkSubTree(tp, true);
-            } else {
-                allCyclesOwned = false;
-            }
-        }
-        if (allCyclesOwned) {
-            packSelectorCheckBoxTree.checkSubTree(new TreePath(top), true);
         }
     }
 

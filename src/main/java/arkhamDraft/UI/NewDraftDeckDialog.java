@@ -23,7 +23,7 @@ public class NewDraftDeckDialog extends JDialog {
     private final JFileChooser fc = new JFileChooser();
     private final Runnable updateAllPanels;
     private final Runnable enableDraft;
-    private final String cardFilterDirectory = "data/cardFilter";
+    private final String cardFilterDirectory = "./data/cardFilter";
 
     public NewDraftDeckDialog(Brain brain, Runnable updateAllPanels, Runnable enableDraft) {
         super();

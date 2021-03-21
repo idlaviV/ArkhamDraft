@@ -23,17 +23,17 @@ public class Main {
         }*/
 
 
-        File directory = new File("data");
+        File directory = new File("./data");
         if (!directory.exists()) {
             directory.mkdir();
         }
-        File directoryDecks = new File("data/decks");
+        File directoryDecks = new File("./data/decks");
         if (!directoryDecks.exists()) {
             directoryDecks.mkdir();
         }
-        File packsFile = new File("data/packs.json");
-        File cardsFile = new File("data/cards.json");
-        File settingsFile = new File("data/packs.txt");
+        File packsFile = new File("./data/packs.json");
+        File cardsFile = new File("./data/cards.json");
+        File settingsFile = new File("./data/packs.txt");
         SettingsManager settingsManager = new SettingsManager();
         if (!(packsFile.exists() || cardsFile.exists())) {
             settingsManager.updateDatabaseFromAPI();
@@ -53,7 +53,7 @@ public class Main {
         }
         settingsManager.updateSettings();
 
-        /*File deckFile = new File("data/deck.txt"); // This part reads the deck in "data/deck" and prints it
+        /*File deckFile = new File("./data/deck.txt"); // This part reads the deck in "./data/deck" and prints it
         Deck deck = new Deck(deckFile, face.getMasterCardBox());
         ArrayList<String> output = deck.getPrintInfo();
         for (String line: output) {
