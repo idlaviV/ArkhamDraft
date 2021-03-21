@@ -97,7 +97,7 @@ public class ArkhamDraftBrainTest {
     }
 
     private void whenReadDeckFromLongFile() {
-        testBrain.buildDeckFromFile(new File("src/test/testdeck/testDeckLong.txt"));
+        testBrain.buildDeckFromFile(new File("src/test/testdecks/testDeckLong.txt"));
     }
 
     private void whenReadDeckFromEmptyFile() {
