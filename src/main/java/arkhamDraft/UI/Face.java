@@ -52,22 +52,16 @@ public class Face extends JFrame{
     public void initComponents() {
         JPanel mainPanel = new JPanel();
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        mainPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        mainPanel.setLayout(new BorderLayout());
 
-        mainPanel.add(initializeMenuButtonPanel(), gbc);
+        mainPanel.add(initializeMenuButtonPanel(), BorderLayout.PAGE_START);
 
-        gbc.gridy++;
-        mainPanel.add(initializeDraftPanel(), gbc);
+        mainPanel.add(initializeDraftPanel(), BorderLayout.CENTER);
 
-        gbc.gridx++;
-        mainPanel.add(initializePreviewPanel(), gbc);
+        mainPanel.add(initializePreviewPanel(), BorderLayout.LINE_END);
 
-        gbc.gridy++;
-        gbc.gridx = 0;
-        mainPanel.add(initializeSortComboBoxPanel(), gbc);
+
+        mainPanel.add(initializeSortComboBoxPanel(), BorderLayout.PAGE_END);
 
         add(mainPanel);
         draftedCardsPanelEnabler.disable();
