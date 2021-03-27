@@ -18,11 +18,9 @@ public class CardCheckBoxList extends JList<Card>
             new EmptyBorder(1, 1, 1, 1);
     private Map<Card, Boolean> jBoxStatus = new HashMap<>();
     private final DefaultListModel<Card> listModel = new DefaultListModel<>();
-    private final Consumer<String> previewCardFromDatabase;
 
     public CardCheckBoxList(Consumer<String> previewCardFromDatabase)
     {
-        this.previewCardFromDatabase = previewCardFromDatabase;
         setCellRenderer(new CellRenderer());
         addMouseListener(new MouseAdapter()
                          {
@@ -39,6 +37,8 @@ public class CardCheckBoxList extends JList<Card>
                              }
                          }
         );
+
+
 
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setModel(listModel);
