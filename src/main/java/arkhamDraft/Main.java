@@ -43,7 +43,7 @@ public class Main {
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         face.setTitle("ArkhamDraft");
         face.setSize(1500,800);
-        face.setResizable(false);
+        face.setResizable(true);
         face.setLocation(50,50);
         face.setVisible(true);
         face.initComponents();

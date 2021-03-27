@@ -121,7 +121,7 @@ public class JCheckBoxTree extends JTree {
             super();
             this.setLayout(new BorderLayout());
             checkBox = new JCheckBox();
-            checkBox.setPreferredSize(new Dimension(250, 20));
+            //checkBox.setPreferredSize(new Dimension(250, 20));
             add(checkBox, BorderLayout.CENTER);
             setOpaque(false);
         }

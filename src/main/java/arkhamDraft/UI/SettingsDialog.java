@@ -100,7 +100,7 @@ public class SettingsDialog extends JDialog {
         packSelectorCheckBoxTree.addCheckChangeEventListener(e -> SwingUtilities.invokeLater(() -> changesWereMaid(true)));
 
         JScrollPane packSelectorScrollPane = new JScrollPane(packSelectorCheckBoxTree);
-        packSelectorScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_PACK_SELECTOR_TREE);
+        //packSelectorScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_PACK_SELECTOR_TREE);
         packSelectorPanel.add(packSelectorScrollPane);
     }
 

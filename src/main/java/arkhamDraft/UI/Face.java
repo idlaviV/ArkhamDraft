@@ -56,7 +56,6 @@ public class Face extends JFrame{
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(2, 2, 2, 2);
 
         mainPanel.add(initializeMenuButtonPanel(), gbc);
 
@@ -73,6 +72,7 @@ public class Face extends JFrame{
         add(mainPanel);
         draftedCardsPanelEnabler.disable();
         sideboardPanelEnabler.disable();
+        //pack();
         setVisible(true);
     }
 
@@ -246,21 +246,32 @@ public class Face extends JFrame{
     }
 
     private Component initializeDraftedCardsPanel() {
-        JPanel draftedCardsPanel = new JPanel();
-
-
-        draftedCardsPanel.setLayout(new BoxLayout(draftedCardsPanel, BoxLayout.PAGE_AXIS));
+        JPanel draftedCardsPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 3;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.fill = GridBagConstraints.BOTH;
+        //draftedCardsPanel.setLayout(new BoxLayout(draftedCardsPanel, BoxLayout.PAGE_AXIS));
         //draftedCardsPanel.setPreferredSize(new Dimension(300,500));
 
         draftedCardsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        draftedCardsPanel.add(new JLabel("drafted cards panel"));
+        draftedCardsPanel.add(new JLabel("drafted cards panel"), gbc);
         draftedCardsList = new CardCheckBoxList(this::previewCardFromDatabase);
 
-        JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
-        draftScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DRAFTED_CARDS);
-        draftedCardsPanel.add(draftScrollPane);
+        gbc.gridy++;
 
-        draftedCardsPanel.add(initializeDraftActionsPanel());
+        JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
+        //draftScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DRAFTED_CARDS);
+        draftedCardsPanel.add(draftScrollPane, gbc);
+
+        gbc.gridy++;
+
+        draftedCardsPanel.add(initializeDraftActionsPanel(), gbc);
         draftedCardsPanelEnabler = new EverythingDisablerAndReenabler(draftedCardsPanel, null);
         return draftedCardsPanel;
     }
@@ -362,14 +373,14 @@ public class Face extends JFrame{
 
     private Component initializeDeckPanel(){
         JPanel deckPanel = new JPanel();
-        deckPanel.setPreferredSize(DIMENSION_DECK_PANEL);
+        //deckPanel.setPreferredSize(DIMENSION_DECK_PANEL);
         BoxLayout mgr = new BoxLayout(deckPanel, BoxLayout.PAGE_AXIS);
         deckPanel.setLayout(mgr);
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         deckPanel.add(deckCountLabel);
         deckList = new CardCheckBoxList(this::previewCardFromDatabase);
         JScrollPane deckScrollPane = new JScrollPane(deckList);
-        deckScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DECK);
+        //deckScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DECK);
         deckPanel.add(deckScrollPane);
 
         JPanel deckButtonPanel = new JPanel();
@@ -517,7 +528,7 @@ public class Face extends JFrame{
         sideboardPanel.add(new JLabel("sideboard panel"));
         sideboardList = new CardCheckBoxList(this::previewCardFromDatabase);
         JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
-        sideboardScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_SIDEBOARD);
+        //sideboardScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_SIDEBOARD);
         sideboardPanel.add(sideboardScrollPane);
         sideboardPanel.add(initializeSideboardButtonPanel());
         sideboardPanelEnabler = new EverythingDisablerAndReenabler(sideboardPanel, null);
