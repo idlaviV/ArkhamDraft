@@ -480,6 +480,7 @@ public class ArkhamDraftBrain implements Brain{
         if (drafter == null) {
             startDraft();
         }
+        drafter.discardDraftingBox();
     }
 
     public void guiDraftCardsNew(int amount) {
