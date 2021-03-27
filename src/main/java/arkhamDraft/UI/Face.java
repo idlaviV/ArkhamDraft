@@ -37,7 +37,7 @@ public class Face extends JFrame{
     //Dimensions
     public static final Dimension DIMENSION_SCROLL_PANE_DRAFTED_CARDS = new Dimension(300, 400);
     public static final Dimension DIMENSION_DECK_PANEL = new Dimension(350, 500);
-    public static final Dimension DIMENSION_SCROLL_PANE_DECK = new Dimension(100, 600);
+    public static final Dimension DIMENSION_SCROLL_PANE_DECK = new Dimension(300, 400);
     public static final Dimension DIMENSION_SCROLL_PANE_SIDEBOARD = new Dimension(300, 400);
     private JLabel previewLabel;
     private JComboBox<String> sortComboBox;
@@ -185,10 +185,10 @@ public class Face extends JFrame{
 
         gbcDraftPanel.gridx = 0;
         gbcDraftPanel.gridy = 0;
-        gbcDraftPanel.insets = new Insets(2, 2, 2, 2);
+        gbcDraftPanel.insets = new Insets(0, 1, 0, 1);
 
         gbcDraftPanel.gridwidth = 3;
-        draftPanel.add(new JLabel("Current draft deck"), gbcDraftPanel);
+        draftPanel.add(new JLabel("Current draft"), gbcDraftPanel);
         gbcDraftPanel.gridwidth = 1;
 
         gbcDraftPanel.gridy++;
@@ -260,7 +260,7 @@ public class Face extends JFrame{
         gbc.gridy++;
 
         JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
-        //draftScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DRAFTED_CARDS);
+        draftScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DRAFTED_CARDS);
         draftedCardsPanel.add(draftScrollPane, gbc);
 
         gbc.gridy++;
@@ -374,7 +374,7 @@ public class Face extends JFrame{
         deckPanel.add(deckCountLabel);
         deckList = new CardCheckBoxList(this::previewCardFromDatabase);
         JScrollPane deckScrollPane = new JScrollPane(deckList);
-        //deckScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DECK);
+        deckScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DECK);
         deckPanel.add(deckScrollPane);
 
         JPanel deckButtonPanel = new JPanel();
@@ -522,7 +522,7 @@ public class Face extends JFrame{
         sideboardPanel.add(new JLabel("sideboard panel"));
         sideboardList = new CardCheckBoxList(this::previewCardFromDatabase);
         JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
-        //sideboardScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_SIDEBOARD);
+        sideboardScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_SIDEBOARD);
         sideboardPanel.add(sideboardScrollPane);
         sideboardPanel.add(initializeSideboardButtonPanel());
         sideboardPanelEnabler = new EverythingDisablerAndReenabler(sideboardPanel, null);
