@@ -2,10 +2,10 @@ package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.SettingsManager;
 
-public class generateBlacklistButtonWorker extends AbstractButtonWorker{
+public class GenerateBlacklistButtonWorker extends AbstractButtonWorker{
     private final SettingsManager settingsManager;
 
-    public generateBlacklistButtonWorker(SettingsManager settingsManager) {
+    public GenerateBlacklistButtonWorker(SettingsManager settingsManager) {
         super(null);
         this.settingsManager = settingsManager;
     }

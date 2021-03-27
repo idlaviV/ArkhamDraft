@@ -2,6 +2,8 @@ package arkhamDraft;
 
 
 import com.google.gson.Gson;
+import sun.misc.IOUtils;
+import sun.nio.ch.IOUtil;
 
 import javax.imageio.ImageIO;
 import java.io.*;
@@ -307,14 +309,14 @@ public class SettingsManager {
     }
 
     public void generateDefaultBlacklist() {
+        InputStream input = getClass().getResourceAsStream("/defaultBlacklist.txt");
         try {
-            Path copied = BLACK_LIST_FILE.toPath();
-
-            Path originalPath = new File("src/main/resources/defaultBlacklist.txt").toPath();
-            Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
-
+            Files.copy(input, BLACK_LIST_FILE.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            input.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 }

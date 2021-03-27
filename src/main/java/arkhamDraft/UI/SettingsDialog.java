@@ -4,7 +4,7 @@ import arkhamDraft.Cycle;
 import arkhamDraft.Pack;
 import arkhamDraft.SettingsManager;
 import arkhamDraft.UI.workerPool.ApplySettingsButtonWorker;
-import arkhamDraft.UI.workerPool.generateBlacklistButtonWorker;
+import arkhamDraft.UI.workerPool.GenerateBlacklistButtonWorker;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -69,7 +69,7 @@ public class SettingsDialog extends JDialog {
     private Component initializeGenerateBlacklistButton() {
         JPanel generateBlacklistPanel = new JPanel();
         JButton generateBlacklistButton = new JButton("Generate Default Blacklist");
-        generateBlacklistButton.addActionListener(e -> new generateBlacklistButtonWorker(settingsManager).execute());
+        generateBlacklistButton.addActionListener(e -> new GenerateBlacklistButtonWorker(settingsManager).execute());
 
         generateBlacklistPanel.add(generateBlacklistButton);
         return generateBlacklistPanel;
