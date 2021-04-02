@@ -16,7 +16,13 @@ public class CardRenderer extends DefaultTableCellRenderer {
         if (isSelected)
             renderer.setBackground( table.getSelectionBackground() );
         else {
-            renderer.setBackground(card.getGUIColor());
+            Color backgroundColor = card.getGUIColor();
+            renderer.setBackground(backgroundColor);
+            if (backgroundColor.equals(Color.BLUE)) {
+                renderer.setForeground(Color.WHITE);
+            } else {
+                renderer.setForeground(Color.BLACK);
+            }
         }
         return renderer;
     }
