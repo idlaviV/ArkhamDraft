@@ -3,6 +3,7 @@ package arkhamDraft.UI;
 import arkhamDraft.Card;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
@@ -19,15 +20,24 @@ public class CardCheckBoxList {
     public CardCheckBoxList(Consumer<String> previewCardFromDatabase) {
         this.previewCardFromDatabase = previewCardFromDatabase;
         table.setModel(model);
-        model.setColumnCount(2);
+        model.addColumn("\u2713");
+        model.addColumn("Cards");
+        table.getColumnModel().getColumn(0).setMaxWidth(new JCheckBox().getPreferredSize().width);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     }
 
     public void addCard(Card card) {
-        model.addRow(new Object[]{new JCheckBox(), card});
+        model.addRow(new Object[]{false, card});
     }
 
     public ArrayList<Card> getCheckedCards() {
-        return null;
+        ArrayList<Card> checkedCards = new ArrayList<>();
+        for (int i = 0; i<table.getRowCount(); i++) {
+            if ((boolean) table.getValueAt(i, 0)) {
+                checkedCards.add((Card) table.getValueAt(i,1));
+            }
+        }
+        return checkedCards;
     }
 
     public void clearList() {

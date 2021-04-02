@@ -18,7 +18,11 @@ public class CardCheckBoxListModel extends DefaultTableModel {
     @Override
     public boolean isCellEditable(int row, int column) {
         //all cells false
-        return false;
+        return column == 0;
+    }
+
+    public Class getColumnClass(int c) {
+        return getValueAt(0, c).getClass();
     }
 
 }
