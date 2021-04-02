@@ -36,10 +36,11 @@ public class SettingsDialog extends JDialog {
 
     private void initializeSettingsDialog() {
         setTitle("Settings");
-        setSize(500,600);
-        setLocation(100,100);
+        setSize(600,500);
+        setLocation(50,50);
         setModal(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(true);
         //setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         JPanel mainPanel = new JPanel();
@@ -64,6 +65,7 @@ public class SettingsDialog extends JDialog {
 
         mainPanel.add(initializeCloseButtonsPanel(), gbc);
         add(mainPanel);
+        pack();
     }
 
     private Component initializeGenerateBlacklistButton() {
@@ -96,11 +98,11 @@ public class SettingsDialog extends JDialog {
 
     private void buildPackSelectorScrollPane() {
         packSelectorCheckBoxTree = new JCheckBoxTree();
-        //packSelectorCheckBoxTree.setPreferredSize(new Dimension(150, 600));
+        //packSelectorCheckBoxTree.setPreferredSize(new Dimension(200, 200));
         packSelectorCheckBoxTree.addCheckChangeEventListener(e -> SwingUtilities.invokeLater(() -> changesWereMaid(true)));
 
         JScrollPane packSelectorScrollPane = new JScrollPane(packSelectorCheckBoxTree);
-        //packSelectorScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_PACK_SELECTOR_TREE);
+        packSelectorScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_PACK_SELECTOR_TREE);
         packSelectorPanel.add(packSelectorScrollPane);
     }
 
