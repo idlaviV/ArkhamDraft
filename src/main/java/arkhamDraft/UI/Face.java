@@ -259,7 +259,7 @@ public class Face extends JFrame{
 
         gbc.gridy++;
 
-        JScrollPane draftScrollPane = new JScrollPane(draftedCardsList);
+        JScrollPane draftScrollPane = new JScrollPane(draftedCardsList.getTable());
         draftScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DRAFTED_CARDS);
         draftedCardsPanel.add(draftScrollPane, gbc);
 
@@ -373,7 +373,7 @@ public class Face extends JFrame{
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         deckPanel.add(deckCountLabel);
         deckList = new CardCheckBoxList(this::previewCardFromDatabase);
-        JScrollPane deckScrollPane = new JScrollPane(deckList);
+        JScrollPane deckScrollPane = new JScrollPane(deckList.getTable());
         deckScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DECK);
         deckPanel.add(deckScrollPane);
 
@@ -521,7 +521,7 @@ public class Face extends JFrame{
         sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         sideboardPanel.add(new JLabel("sideboard panel"));
         sideboardList = new CardCheckBoxList(this::previewCardFromDatabase);
-        JScrollPane sideboardScrollPane = new JScrollPane(sideboardList);
+        JScrollPane sideboardScrollPane = new JScrollPane(sideboardList.getTable());
         sideboardScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_SIDEBOARD);
         sideboardPanel.add(sideboardScrollPane);
         sideboardPanel.add(initializeSideboardButtonPanel());
