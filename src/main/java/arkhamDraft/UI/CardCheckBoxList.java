@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public class CardCheckBoxList {
 
-    private DefaultTableModel model = new DefaultTableModel();
+    private CardCheckBoxListModel model = new CardCheckBoxListModel();
     private final JTable table = new JTable();
     private final Consumer<String> previewCardFromDatabase;
 
