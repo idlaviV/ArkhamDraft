@@ -4,10 +4,7 @@ import arkhamDraft.Card;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -37,13 +34,12 @@ public class CardCheckBoxList {
     private void initializeHeader() {
         model.addColumn("\u2713");
         model.addColumn("Cards");
-        table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+        table.getTableHeader().setDefaultRenderer(new DefaultTableCellHeaderRenderer() {
             @Override
             public Component getTableCellRendererComponent(
                     JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 if (column == 0) {
                     return superCheckBox;
-                    //return super.getTableCellRendererComponent(table, superCheckBox, isSelected, hasFocus, row, column);
                 }
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
@@ -51,20 +47,17 @@ public class CardCheckBoxList {
     }
 
     private void addMouseListenersToTable(Consumer<String> previewCardFromDatabase) {
-        table.addMouseListener(new MouseAdapter()
-                               {
-                                   @Override
-                             public void mousePressed(MouseEvent e)
-                             {
-                                 int row = table.rowAtPoint(e.getPoint());
-                                 int col = table.columnAtPoint(e.getPoint());
-                                 if (col == 1) {
-                                     Card card = ((Card) table.getModel().getValueAt(row, col));
-                                     previewCardFromDatabase.accept(card.getCode());
-                                 }
-                             }
-                         }
-        );
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                int col = table.columnAtPoint(e.getPoint());
+                if (col == 1) {
+                    Card card = ((Card) table.getModel().getValueAt(row, col));
+                    previewCardFromDatabase.accept(card.getCode());
+                }
+            }
+        });
         table.getTableHeader().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
