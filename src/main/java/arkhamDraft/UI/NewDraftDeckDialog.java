@@ -2,8 +2,8 @@ package arkhamDraft.UI;
 
 import arkhamDraft.Brain;
 import arkhamDraft.CardFilter;
-import arkhamDraft.UI.workerPool.DeleteButtonWorker;
-import arkhamDraft.UI.workerPool.FinalizeDraftDeckButtonWorker;
+import arkhamDraft.UI.workerPool.DeleteWorker;
+import arkhamDraft.UI.workerPool.FinalizeDraftDeckWorker;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -125,7 +125,7 @@ public class NewDraftDeckDialog extends JDialog {
     private Component initializeFinalizeDraftDeckButton() {
         JButton finalizeDraftDeckButton = new JButton("Finalize");
         finalizeDraftDeckButton.addActionListener(e -> {
-                    new FinalizeDraftDeckButtonWorker(
+                    new FinalizeDraftDeckWorker(
                             brain,
                             this::dispose,
                             updateAllPanels,
@@ -226,7 +226,7 @@ public class NewDraftDeckDialog extends JDialog {
             e.printStackTrace();
         }
         deleteButton.addActionListener(e->
-                new DeleteButtonWorker(
+                new DeleteWorker(
                         brain,
                         this::draftingBoxWasDiscarded
                 ).execute());

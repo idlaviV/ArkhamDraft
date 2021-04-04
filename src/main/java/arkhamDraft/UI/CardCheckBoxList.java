@@ -1,6 +1,8 @@
 package arkhamDraft.UI;
 
+import arkhamDraft.Brain;
 import arkhamDraft.Card;
+import arkhamDraft.CardPanel;
 import arkhamDraft.UI.dnd.CardCheckBoxListTransferHandler;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
@@ -14,10 +16,15 @@ import java.util.function.Consumer;
 public class CardCheckBoxList {
 
     private CardCheckBoxListModel model = new CardCheckBoxListModel();
-    private final JTable table = new JTable();
+    private final IdentifiableTable table;
     private final JCheckBox superCheckBox = new JCheckBox();
+    private final Brain brain;
+    private final Runnable updateAllPanels;
 
-    public CardCheckBoxList(Consumer<String> previewCardFromDatabase) {
+    public CardCheckBoxList(Consumer<String> previewCardFromDatabase, Brain brain, CardPanel panel, Runnable updateAllPanels) {
+        this.brain = brain;
+        this.updateAllPanels = updateAllPanels;
+        table = new IdentifiableTable(panel);
         table.setModel(model);
         initializeHeader();
         table.getColumnModel().getColumn(0).setMaxWidth(new JCheckBox().getPreferredSize().width);
@@ -32,7 +39,7 @@ public class CardCheckBoxList {
     private void initializeDnD() {
         table.setDragEnabled(true);
         table.setDropMode(DropMode.INSERT_ROWS);
-        table.setTransferHandler(new CardCheckBoxListTransferHandler(table, model));
+        table.setTransferHandler(new CardCheckBoxListTransferHandler(table, model, brain, updateAllPanels));
     }
 
     private void initializeHeader() {
@@ -104,7 +111,7 @@ public class CardCheckBoxList {
 
     }
 
-    public JTable getTable() {
+    public IdentifiableTable getTable() {
         return table;
     }
 }

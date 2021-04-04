@@ -1,17 +1,13 @@
 package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
-import arkhamDraft.UI.CardCheckBoxList;
-import arkhamDraft.Deck;
 
-import java.util.function.BiConsumer;
-
-public class DraftCardsButtonWorker extends AbstractButtonWorker {
+public class DraftCardsWorker extends AbstractWorker {
     private final int numberOfDraftedCards;
     private final Runnable printCardsToDraftPanel;
     private final Runnable updateLabelCurrentNumberOfCardsInDraftingDeck;
 
-    public DraftCardsButtonWorker(Brain brain, int numberOfDraftedCards, Runnable printCardsToDraftPanel, Runnable updateLabelCurrentNumberOfCardsInDraftingDeck) {
+    public DraftCardsWorker(Brain brain, int numberOfDraftedCards, Runnable printCardsToDraftPanel, Runnable updateLabelCurrentNumberOfCardsInDraftingDeck) {
         super(brain);
         this.numberOfDraftedCards = numberOfDraftedCards;
         this.printCardsToDraftPanel = printCardsToDraftPanel;

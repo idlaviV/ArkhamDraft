@@ -3,7 +3,7 @@ package arkhamDraft.UI;
 import arkhamDraft.*;
 import arkhamDraft.UI.workerPool.*;
 import arkhamDraft.UI.workerPool.OpenNewDraftDeckDialogWorker;
-import arkhamDraft.UI.workerPool.StartDraftButtonWorker;
+import arkhamDraft.UI.workerPool.StartDraftWorker;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -154,7 +154,7 @@ public class Face extends JFrame{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        newDraftDeckButton.addActionListener(e-> new StartDraftButtonWorker(
+        newDraftDeckButton.addActionListener(e-> new StartDraftWorker(
                 brain,
                 this::openNewDraftDeckDialog
         ).execute());
@@ -166,7 +166,7 @@ public class Face extends JFrame{
     }
 
     private ActionListener getOpenSettingsButtonActionListener() {
-        return (e -> new OpenSettingsButtonWorker(brain, settingsDialog).execute());
+        return (e -> new OpenSettingsWorker(brain, settingsDialog).execute());
     }
 
     private void openNewDraftDeckDialog() {
@@ -255,7 +255,7 @@ public class Face extends JFrame{
 
         draftedCardsPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         draftedCardsPanel.add(new JLabel("drafted cards panel"), gbc);
-        draftedCardsList = new CardCheckBoxList(this::previewCardFromDatabase);
+        draftedCardsList = new CardCheckBoxList(this::previewCardFromDatabase, brain, CardPanel.DRAFT, this::updateAllPanels);
 
         gbc.gridy++;
 
@@ -301,7 +301,7 @@ public class Face extends JFrame{
     private Component initializeSortDraftedCardsButton() {
         JButton sortDraftedCardsButton = new JButton("Sort Drafted Cards");
 
-        sortDraftedCardsButton.addActionListener(e -> new SortDraftedCardsButtonWorker(
+        sortDraftedCardsButton.addActionListener(e -> new SortDraftedCardsWorker(
                 brain,
                 sortComboBox,
                 this::updateDraftingAndSideboardPanel
@@ -319,7 +319,7 @@ public class Face extends JFrame{
 
     private Component initializeAddSideboardButton() {
         JButton addSideboardButton = new JButton("To Sideboard");
-        addSideboardButton.addActionListener(e -> new AddSideboardButtonWorker(
+        addSideboardButton.addActionListener(e -> new AddSideboardWorker(
                 brain,
                 draftedCardsList,
                 this::printCardsToDraftPanel,
@@ -331,7 +331,7 @@ public class Face extends JFrame{
     private Component initializeAddButton() {
         JButton addButton = new JButton("Add");
         addButton.addActionListener(
-                e -> new AddButtonWorker(
+                e -> new AddWorker(
                         brain,
                         draftedCardsList,
                         this::printCardsToDraftPanel,
@@ -343,7 +343,7 @@ public class Face extends JFrame{
     private Component initializeRedraftButton() {
         JButton redraftButton = new JButton("Redraft");
         redraftButton.addActionListener(
-                e-> new RedraftButtonWorker(
+                e-> new RedraftWorker(
                         brain,
                         draftedCardsList,
                         this::printCardsToDraftPanel
@@ -355,7 +355,7 @@ public class Face extends JFrame{
     private Component initializeDraftCardsButton(SpinnerNumberModel spinnerModel) {
         JButton draftCardsButton = new JButton("Draft");
         draftCardsButton.addActionListener(
-            e -> new DraftCardsButtonWorker(
+            e -> new DraftCardsWorker(
                 brain,
                 spinnerModel.getNumber().intValue(),
                 this::printCardsToDraftPanel,
@@ -372,7 +372,7 @@ public class Face extends JFrame{
         deckPanel.setLayout(mgr);
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         deckPanel.add(deckCountLabel);
-        deckList = new CardCheckBoxList(this::previewCardFromDatabase);
+        deckList = new CardCheckBoxList(this::previewCardFromDatabase, brain, CardPanel.DECK, this::updateAllPanels);
         JScrollPane deckScrollPane = new JScrollPane(deckList.getTable());
         deckScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DECK);
         deckPanel.add(deckScrollPane);
@@ -396,7 +396,7 @@ public class Face extends JFrame{
         JButton removeFromDeckButton = new JButton("Remove");
         removeFromDeckButton.setEnabled(false);
         deckComponentEnablers.add(()->removeFromDeckButton.setEnabled(true));
-        removeFromDeckButton.addActionListener(e -> new RemoveCardFromDeckButtonWorker(
+        removeFromDeckButton.addActionListener(e -> new RemoveCardFromDeckWorker(
                 brain,
                 this::updateAllPanels,
                 deckList
@@ -437,7 +437,7 @@ public class Face extends JFrame{
             int returnVal = fc.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                new LoadDeckButtonWorker(
+                new LoadDeckWorker(
                         brain,
                         file,
                         this::updateDeckPanel,
@@ -484,7 +484,7 @@ public class Face extends JFrame{
                 if (!pathName.endsWith(".txt")) {
                     file = new File(pathName + ".txt");
                 }
-                new SaveDeckButtonWorker(brain, file).execute();
+                new SaveDeckWorker(brain, file).execute();
             }
         });
         return saveButton;
@@ -506,7 +506,7 @@ public class Face extends JFrame{
         JButton sortDeckButton = new JButton("Sort Deck");
         sortDeckButton.setEnabled(false);
         deckComponentEnablers.add(()->sortDeckButton.setEnabled(true));
-        sortDeckButton.addActionListener(e -> new SortDeckButtonWorker(
+        sortDeckButton.addActionListener(e -> new SortDeckWorker(
                 brain,
                 sortComboBox,
                 this::updateDeckPanel
@@ -520,7 +520,7 @@ public class Face extends JFrame{
         sideboardPanel.setLayout(new BoxLayout(sideboardPanel, BoxLayout.PAGE_AXIS));
         sideboardPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         sideboardPanel.add(new JLabel("sideboard panel"));
-        sideboardList = new CardCheckBoxList(this::previewCardFromDatabase);
+        sideboardList = new CardCheckBoxList(this::previewCardFromDatabase, brain, CardPanel.SIDEBOARD, this::updateAllPanels);
         JScrollPane sideboardScrollPane = new JScrollPane(sideboardList.getTable());
         sideboardScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_SIDEBOARD);
         sideboardPanel.add(sideboardScrollPane);
@@ -539,7 +539,7 @@ public class Face extends JFrame{
     private Component initializeDiscardFromSideBoardButton() {
         JButton removeFromSideBoardButton = new JButton("Discard");
         removeFromSideBoardButton.addActionListener(e ->
-                new DiscardFromSideBoardButtonWorker(
+                new DiscardFromSideBoardWorker(
                         brain,
                         sideboardList,
                         this::printCardsToSideboardPanel
@@ -550,7 +550,7 @@ public class Face extends JFrame{
     private Component initializeAddFromSideBoardButton() {
         JButton addFromSideBoardButton = new JButton("Add");
         addFromSideBoardButton.addActionListener(e ->
-                new AddFromSideBoardButtonWorker(
+                new AddFromSideBoardWorker(
                         brain,
                         sideboardList,
                         this::updateAllPanels

@@ -4,12 +4,12 @@ import arkhamDraft.Brain;
 
 import java.io.File;
 
-public class SaveDeckButtonWorker extends AbstractButtonWorker{
+public class SaveDeckWorker extends AbstractWorker {
 
 
     private final File file;
 
-    public SaveDeckButtonWorker(Brain brain, File file) {
+    public SaveDeckWorker(Brain brain, File file) {
         super(brain);
         this.file = file;
     }

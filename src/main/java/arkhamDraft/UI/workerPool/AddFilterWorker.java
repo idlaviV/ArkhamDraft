@@ -1,19 +1,15 @@
 package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
-import arkhamDraft.Decoder;
-import arkhamDraft.UI.HintTextField;
 
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
-public class AddFilterButtonWorker extends AbstractButtonWorker{
+public class AddFilterWorker extends AbstractWorker {
     private final Runnable updateFilterListFromBrain;
     private final Consumer<Integer> updateCurrentCardsFiltered;
     private final Runnable addFilterFromUserSelection;
 
-    public AddFilterButtonWorker(Brain brain, Runnable updateFilterListFromBrain, Consumer<Integer> updateCurrentCardsFiltered, Runnable addFilterFromUserSelection) {
+    public AddFilterWorker(Brain brain, Runnable updateFilterListFromBrain, Consumer<Integer> updateCurrentCardsFiltered, Runnable addFilterFromUserSelection) {
         super(brain);
         this.updateFilterListFromBrain = updateFilterListFromBrain;
         this.updateCurrentCardsFiltered = updateCurrentCardsFiltered;

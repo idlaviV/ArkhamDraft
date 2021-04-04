@@ -4,12 +4,12 @@ package arkhamDraft.UI.workerPool;
 import arkhamDraft.Brain;
 import arkhamDraft.UI.CardCheckBoxList;
 
-public class AddSideboardButtonWorker extends AbstractButtonWorker {
+public class AddSideboardWorker extends AbstractWorker {
     private final CardCheckBoxList draftedCardsList;
     private final Runnable printCardsToDraftPanel;
     private final Runnable printCardsToSideboardPanel;
 
-    public AddSideboardButtonWorker(Brain brain, CardCheckBoxList draftedCardsList, Runnable printCardsToDraftPanel, Runnable printCardsToSideboardPanel) {
+    public AddSideboardWorker(Brain brain, CardCheckBoxList draftedCardsList, Runnable printCardsToDraftPanel, Runnable printCardsToSideboardPanel) {
         super(brain);
         this.draftedCardsList = draftedCardsList;
         this.printCardsToDraftPanel = printCardsToDraftPanel;

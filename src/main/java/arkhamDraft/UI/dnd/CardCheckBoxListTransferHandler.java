@@ -1,8 +1,12 @@
 package arkhamDraft.UI.dnd;
 
+import arkhamDraft.Brain;
 import arkhamDraft.Card;
+import arkhamDraft.CardPanel;
 import arkhamDraft.UI.CardCheckBoxListModel;
-import arkhamDraft.UI.dnd.CardTransferable;
+import arkhamDraft.UI.IdentifiableTable;
+import arkhamDraft.UI.workerPool.DragAndDropWorker;
+import sun.awt.datatransfer.TransferableProxy;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,13 +15,19 @@ import java.io.IOException;
 
 
 public class CardCheckBoxListTransferHandler extends TransferHandler {
-    private final JTable table;
+    private final IdentifiableTable table;
     private final CardCheckBoxListModel model;
+    private final Brain brain;
+    private final Runnable updateAllPanels;
+    private Card card;
+    private CardPanel from;
 
-    public CardCheckBoxListTransferHandler(JTable table, CardCheckBoxListModel model) {
+    public CardCheckBoxListTransferHandler(IdentifiableTable table, CardCheckBoxListModel model, Brain brain, Runnable updateAllPanels) {
         super();
         this.table = table;
         this.model = model;
+        this.brain = brain;
+        this.updateAllPanels = updateAllPanels;
     }
 
     public int getSourceActions(JComponent comp) {
@@ -30,6 +40,11 @@ public class CardCheckBoxListTransferHandler extends TransferHandler {
             return false;
         }
 
+        extractCardAndFromFromSupport(support);
+        if (!legalOrigin(from)) {
+            return false;
+        }
+
         /*
         // we only import Strings
         if (!support.isDataFlavorSupported(DataFlavor.stringFlavor)) {
@@ -39,11 +54,16 @@ public class CardCheckBoxListTransferHandler extends TransferHandler {
         return true;
     }
 
+
+
     public boolean importData(TransferSupport support) {
+
         // if we can't handle the import, say so
         if (!canImport(support)) {
             return false;
         }
+
+        CardPanel to = table.getPanel();
 
         // fetch the drop location
         JTable.DropLocation dl = (JTable.DropLocation)support.getDropLocation();
@@ -51,21 +71,56 @@ public class CardCheckBoxListTransferHandler extends TransferHandler {
         int row = dl.getRow();
 
         // fetch the data and bail if this fails
-        Card data;
-        try {
-            data = (Card)support.getTransferable().getTransferData(CardTransferable.cardFlavor);
-        } catch (UnsupportedFlavorException | IOException e) {
-            return false;
-        }
 
+        new DragAndDropWorker(brain, from, to, card, row, updateAllPanels).execute();
+
+
+
+        /*
         Object[] rowData = new Object[]{false, data};
         model.insertRow(row, rowData);
+        */
 
         Rectangle rect = table.getCellRect(row, 0, false);
         table.scrollRectToVisible(rect);
 
 
         return true;
+    }
+
+    private void extractCardAndFromFromSupport(TransferSupport support) {
+        Object[] transferData = new Object[0];
+        try {
+            transferData = (Object[]) support.getTransferable().getTransferData(CardTransferable.cardFlavor);
+        } catch (UnsupportedFlavorException | IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        card = (Card) transferData[0];
+        from = (CardPanel) transferData[1];
+    }
+
+    private boolean legalOrigin(CardPanel from) {
+        CardPanel to = table.getPanel();
+        switch (from) {
+            case DRAFT:
+                if (CardPanel.DECK.equals(to)) {
+                    return true;
+                }
+                if (CardPanel.SIDEBOARD.equals(to)) {
+                    return true;
+                }
+                break;
+            case DECK:
+                break;
+            case SIDEBOARD:
+                if (CardPanel.DECK.equals(to)) {
+                    return true;
+                }
+                break;
+            default:
+        }
+        return false;
     }
 
     private int index = 0;
@@ -76,8 +131,7 @@ public class CardCheckBoxListTransferHandler extends TransferHandler {
             return null;
         }
 
-        CardTransferable transferable = new CardTransferable((Card) model.getValueAt(index, 1));
-        return transferable;
+        return new CardTransferable((Card) model.getValueAt(index, 1), table.getPanel());
     }
 
     public void exportDone(JComponent comp, Transferable trans, int action) {

@@ -4,9 +4,9 @@ import arkhamDraft.Brain;
 import arkhamDraft.CardFilter;
 import arkhamDraft.Decoder;
 import arkhamDraft.Faction;
-import arkhamDraft.UI.workerPool.AddCardsToDraftDeckButtonWorker;
-import arkhamDraft.UI.workerPool.AddFilterButtonWorker;
-import arkhamDraft.UI.workerPool.RemoveCardFilterFromListButtonWorker;
+import arkhamDraft.UI.workerPool.AddCardsToDraftDeckWorker;
+import arkhamDraft.UI.workerPool.AddFilterWorker;
+import arkhamDraft.UI.workerPool.RemoveCardFilterFromListWorker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 
@@ -61,7 +60,7 @@ public class FilterCardsDialog extends JDialog {
     private Component initializeAddCardsToDraftDeckButton() {
         JButton addCardsToDraftDeckButton = new JButton("Add cards to draft deck");
         addCardsToDraftDeckButton.addActionListener(e -> {
-            new AddCardsToDraftDeckButtonWorker(
+            new AddCardsToDraftDeckWorker(
                     brain,
                     valueSelector,
                     this::dispose,
@@ -75,7 +74,7 @@ public class FilterCardsDialog extends JDialog {
         addFilterButton = new JButton("Add Filter");
         addFilterButton.addActionListener(e -> {});
         addFilterButton.setEnabled(false);
-        addFilterButton.addActionListener(e -> new AddFilterButtonWorker(
+        addFilterButton.addActionListener(e -> new AddFilterWorker(
                 brain,
                 this::updateFilterListFromBrain,
                 this::updateCurrentCardsFiltered,
@@ -247,7 +246,7 @@ public class FilterCardsDialog extends JDialog {
     }
 
     public void removeCardFilterFromList(CardFilter cardFilter) {
-        new RemoveCardFilterFromListButtonWorker(brain,
+        new RemoveCardFilterFromListWorker(brain,
                 cardFilter,
                 this::revalidate,
                 this::repaint,

@@ -1,19 +1,15 @@
 package arkhamDraft.UI.workerPool;
 
-import arkhamDraft.Cycle;
 import arkhamDraft.Pack;
 import arkhamDraft.SettingsManager;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ApplySettingsButtonWorker extends AbstractButtonWorker{
+public class ApplySettingsWorker extends AbstractWorker {
     private final SettingsManager manager;
     private final boolean regularCards;
     private final boolean secondCore;
@@ -21,7 +17,7 @@ public class ApplySettingsButtonWorker extends AbstractButtonWorker{
     private final Consumer<Boolean> changesWereMaid;
 
 
-    public ApplySettingsButtonWorker(SettingsManager manager, boolean regularCards, boolean secondCore, TreePath[] checkedPaths, Consumer<Boolean> changesWereMaid) {
+    public ApplySettingsWorker(SettingsManager manager, boolean regularCards, boolean secondCore, TreePath[] checkedPaths, Consumer<Boolean> changesWereMaid) {
         super(null);
         this.manager = manager;
         this.regularCards = regularCards;

@@ -1,6 +1,7 @@
 package arkhamDraft.UI.dnd;
 
 import arkhamDraft.Card;
+import arkhamDraft.CardPanel;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -11,9 +12,11 @@ public class CardTransferable implements Transferable {
 
     public static DataFlavor cardFlavor = new DataFlavor(Card.class, "Card");
     private final Card card;
+    private final CardPanel source;
 
-    public CardTransferable(Card card) {
+    public CardTransferable(Card card, CardPanel source) {
         this.card = card;
+        this.source = source;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class CardTransferable implements Transferable {
     @Override
     public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
         if (isDataFlavorSupported(flavor)) {
-            return card;
+            return new Object[] {card, source};
         } else {
             throw new UnsupportedFlavorException(flavor);
         }

@@ -182,6 +182,31 @@ public class ArkhamDraftBrain implements Brain{
         drafter.removeCardFilterFromList(cardFilter);
     }
 
+    public boolean guiInsertCardFromPanelToPanel(CardPanel from, CardPanel to, Card card, int position) {
+        switch (from) {
+            case DRAFT:
+                if (CardPanel.DECK.equals(to)) {
+                    drafter.addCardFromDraftToDeck(card, position);
+                    return true;
+                }
+                if (CardPanel.SIDEBOARD.equals(to)) {
+                    drafter.addCardFromDraftToSide(card, position);
+                    return true;
+                }
+                break;
+            case DECK:
+                break;
+            case SIDEBOARD:
+                if (CardPanel.DECK.equals(to)) {
+                    drafter.addCardFromSideToDeck(card, position);
+                    return true;
+                }
+                break;
+            default:
+        }
+        return false;
+    }
+
     public void guiRedraft(ArrayList<Card> checkedCards) {
         for (Card currentCard : checkedCards) {
             drafter.redraftCard(currentCard);
@@ -206,7 +231,6 @@ public class ArkhamDraftBrain implements Brain{
             drafter.discardCardFromDraftedDeck(currentCard);
         }
     }
-
 
     public void guiAddFromSideboard(ArrayList<Card> checkedCards) {
         for (Card currentCard : checkedCards) {

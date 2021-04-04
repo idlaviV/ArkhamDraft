@@ -2,10 +2,10 @@ package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
 
-public class DeleteButtonWorker extends AbstractButtonWorker{
+public class DeleteWorker extends AbstractWorker {
     private final Runnable draftingBoxWasDiscarded;
 
-    public DeleteButtonWorker(Brain brain, Runnable draftingBoxWasDiscarded) {
+    public DeleteWorker(Brain brain, Runnable draftingBoxWasDiscarded) {
         super(brain);
         this.draftingBoxWasDiscarded = draftingBoxWasDiscarded;
     }

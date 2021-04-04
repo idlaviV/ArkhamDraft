@@ -69,6 +69,10 @@ public class Deck  {
         addCards(Collections.singletonList(card));
     }
 
+    public void addCard(Card card, int position) {
+        physicalDeck.add(position, card);
+    }
+
     public ArrayList<Card> getCards() {
         return physicalDeck;
     }
@@ -117,5 +121,9 @@ public class Deck  {
 
     public void clear() {
         physicalDeck.clear();
+    }
+
+    public boolean removeCard(Card card) {
+        return physicalDeck.remove(card);
     }
 }

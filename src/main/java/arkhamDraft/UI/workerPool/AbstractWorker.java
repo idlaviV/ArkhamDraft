@@ -5,11 +5,11 @@ import arkhamDraft.Brain;
 import javax.swing.*;
 import java.util.concurrent.ExecutionException;
 
-public abstract class AbstractButtonWorker extends SwingWorker<Boolean, Void> {
+public abstract class AbstractWorker extends SwingWorker<Boolean, Void> {
 
     protected final Brain brain;
 
-    public AbstractButtonWorker(Brain brain) {
+    public AbstractWorker(Brain brain) {
         this.brain = brain;
     }
 

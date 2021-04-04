@@ -9,6 +9,8 @@ import java.util.function.Supplier;
 
 public interface Brain {
 
+    boolean guiInsertCardFromPanelToPanel(CardPanel from, CardPanel to, Card card, int position);
+
     void guiOpensNewDraftDeckDialog();
 
     void updateFromJson () throws IOException;

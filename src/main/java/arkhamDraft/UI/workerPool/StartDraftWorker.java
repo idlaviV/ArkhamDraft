@@ -1,14 +1,11 @@
 package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
-import arkhamDraft.UI.workerPool.AbstractButtonWorker;
 
-import java.awt.event.ActionListener;
-
-public class StartDraftButtonWorker extends AbstractButtonWorker {
+public class StartDraftWorker extends AbstractWorker {
     private final Runnable openDialog;
 
-    public StartDraftButtonWorker(Brain brain, Runnable openDialog) {
+    public StartDraftWorker(Brain brain, Runnable openDialog) {
         super(brain);
         this.openDialog = openDialog;
     }

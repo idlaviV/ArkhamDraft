@@ -36,25 +36,20 @@ public class Drafter {
         }
     }
 
-    public void addCards(){
+    public void addCards() {
         draftingBox.addCards(filteredCardBox);
         filteredCardBox = null;
     }
 
-    public void clearFilter(){
-        filteredCardBox = new DraftingBox();
-    }
-
-    public Deck draftCards(int number) {
+    public void draftCards(int number) {
         ArrayList<Card> newCards = draftingBox.draftCards(number);
         if (!newCards.isEmpty()) {
             draftedCards = new Deck();
             draftedCards.addCards(newCards);
         }
-        return draftedCards;
     }
 
-    public Deck redraftCard(int index) {
+    public void redraftCard(int index) {
         if (index < draftedCards.getSize() && index >= 0) {
             List<Card> cards = draftingBox.draftCards(1);
             if (!cards.isEmpty()) {
@@ -63,7 +58,6 @@ public class Drafter {
                 System.out.println("There are no cards in the draft deck left for redraft.");
             }
         }
-        return draftedCards;
     }
 
     public void redraftCard(Card card) {
@@ -78,37 +72,43 @@ public class Drafter {
         draftingBox = new DraftingBox();
     }
 
-    public boolean addCardToDeckFromDraftedCards(int index) {
-        return addCardFromDeckToDeck(draftedCards, draftedDeck, index);
-    }
-
     public void addCardToDeckFromDraftedCards(Card card) {
         addCardFromDeckToDeck(draftedCards, draftedDeck, card);
-    }
-
-    public boolean addCardToSideboard(int index) {
-        return addCardFromDeckToDeck(draftedCards, sideboard, index);
     }
 
     public void addCardToSideboard(Card card) {
         addCardFromDeckToDeck(draftedCards, sideboard, card);
     }
 
-    public boolean addCardToDeckFromSideboard(int index) {
-        return addCardFromDeckToDeck(sideboard, draftedDeck, index);
-    }
-
     public void addCardToDeckFromSideboard(Card card) {
         addCardFromDeckToDeck(sideboard, draftedDeck, card);
     }
 
-    private boolean addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, int index) {
+    private void addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, int index) {
         if (index < fromDeck.getSize() && index >= 0 && fromDeck.getCard(index) != null && !fromDeck.getCard(index).equals(Card.nullCard)) {
-            toDeck.addCard(fromDeck.getCard(index));
-            fromDeck.setCard(index, Card.nullCard);
-            return true;
+            Card card = fromDeck.getCard(index);
+            toDeck.addCard(card);
+            fromDeck.removeCard(card);
         }
-        return false;
+    }
+
+    private void addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, Card card, int index) {
+        if (index <= toDeck.getSize() && index >= 0) {
+            toDeck.addCard(card, index);
+            fromDeck.removeCard(card);
+        }
+    }
+
+    public void addCardFromDraftToDeck(Card card, int index) {
+        addCardFromDeckToDeck(draftedCards, draftedDeck, card, index);
+    }
+
+    public void addCardFromDraftToSide(Card card, int index) {
+        addCardFromDeckToDeck(draftedCards, sideboard, card, index);
+    }
+
+    public void addCardFromSideToDeck(Card card, int index) {
+        addCardFromDeckToDeck(sideboard, draftedDeck, card, index);
     }
 
     private void addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, Card card) {
@@ -117,8 +117,8 @@ public class Drafter {
 
     public void discardCardFromSideboard(Card card) {discardCardFromSideboard(sideboard.getIndex(card));}
 
-    public boolean discardCardFromSideboard(int index) {
-        return discardCardFromAnyDeck(sideboard, index);
+    public void discardCardFromSideboard(int index) {
+        discardCardFromAnyDeck(sideboard, index);
     }
 
     public void discardCardFromDraftedDeck(Card card) {
@@ -129,16 +129,10 @@ public class Drafter {
         discardCardFromAnyDeck(draftedDeck, index);
     }
 
-    private boolean discardCardFromAnyDeck(Deck deck, int index) {
+    private void discardCardFromAnyDeck(Deck deck, int index) {
         if (index < deck.getSize() && index >= 0 && deck.getCard(index) != null) {
-            deck.setCard(index, Card.nullCard);
-            return true;
+            deck.removeCard(deck.getCard(index));
         }
-        return false;
-    }
-
-    public void tidySideboard() {
-        sideboard.tidy();
     }
 
     public void sortDeck(Comparator<Card> comparator) {
@@ -174,10 +168,6 @@ public class Drafter {
 
     public int getDraftingBoxSize() {
         return draftingBox.getCards().size();
-    }
-
-    public int getPhysicalDraftingBoxSize() {
-        return draftingBox.getPhysicalDraftingBoxSize();
     }
 
     public int getFilteredBoxSize(){

@@ -4,7 +4,7 @@ import arkhamDraft.Brain;
 
 import java.io.File;
 
-public class LoadDeckButtonWorker extends AbstractButtonWorker{
+public class LoadDeckWorker extends AbstractWorker {
 
 
     private final File file;
@@ -12,7 +12,7 @@ public class LoadDeckButtonWorker extends AbstractButtonWorker{
     private final Runnable enablers;
     private final Runnable updateOtherPanels;
 
-    public LoadDeckButtonWorker(Brain brain, File file, Runnable printCardsToDeckPanel, Runnable enablers, Runnable updatePanelsAfterwards) {
+    public LoadDeckWorker(Brain brain, File file, Runnable printCardsToDeckPanel, Runnable enablers, Runnable updatePanelsAfterwards) {
         super(brain);
         this.file = file;
         this.printCardsToDeckPanel = printCardsToDeckPanel;

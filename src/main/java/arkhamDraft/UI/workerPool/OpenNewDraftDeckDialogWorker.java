@@ -2,9 +2,8 @@ package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
 import arkhamDraft.UI.NewDraftDeckDialog;
-import arkhamDraft.UI.workerPool.AbstractButtonWorker;
 
-public class OpenNewDraftDeckDialogWorker extends AbstractButtonWorker {
+public class OpenNewDraftDeckDialogWorker extends AbstractWorker {
 
     private final NewDraftDeckDialog newDraftDeckDialog;
 

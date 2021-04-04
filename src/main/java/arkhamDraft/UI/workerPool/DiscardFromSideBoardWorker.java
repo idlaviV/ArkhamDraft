@@ -3,11 +3,11 @@ package arkhamDraft.UI.workerPool;
 import arkhamDraft.Brain;
 import arkhamDraft.UI.CardCheckBoxList;
 
-public class DiscardFromSideBoardButtonWorker extends AbstractButtonWorker{
+public class DiscardFromSideBoardWorker extends AbstractWorker {
     private final CardCheckBoxList sideBoardList;
     private final Runnable printCardsToSideboardPanel;
 
-    public DiscardFromSideBoardButtonWorker(Brain brain, CardCheckBoxList sideBoardList, Runnable printCardsToSideboardPanel) {
+    public DiscardFromSideBoardWorker(Brain brain, CardCheckBoxList sideBoardList, Runnable printCardsToSideboardPanel) {
         super(brain);
         this.sideBoardList = sideBoardList;
         this.printCardsToSideboardPanel = printCardsToSideboardPanel;

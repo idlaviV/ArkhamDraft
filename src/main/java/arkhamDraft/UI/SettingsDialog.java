@@ -3,8 +3,8 @@ package arkhamDraft.UI;
 import arkhamDraft.Cycle;
 import arkhamDraft.Pack;
 import arkhamDraft.SettingsManager;
-import arkhamDraft.UI.workerPool.ApplySettingsButtonWorker;
-import arkhamDraft.UI.workerPool.GenerateBlacklistButtonWorker;
+import arkhamDraft.UI.workerPool.ApplySettingsWorker;
+import arkhamDraft.UI.workerPool.GenerateBlacklistWorker;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -71,7 +71,7 @@ public class SettingsDialog extends JDialog {
     private Component initializeGenerateBlacklistButton() {
         JPanel generateBlacklistPanel = new JPanel();
         JButton generateBlacklistButton = new JButton("Generate Default Blacklist");
-        generateBlacklistButton.addActionListener(e -> new GenerateBlacklistButtonWorker(settingsManager).execute());
+        generateBlacklistButton.addActionListener(e -> new GenerateBlacklistWorker(settingsManager).execute());
 
         generateBlacklistPanel.add(generateBlacklistButton);
         return generateBlacklistPanel;
@@ -129,7 +129,7 @@ public class SettingsDialog extends JDialog {
     }
 
     private void applyChanges() {
-        new ApplySettingsButtonWorker(settingsManager, regularCardsCheckBox.isSelected(), secondCoreCheckBox.isSelected(), packSelectorCheckBoxTree.getCheckedPaths(), this::changesWereMaid).execute();
+        new ApplySettingsWorker(settingsManager, regularCardsCheckBox.isSelected(), secondCoreCheckBox.isSelected(), packSelectorCheckBoxTree.getCheckedPaths(), this::changesWereMaid).execute();
     }
 
     private Component initializeRegularCardsPanel() {
