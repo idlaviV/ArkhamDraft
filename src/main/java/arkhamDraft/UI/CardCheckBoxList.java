@@ -1,27 +1,23 @@
 package arkhamDraft.UI;
 
 import arkhamDraft.Card;
+import arkhamDraft.UI.dnd.CardCheckBoxListTransferHandler;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
-import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class CardCheckBoxList {
 
     private CardCheckBoxListModel model = new CardCheckBoxListModel();
     private final JTable table = new JTable();
-    private final Consumer<String> previewCardFromDatabase;
     private final JCheckBox superCheckBox = new JCheckBox();
 
     public CardCheckBoxList(Consumer<String> previewCardFromDatabase) {
-        this.previewCardFromDatabase = previewCardFromDatabase;
         table.setModel(model);
         initializeHeader();
         table.getColumnModel().getColumn(0).setMaxWidth(new JCheckBox().getPreferredSize().width);
@@ -29,6 +25,14 @@ public class CardCheckBoxList {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
         addMouseListenersToTable(previewCardFromDatabase);
+
+        initializeDnD();
+    }
+
+    private void initializeDnD() {
+        table.setDragEnabled(true);
+        table.setDropMode(DropMode.INSERT_ROWS);
+        table.setTransferHandler(new CardCheckBoxListTransferHandler(table, model));
     }
 
     private void initializeHeader() {
