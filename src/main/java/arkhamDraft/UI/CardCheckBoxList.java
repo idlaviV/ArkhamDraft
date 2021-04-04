@@ -40,6 +40,7 @@ public class CardCheckBoxList {
         table.setDragEnabled(true);
         table.setDropMode(DropMode.INSERT_ROWS);
         table.setTransferHandler(new CardCheckBoxListTransferHandler(table, model, brain, updateAllPanels));
+        table.setFillsViewportHeight(true);
     }
 
     private void initializeHeader() {
@@ -63,7 +64,7 @@ public class CardCheckBoxList {
             public void mousePressed(MouseEvent e) {
                 int row = table.rowAtPoint(e.getPoint());
                 int col = table.columnAtPoint(e.getPoint());
-                if (col == 1) {
+                if (col == 1 && row>=0) {
                     Card card = ((Card) table.getModel().getValueAt(row, col));
                     previewCardFromDatabase.accept(card.getCode());
                 }
