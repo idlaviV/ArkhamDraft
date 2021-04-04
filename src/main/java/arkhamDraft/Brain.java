@@ -13,8 +13,6 @@ public interface Brain {
 
     void updateFromJson () throws IOException;
 
-    void watch() throws IOException;
-
     int getDraftingBoxSize();
 
     ArrayList<CardFilter> getFilterList();

@@ -12,16 +12,6 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        /*ArrayList<String> strings = new ArrayList<>();
-        strings.add("xp<=4");
-        strings.add("xp<==4");
-        strings.add("xp>=4");
-        strings.add("xp=4");
-        strings.add("xp!=4");
-        for (String string: strings) {
-            System.out.println(String.format("[%s]-->[%s]", string, getRelator(string)));
-        }*/
-
 
         File directory = new File("./data");
         if (!directory.exists()) {
@@ -52,16 +42,6 @@ public class Main {
             settingsManager.generateDefaultSettings();
         }
         settingsManager.updateSettings();
-
-        /*File deckFile = new File("./data/deck.txt"); // This part reads the deck in "./data/deck" and prints it
-        Deck deck = new Deck(deckFile, face.getMasterCardBox());
-        ArrayList<String> output = deck.getPrintInfo();
-        for (String line: output) {
-            System.out.println(line);
-        }*/
-
-        brain.watch();
-        System.out.println("finished");
     }
 
 }

@@ -21,16 +21,13 @@ public class AddCardsToDraftDeckButtonWorker extends AbstractButtonWorker{
 
     @Override
     protected void update() {
-        System.out.println("update");
         valueSelector.resetToHint();
-        System.out.println("Now dispose");
         dispose.run();
         addCards.get().run();
     }
 
     @Override
     protected Boolean doInBackground() {
-        System.out.println("doInBackground");
         brain.guiLeavesFilterCardsDialog();
         return true;
     }
