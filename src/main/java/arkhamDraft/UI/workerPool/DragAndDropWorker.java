@@ -28,7 +28,10 @@ public class DragAndDropWorker extends AbstractWorker {
 
     @Override
     protected Boolean doInBackground() throws Exception {
-        brain.guiInsertCardFromPanelToPanel(from, to, card, row);
-        return true;
+        if (brain.guiInsertCardFromPanelToPanel(from, to, card, row)) {
+            return true;
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 }

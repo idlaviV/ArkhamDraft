@@ -195,10 +195,18 @@ public class ArkhamDraftBrain implements Brain{
                 }
                 break;
             case DECK:
+                if (CardPanel.TRASH.equals(to)) {
+                    drafter.discardCardFromDraftedDeck(card);
+                    return true;
+                }
                 break;
             case SIDEBOARD:
                 if (CardPanel.DECK.equals(to)) {
                     drafter.addCardFromSideToDeck(card, position);
+                    return true;
+                }
+                if (CardPanel.TRASH.equals(to)) {
+                    drafter.discardCardFromSideboard(card);
                     return true;
                 }
                 break;

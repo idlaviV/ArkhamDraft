@@ -14,47 +14,19 @@ import java.awt.datatransfer.*;
 import java.io.IOException;
 
 
-public class CardCheckBoxListTransferHandler extends TransferHandler {
+public class CardCheckBoxListTransferHandler extends CardTransferHandler {
     private final IdentifiableTable table;
     private final CardCheckBoxListModel model;
-    private final Brain brain;
-    private final Runnable updateAllPanels;
-    private Card card;
-    private CardPanel from;
 
     public CardCheckBoxListTransferHandler(IdentifiableTable table, CardCheckBoxListModel model, Brain brain, Runnable updateAllPanels) {
-        super();
+        super(brain, updateAllPanels);
         this.table = table;
         this.model = model;
-        this.brain = brain;
-        this.updateAllPanels = updateAllPanels;
     }
 
     public int getSourceActions(JComponent comp) {
         return TransferHandler.MOVE;
     }
-
-    public boolean canImport(TransferSupport support) {
-        // we only support drops (not clipboard paste)
-        if (!support.isDrop()) {
-            return false;
-        }
-
-        extractCardAndFromFromSupport(support);
-        if (!legalOrigin(from)) {
-            return false;
-        }
-
-        /*
-        // we only import Strings
-        if (!support.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-            return false;
-        }*/
-
-        return true;
-    }
-
-
 
     public boolean importData(TransferSupport support) {
 
@@ -72,7 +44,7 @@ public class CardCheckBoxListTransferHandler extends TransferHandler {
 
         // fetch the data and bail if this fails
 
-        new DragAndDropWorker(brain, from, to, card, row, updateAllPanels).execute();
+        new DragAndDropWorker(getBrain(), getFrom(), to, getCard(), row, this::updateAllPanels).execute();
 
 
 
@@ -88,19 +60,7 @@ public class CardCheckBoxListTransferHandler extends TransferHandler {
         return true;
     }
 
-    private void extractCardAndFromFromSupport(TransferSupport support) {
-        Object[] transferData = new Object[0];
-        try {
-            transferData = (Object[]) support.getTransferable().getTransferData(CardTransferable.cardFlavor);
-        } catch (UnsupportedFlavorException | IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        card = (Card) transferData[0];
-        from = (CardPanel) transferData[1];
-    }
-
-    private boolean legalOrigin(CardPanel from) {
+    boolean legalOrigin(CardPanel from) {
         CardPanel to = table.getPanel();
         switch (from) {
             case DRAFT:

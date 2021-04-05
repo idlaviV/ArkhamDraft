@@ -1,6 +1,8 @@
 package arkhamDraft.UI;
 
 import arkhamDraft.*;
+import arkhamDraft.UI.dnd.CardCheckBoxListTransferHandler;
+import arkhamDraft.UI.dnd.TrashTransferHandler;
 import arkhamDraft.UI.workerPool.*;
 import arkhamDraft.UI.workerPool.OpenNewDraftDeckDialogWorker;
 import arkhamDraft.UI.workerPool.StartDraftWorker;
@@ -80,12 +82,32 @@ public class Face extends JFrame{
     private Component initializePreviewPanel() {
         JPanel previewPanel = new JPanel();
         previewPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        previewPanel.setLayout(new BorderLayout());
 
         previewLabel = new JLabel();
         previewLabel.setPreferredSize(DIMENSION_PHYSICAL_CARD);
-        previewPanel.add(previewLabel);
+        previewPanel.add(previewLabel, BorderLayout.PAGE_START);
+
+        previewPanel.add(initializeTrashPanel(), BorderLayout.PAGE_END);
 
         return previewPanel;
+    }
+
+    private Component initializeTrashPanel() {
+        JPanel trashPanel = new JPanel();
+        trashPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        JLabel trashLabel = new JLabel();
+        try {
+            Image img = ImageIO.read(getClass().getResource("/icons/Actions-trash-empty-icon.png"));
+            trashLabel.setIcon(new ImageIcon(img));
+            trashLabel.setBorder(null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        trashPanel.add(trashLabel);
+        trashPanel.setTransferHandler(new TrashTransferHandler(brain, this::updateAllPanels));
+
+        return trashPanel;
     }
 
     private void previewCardFromDatabase(String id) {
