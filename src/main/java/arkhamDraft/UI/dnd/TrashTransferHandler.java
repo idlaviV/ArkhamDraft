@@ -21,4 +21,14 @@ public class TrashTransferHandler extends CardTransferHandler {
         }
         return false;
     }
+
+    @Override
+    int fetchDropLocation(TransferSupport support) {
+        return -1;
+    }
+
+    @Override
+    void updateScroll(int row) {
+
+    }
 }

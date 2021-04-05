@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
-public class CardTransferHandler extends TransferHandler {
+public abstract class CardTransferHandler extends TransferHandler {
 
     private final Brain brain;
     private final Runnable updateAllPanels;
@@ -53,18 +53,12 @@ public class CardTransferHandler extends TransferHandler {
     }
 
     /*To be overwritten by inheriting classes*/
-    int fetchDropLocation(TransferSupport support) {
-        return -1;
-    }
+    abstract int fetchDropLocation(TransferSupport support);
 
     /*To be overwritten by inheriting classes*/
-    void updateScroll(int row) {
-    }
+    abstract void updateScroll(int row);
 
-    /*To be overwritten by inheriting classes*/
-    boolean legalOrigin(CardPanel from) {
-        return false;
-    }
+    abstract boolean legalOrigin(CardPanel from);
 
     void extractCardAndFromFromSupport(TransferSupport support) {
         Object[] transferData;

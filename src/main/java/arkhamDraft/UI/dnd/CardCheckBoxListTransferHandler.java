@@ -81,4 +81,3 @@ public class CardCheckBoxListTransferHandler extends CardTransferHandler {
         model.removeRow(index);
     }
 }
-
