@@ -3,6 +3,7 @@ package arkhamDraft.UI.dnd;
 import arkhamDraft.Brain;
 import arkhamDraft.Card;
 import arkhamDraft.CardPanel;
+import arkhamDraft.UI.workerPool.DragAndDropWorker;
 
 import javax.swing.*;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -14,6 +15,7 @@ public class CardTransferHandler extends TransferHandler {
     private final Runnable updateAllPanels;
     private Card card;
     private CardPanel from;
+    private CardPanel to;
 
     public CardTransferHandler(Brain brain, Runnable updateAllPanels) {
         this.brain = brain;
@@ -30,14 +32,33 @@ public class CardTransferHandler extends TransferHandler {
         if (!legalOrigin(from)) {
             return false;
         }
+        return true;
+    }
 
-        /*
-        // we only import Strings
-        if (!support.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+    public boolean importData(TransferSupport support) {
+
+        // if we can't handle the import, say so
+        if (!canImport(support)) {
             return false;
-        }*/
+        }
+
+        int row = fetchDropLocation(support);
+
+        // fetch the data and bail if this fails
+        new DragAndDropWorker(getBrain(), getFrom(), to, getCard(), row, this::updateAllPanels).execute();
+
+        updateScroll(row);
 
         return true;
+    }
+
+    /*To be overwritten by inheriting classes*/
+    int fetchDropLocation(TransferSupport support) {
+        return -1;
+    }
+
+    /*To be overwritten by inheriting classes*/
+    void updateScroll(int row) {
     }
 
     /*To be overwritten by inheriting classes*/
@@ -67,6 +88,10 @@ public class CardTransferHandler extends TransferHandler {
 
     Brain getBrain() {
         return brain;
+    }
+
+    void setTo(CardPanel to) {
+        this.to = to;
     }
 
     void updateAllPanels() {

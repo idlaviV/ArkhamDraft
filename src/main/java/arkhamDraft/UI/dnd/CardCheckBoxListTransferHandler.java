@@ -5,13 +5,10 @@ import arkhamDraft.Card;
 import arkhamDraft.CardPanel;
 import arkhamDraft.UI.CardCheckBoxListModel;
 import arkhamDraft.UI.IdentifiableTable;
-import arkhamDraft.UI.workerPool.DragAndDropWorker;
-import sun.awt.datatransfer.TransferableProxy;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
-import java.io.IOException;
 
 
 public class CardCheckBoxListTransferHandler extends CardTransferHandler {
@@ -22,42 +19,24 @@ public class CardCheckBoxListTransferHandler extends CardTransferHandler {
         super(brain, updateAllPanels);
         this.table = table;
         this.model = model;
+        setTo(table.getPanel());
     }
 
     public int getSourceActions(JComponent comp) {
         return TransferHandler.MOVE;
     }
 
-    public boolean importData(TransferSupport support) {
-
-        // if we can't handle the import, say so
-        if (!canImport(support)) {
-            return false;
-        }
-
-        CardPanel to = table.getPanel();
-
-        // fetch the drop location
+    /*To be overwritten by inheriting classes*/
+    int fetchDropLocation(TransferSupport support) {
         JTable.DropLocation dl = (JTable.DropLocation)support.getDropLocation();
 
-        int row = dl.getRow();
+        return dl.getRow();
+    }
 
-        // fetch the data and bail if this fails
-
-        new DragAndDropWorker(getBrain(), getFrom(), to, getCard(), row, this::updateAllPanels).execute();
-
-
-
-        /*
-        Object[] rowData = new Object[]{false, data};
-        model.insertRow(row, rowData);
-        */
-
+    /*To be overwritten by inheriting classes*/
+    void updateScroll(int row) {
         Rectangle rect = table.getCellRect(row, 0, false);
         table.scrollRectToVisible(rect);
-
-
-        return true;
     }
 
     boolean legalOrigin(CardPanel from) {
