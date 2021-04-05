@@ -3,7 +3,6 @@ package arkhamDraft.UI.workerPool;
 import arkhamDraft.Brain;
 import arkhamDraft.Card;
 import arkhamDraft.CardPanel;
-import arkhamDraft.UI.workerPool.AbstractWorker;
 
 public class DragAndDropWorker extends AbstractWorker {
     private final CardPanel from;

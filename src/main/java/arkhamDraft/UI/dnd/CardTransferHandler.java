@@ -22,6 +22,7 @@ public abstract class CardTransferHandler extends TransferHandler {
         this.updateAllPanels = updateAllPanels;
     }
 
+    @Override
     public boolean canImport(TransferSupport support) {
         // we only support drops (not clipboard paste)
         if (!support.isDrop()) {
@@ -35,6 +36,7 @@ public abstract class CardTransferHandler extends TransferHandler {
         return true;
     }
 
+    @Override
     public boolean importData(TransferSupport support) {
 
         // if we can't handle the import, say so
@@ -52,7 +54,6 @@ public abstract class CardTransferHandler extends TransferHandler {
         return true;
     }
 
-    /*To be overwritten by inheriting classes*/
     abstract int fetchDropLocation(TransferSupport support);
 
     /*To be overwritten by inheriting classes*/
@@ -60,7 +61,7 @@ public abstract class CardTransferHandler extends TransferHandler {
 
     abstract boolean legalOrigin(CardPanel from);
 
-    void extractCardAndFromFromSupport(TransferSupport support) {
+    private void extractCardAndFromFromSupport(TransferSupport support) {
         Object[] transferData;
         try {
             transferData = (Object[]) support.getTransferable().getTransferData(CardTransferable.cardFlavor);

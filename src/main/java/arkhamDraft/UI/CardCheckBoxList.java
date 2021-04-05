@@ -39,7 +39,7 @@ public class CardCheckBoxList {
     private void initializeDnD() {
         table.setDragEnabled(true);
         table.setDropMode(DropMode.INSERT_ROWS);
-        table.setTransferHandler(new CardCheckBoxListTransferHandler(table, model, brain, updateAllPanels));
+        table.setTransferHandler(new CardCheckBoxListTransferHandler(table, brain, updateAllPanels));
         table.setFillsViewportHeight(true);
     }
 
@@ -106,10 +106,6 @@ public class CardCheckBoxList {
 
     public void clearList() {
         model.setRowCount(0);
-    }
-
-    public void toggleCard(Card card) {
-
     }
 
     public IdentifiableTable getTable() {

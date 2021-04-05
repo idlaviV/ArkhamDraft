@@ -2,15 +2,11 @@ package arkhamDraft;
 
 
 import com.google.gson.Gson;
-import sun.misc.IOUtils;
-import sun.nio.ch.IOUtil;
 
-import javax.imageio.ImageIO;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;

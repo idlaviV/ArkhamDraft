@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface Brain {

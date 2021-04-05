@@ -10,6 +10,7 @@ public class TrashTransferHandler extends CardTransferHandler {
         setTo(CardPanel.TRASH);
     }
 
+    @Override
     boolean legalOrigin(CardPanel from) {
         switch (from) {
             case DRAFT:

@@ -1,15 +1,6 @@
 package arkhamDraft.UI;
 
-import arkhamDraft.Card;
-
-import javax.naming.OperationNotSupportedException;
-import javax.swing.*;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.swing.table.DefaultTableModel;
 
 public class CardCheckBoxListModel extends DefaultTableModel {
 
@@ -19,6 +10,7 @@ public class CardCheckBoxListModel extends DefaultTableModel {
         return column == 0;
     }
 
+    @Override
     public Class getColumnClass(int c) {
         return getValueAt(0, c).getClass();
     }

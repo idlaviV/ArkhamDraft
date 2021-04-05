@@ -1,8 +1,8 @@
 package arkhamDraft;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public class Card {

@@ -9,11 +9,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
-
-import static java.lang.Thread.sleep;
 
 public class NewDraftDeckDialog extends JDialog {
     private final Brain brain;

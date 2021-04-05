@@ -1,11 +1,11 @@
 package arkhamDraft.UI;
 
-import arkhamDraft.*;
-import arkhamDraft.UI.dnd.CardCheckBoxListTransferHandler;
+import arkhamDraft.Brain;
+import arkhamDraft.Card;
+import arkhamDraft.CardPanel;
+import arkhamDraft.Deck;
 import arkhamDraft.UI.dnd.TrashTransferHandler;
 import arkhamDraft.UI.workerPool.*;
-import arkhamDraft.UI.workerPool.OpenNewDraftDeckDialogWorker;
-import arkhamDraft.UI.workerPool.StartDraftWorker;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

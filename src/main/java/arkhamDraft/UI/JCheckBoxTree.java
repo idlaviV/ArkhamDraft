@@ -1,5 +1,8 @@
 package arkhamDraft.UI;
 
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -7,17 +10,6 @@ import java.util.EventListener;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JTree;
-import javax.swing.event.EventListenerList;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeSelectionModel;
-import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
 
 public class JCheckBoxTree extends JTree {
 
