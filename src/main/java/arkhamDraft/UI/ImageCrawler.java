@@ -52,7 +52,7 @@ public class ImageCrawler extends SwingWorker<Boolean, Void> {
                     try {
                         return ImageIO.read(getClass().getResource("/cards/00000.jpg"));
                     } catch (IOException e3) {
-                        e3.printStackTrace();
+                        throw new RuntimeException(e3);
                     }
                 }
             }
@@ -60,9 +60,8 @@ public class ImageCrawler extends SwingWorker<Boolean, Void> {
         try {
             return ImageIO.read(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     private void extractURLtoFile(Path filePath, String urlPath1, File file) throws IOException {
