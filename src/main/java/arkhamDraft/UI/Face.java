@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class Face extends JFrame{
+public class Face extends JFrame {
 
 
     public static final Dimension DIMENSION_PHYSICAL_CARD = new Dimension(300, 419);
@@ -116,7 +116,6 @@ public class Face extends JFrame{
     }
 
 
-
     private Component initializeMenuButtonPanel() {
         JPanel menuButtonPanel = new JPanel();
 
@@ -176,7 +175,7 @@ public class Face extends JFrame{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        newDraftDeckButton.addActionListener(e-> new StartDraftWorker(
+        newDraftDeckButton.addActionListener(e -> new NewDraftWorker(
                 brain,
                 this::openNewDraftDeckDialog
         ).execute());
@@ -184,19 +183,25 @@ public class Face extends JFrame{
     }
 
     private ActionListener getStartDraftActionListener() {
-        return (e -> openNewDraftDeckDialog());
+        return (e -> runOpenNewDraftDeckDialog());
     }
 
     private ActionListener getOpenSettingsButtonActionListener() {
         return (e -> new OpenSettingsWorker(brain, settingsDialog).execute());
     }
 
-    private void openNewDraftDeckDialog() {
+    private void runOpenNewDraftDeckDialog() {
         new OpenNewDraftDeckDialogWorker(
                 brain,
-                newDraftDeckDialog
+                this::openNewDraftDeckDialog
         ).execute();
     }
+
+    private void openNewDraftDeckDialog() {
+        newDraftDeckDialog.tidyUp();
+        newDraftDeckDialog.setVisible(true);
+    }
+
 
     private Component initializeDraftPanel() {
         JPanel draftPanel = new JPanel();

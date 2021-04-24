@@ -24,6 +24,7 @@ public class FinalizeDraftDeckWorker extends AbstractWorker {
     @Override
     protected Boolean doInBackground() throws Exception {
         brain.guiFinalizeDraftDeck();
+        System.out.println(brain.getDraftedDeck());
         return true;
     }
 }

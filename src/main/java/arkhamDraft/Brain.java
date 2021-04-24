@@ -68,8 +68,6 @@ public interface Brain {
 
     void disposeDeck();
 
-    void clearDrafter();
-
     int getNumberOfCardsInDraftingDeck();
 
     int getNumberOfCardsInDeck();
@@ -77,4 +75,6 @@ public interface Brain {
     void sortDraftedCards(String requireNonNull);
 
     SettingsManager getSettingsManager();
+
+    //void guiClosesNewDraftDeckDialog();
 }

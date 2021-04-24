@@ -129,4 +129,11 @@ public class Deck  {
     public boolean removeCard(Card card) {
         return physicalDeck.remove(card);
     }
+
+    @Override
+    public String toString() {
+        return "Deck{" +
+                + physicalDeck.size() +
+                '}';
+    }
 }

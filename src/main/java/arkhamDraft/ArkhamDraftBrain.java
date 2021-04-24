@@ -11,6 +11,7 @@ import static java.lang.Thread.sleep;
 
 public class ArkhamDraftBrain implements Brain{
     private Drafter drafter;
+    private Drafter newDrafter;
     private CardBox masterCardBox;
     private final SettingsManager settingsManager;
     public static final String ANSI_RESET = "\u001B[0m";
@@ -32,14 +33,14 @@ public class ArkhamDraftBrain implements Brain{
         ArrayList<String> arguments = Decoder.watchFilterInputDecrypter(input);
         switch (arguments.get(0)) {
             case "containsFilter":
-                drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size()), arguments.get(1)));
-                System.out.printf("%d cards left.%n",drafter.getFilteredBoxSize());
+                newDrafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getContainRelator(arguments.get(1)), arguments.subList(3, arguments.size()), arguments.get(1)));
+                System.out.printf("%d cards left.%n", newDrafter.getFilteredBoxSize());
                 break;
             case "numericalFilter":
                 try {
                     int value = Integer.parseInt(arguments.get(3));
-                    drafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getNumericalRelator(arguments.get(1)), value, arguments.get(1)));
-                    System.out.printf("%d cards left.%n", drafter.getFilteredBoxSize());
+                    newDrafter.filter(Card.generateCardFilter(arguments.get(2), Relator.getNumericalRelator(arguments.get(1)), value, arguments.get(1)));
+                    System.out.printf("%d cards left.%n", newDrafter.getFilteredBoxSize());
                 } catch (NumberFormatException e) {
                     System.out.println("Error: value of filter is not an integer.");
                 }
@@ -50,7 +51,9 @@ public class ArkhamDraftBrain implements Brain{
     }
 
     private void startDraft() {
-        drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox), settingsManager.getSecondCore());
+        if (drafter == null) {
+            drafter = new Drafter(settingsManager.getOwnedCards(masterCardBox), settingsManager.getSecondCore());
+        }
     }
 
     private void notWellFormatted() {
@@ -85,22 +88,33 @@ public class ArkhamDraftBrain implements Brain{
                 }
                 break;
         }
-        drafter.addToFilterList(newCardFilter);
+        newDrafter.addToFilterList(newCardFilter);
     }
 
     public void guiEntersFilterCardsDialog() {
-        drafter.initializeCardAddition();
+        newDrafter.initializeCardAddition();
     }
 
     public void guiLeavesFilterCardsDialog() {
-        drafter.applyFilterList();
+        newDrafter.applyFilterList();
     }
 
     @Override
     public void guiCreateNewDeck() {
         guiOpensNewDraftDeckDialog();
-        clearDrafter();
-        drafter.disposeDeck();
+        newDrafter.disposeDeck();
+    }
+
+    public void guiFinalizeDraftDeck() {
+        newDrafter.finalizeDraft();
+        //startDraft();
+        drafter.updateFromNewDrafter(newDrafter.getDraftingBox(), newDrafter.getDeck());
+    }
+
+    /*wird geöffnet wenn Deck erweitert wird*/
+    public void guiOpensNewDraftDeckDialog() {
+        startDraft();
+        newDrafter = new Drafter(settingsManager.getOwnedCards(masterCardBox), settingsManager.getSecondCore(), drafter.getDeck());
     }
 
     public void loadFilterList(File file, Supplier<SwingWorker<Integer, Void>> addCards) {
@@ -134,7 +148,7 @@ public class ArkhamDraftBrain implements Brain{
         FileWriter fileWriter = new FileWriter(file);
         fileWriter.write(fileName + "\n" + "\n");
         fileWriter.write("This line must contain investigator name" + "\n" + "\n");
-        ArrayList<String> printInfo = drafter.getDraftedDeck().getPrintInfo(false);
+        ArrayList<String> printInfo = drafter.getDeck().getPrintInfo(false);
         for (String println: printInfo) {
             fileWriter.write(println+"\n");
         }
@@ -143,6 +157,7 @@ public class ArkhamDraftBrain implements Brain{
 
     @Override
     public void buildDeckFromFile(File file) {
+        drafter.clear();
         try {
             FileReader fr = new FileReader(file);
             BufferedReader reader = new BufferedReader(fr);
@@ -165,23 +180,12 @@ public class ArkhamDraftBrain implements Brain{
         drafter.disposeDeck();
     }
 
-    public void guiOpensNewDraftDeckDialog() {
-        if (drafter == null) {
-            startDraft();
-        }
-        drafter.discardDraftingBox();
-    }
-
     public void guiDraftCardsNew(int amount) {
         drafter.draftCards(amount);
     }
 
-    public void guiFinalizeDraftDeck() {
-        drafter.finalizeDraft();
-    }
-
     public void removeCardFilterFromList(CardFilter cardFilter) {
-        drafter.removeCardFilterFromList(cardFilter);
+        newDrafter.removeCardFilterFromList(cardFilter);
     }
 
     public boolean guiInsertCardFromPanelToPanel(CardPanel from, CardPanel to, Card card, int position) {
@@ -198,7 +202,7 @@ public class ArkhamDraftBrain implements Brain{
                 break;
             case DECK:
                 if (CardPanel.TRASH.equals(to)) {
-                    drafter.discardCardFromDraftedDeck(card);
+                    drafter.discardCardFromDeck(card);
                     return true;
                 }
                 break;
@@ -238,7 +242,7 @@ public class ArkhamDraftBrain implements Brain{
     @Override
     public void guiDiscardFromDraftedDeck(ArrayList<Card> checkedCards) {
         for (Card currentCard : checkedCards) {
-            drafter.discardCardFromDraftedDeck(currentCard);
+            drafter.discardCardFromDeck(currentCard);
         }
     }
 
@@ -261,7 +265,7 @@ public class ArkhamDraftBrain implements Brain{
                 saveFile.createNewFile();
             }
             FileWriter fw = new FileWriter(saveFile);
-            ArrayList<ArrayList<CardFilter>> filterListAll = drafter.getCardFilterOfDraftingBox();
+            ArrayList<ArrayList<CardFilter>> filterListAll = newDrafter.getCardFilterOfDraftingBox();
             Iterator<ArrayList<CardFilter>> iterator = filterListAll.iterator();
             while(iterator.hasNext()) {
                 ArrayList<CardFilter> filterList = iterator.next();
@@ -280,7 +284,7 @@ public class ArkhamDraftBrain implements Brain{
     }
 
     public void guiDeleteDeck() {
-        drafter.discardDraftingBox();
+        newDrafter.discardDraftingBox();
     }
 
     public Deck getDraftedCards() {
@@ -288,7 +292,7 @@ public class ArkhamDraftBrain implements Brain{
     }
 
     public Deck getDraftedDeck() {
-        return drafter.getDraftedDeck();
+        return drafter.getDeck();
     }
 
     public Deck getSideboard() {
@@ -296,32 +300,28 @@ public class ArkhamDraftBrain implements Brain{
     }
 
     public int getNumberOfCardsLeftAfterFiltering() {
-        return drafter.getNumberOfCardsLeftAfterFiltering();
+        return newDrafter.getNumberOfCardsLeftAfterFiltering();
     }
 
     public ArrayList<CardFilter> getFilterList() {
-        return drafter.getFilterList();
+        return newDrafter.getFilterList();
     }
 
     public int getDraftingBoxSize() {
-        return drafter.getDraftingBoxSize();
+        return newDrafter.getDraftingBoxSize();
     }
 
     public void addCards() {
-        drafter.addCards();
+        newDrafter.addCards();
     }
 
     public void initializeCardAddition() {
-        drafter.initializeCardAddition();
-    }
-
-    public void clearDrafter() {
-        drafter.clear();
+        newDrafter.initializeCardAddition();
     }
 
     @Override
     public int getNumberOfCardsInDraftingDeck() {
-        return drafter.getNumberOfCardsInDraftingDeck();
+        return drafter.getNumberOfCardsInPhysicalDraftingBox();
     }
 
     @Override
@@ -332,5 +332,13 @@ public class ArkhamDraftBrain implements Brain{
     @Override
     public SettingsManager getSettingsManager() {
         return settingsManager;
+    }
+
+    @Override
+    public String toString() {
+        return "ArkhamDraftBrain{" +
+                "drafter=" + drafter +
+                ", newDrafter=" + newDrafter +
+                '}';
     }
 }

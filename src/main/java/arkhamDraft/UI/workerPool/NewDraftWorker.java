@@ -2,10 +2,10 @@ package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
 
-public class StartDraftWorker extends AbstractWorker {
+public class NewDraftWorker extends AbstractWorker {
     private final Runnable openDialog;
 
-    public StartDraftWorker(Brain brain, Runnable openDialog) {
+    public NewDraftWorker(Brain brain, Runnable openDialog) {
         super(brain);
         this.openDialog = openDialog;
     }

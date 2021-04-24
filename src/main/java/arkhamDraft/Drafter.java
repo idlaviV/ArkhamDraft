@@ -11,7 +11,7 @@ public class Drafter {
     private DraftingBox draftingBox = new DraftingBox(); //Box of cards which can be drafted from
 
     private Deck draftedCards = new Deck();
-    private Deck draftedDeck = new Deck();
+    private Deck deck = new Deck();
     private final Deck sideboard = new Deck();
 
     private final boolean secondCore;
@@ -21,6 +21,12 @@ public class Drafter {
     public Drafter(CardBox ownedCardBox, boolean secondCore) {
         this.ownedCardBox = ownedCardBox;
         this.secondCore = secondCore;
+    }
+
+    public Drafter(CardBox ownedCards, boolean secondCore, Deck deck) {
+        this.ownedCardBox = ownedCards;
+        this.secondCore = secondCore;
+        this.deck = deck;
     }
 
     public void initializeCardAddition(){
@@ -65,7 +71,7 @@ public class Drafter {
     }
 
     public void finalizeDraft() {
-        draftingBox.finalizeDraft(secondCore, draftedDeck);
+        draftingBox.finalizeDraft(secondCore, deck);
     }
 
     public void discardDraftingBox() {
@@ -73,7 +79,7 @@ public class Drafter {
     }
 
     public void addCardToDeckFromDraftedCards(Card card) {
-        addCardFromDeckToDeck(draftedCards, draftedDeck, card);
+        addCardFromDeckToDeck(draftedCards, deck, card);
     }
 
     public void addCardToSideboard(Card card) {
@@ -81,7 +87,7 @@ public class Drafter {
     }
 
     public void addCardToDeckFromSideboard(Card card) {
-        addCardFromDeckToDeck(sideboard, draftedDeck, card);
+        addCardFromDeckToDeck(sideboard, deck, card);
     }
 
     private void addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, int index) {
@@ -100,7 +106,7 @@ public class Drafter {
     }
 
     public void addCardFromDraftToDeck(Card card, int index) {
-        addCardFromDeckToDeck(draftedCards, draftedDeck, card, index);
+        addCardFromDeckToDeck(draftedCards, deck, card, index);
     }
 
     public void addCardFromDraftToSide(Card card, int index) {
@@ -108,7 +114,7 @@ public class Drafter {
     }
 
     public void addCardFromSideToDeck(Card card, int index) {
-        addCardFromDeckToDeck(sideboard, draftedDeck, card, index);
+        addCardFromDeckToDeck(sideboard, deck, card, index);
     }
 
     private void addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, Card card) {
@@ -121,12 +127,12 @@ public class Drafter {
         discardCardFromAnyDeck(sideboard, index);
     }
 
-    public void discardCardFromDraftedDeck(Card card) {
-        discardCardFromDraftedDeck(draftedDeck.getIndex(card));
+    public void discardCardFromDeck(Card card) {
+        discardCardFromDeck(deck.getIndex(card));
     }
 
-    private void discardCardFromDraftedDeck(int index) {
-        discardCardFromAnyDeck(draftedDeck, index);
+    private void discardCardFromDeck(int index) {
+        discardCardFromAnyDeck(deck, index);
     }
 
     private void discardCardFromAnyDeck(Deck deck, int index) {
@@ -136,7 +142,7 @@ public class Drafter {
     }
 
     public void sortDeck(Comparator<Card> comparator) {
-        draftedDeck.sortDeck(comparator);
+        deck.sortDeck(comparator);
     }
 
     public void sortDraftedCards(Comparator<Card> comparator) {
@@ -182,8 +188,8 @@ public class Drafter {
         return draftedCards;
     }
 
-    public Deck getDraftedDeck() {
-        return draftedDeck;
+    public Deck getDeck() {
+        return deck;
     }
 
     public Deck getSideboard() {
@@ -199,11 +205,11 @@ public class Drafter {
     }
 
     public void addCardsToDeck(List<Card> cards) {
-        draftedDeck.addCards(cards);
+        deck.addCards(cards);
     }
 
     public void disposeDeck() {
-        draftedDeck = new Deck();
+        deck = new Deck();
     }
 
     public void clear() {
@@ -213,13 +219,36 @@ public class Drafter {
         filterList.clear();
     }
 
-    public int getNumberOfCardsInDraftingDeck() {
+    public int getNumberOfCardsInPhysicalDraftingBox() {
         return draftingBox.getPhysicalDraftingBoxSize();
     }
 
 
     public int getNumberOfCardsInDeck() {
-        draftedDeck.tidy();
-        return draftedDeck.getSize();
+        deck.tidy();
+        return deck.getSize();
+    }
+
+    public void updateFromNewDrafter(DraftingBox draftingBox, Deck deck) {
+        clear();
+        this.draftingBox = draftingBox;
+        this.deck = deck;
+    }
+
+    public DraftingBox getDraftingBox() {
+        return draftingBox;
+    }
+
+    @Override
+    public String toString() {
+        return "Drafter{"
+                + draftingBox.getPhysicalDraftingBox().size()
+                + "/"
+                + draftedCards.getSize()
+                + "/"
+                + deck.getSize()
+                + "/"
+                + sideboard.getSize()
+                + "}";
     }
 }

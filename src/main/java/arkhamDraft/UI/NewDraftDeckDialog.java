@@ -2,6 +2,7 @@ package arkhamDraft.UI;
 
 import arkhamDraft.Brain;
 import arkhamDraft.CardFilter;
+import arkhamDraft.UI.workerPool.CloseNewDraftDeckDialogWorker;
 import arkhamDraft.UI.workerPool.DeleteWorker;
 import arkhamDraft.UI.workerPool.FinalizeDraftDeckWorker;
 
@@ -9,6 +10,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -38,7 +41,7 @@ public class NewDraftDeckDialog extends JDialog {
         setSize(300,300);
         setLocation(100,100);
         setModal(true);
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setCloseOperation();
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         JPanel currentDraftDeckPanel = new JPanel();
@@ -51,6 +54,46 @@ public class NewDraftDeckDialog extends JDialog {
         add(initializeButtonPanel());
 
 
+    }
+
+    private void setCloseOperation() {
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                //new CloseNewDraftDeckDialogWorker(brain);
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
     }
 
     private Component initializeButtonPanel() {

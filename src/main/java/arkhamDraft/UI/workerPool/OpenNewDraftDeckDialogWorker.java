@@ -1,21 +1,19 @@
 package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
-import arkhamDraft.UI.NewDraftDeckDialog;
 
 public class OpenNewDraftDeckDialogWorker extends AbstractWorker {
 
-    private final NewDraftDeckDialog newDraftDeckDialog;
+    private final Runnable openNewDraftDeckDialog;
 
-    public OpenNewDraftDeckDialogWorker(Brain brain, NewDraftDeckDialog newDraftDeckDialog) {
+    public OpenNewDraftDeckDialogWorker(Brain brain, Runnable openNewDraftDeckDialog) {
         super(brain);
-        this.newDraftDeckDialog = newDraftDeckDialog;
+        this.openNewDraftDeckDialog = openNewDraftDeckDialog;
     }
 
     @Override
     protected void update() {
-        newDraftDeckDialog.tidyUp();
-        newDraftDeckDialog.setVisible(true);
+        openNewDraftDeckDialog.run();
     }
 
     @Override

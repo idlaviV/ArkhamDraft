@@ -31,9 +31,9 @@ public class LoadDeckWorker extends AbstractWorker {
     @Override
     protected Boolean doInBackground() throws Exception {
         brain.guiOpensNewDraftDeckDialog();
+        brain.guiFinalizeDraftDeck();
         brain.disposeDeck();
         brain.buildDeckFromFile(file);
-        brain.clearDrafter();
         return true;
     }
 }
