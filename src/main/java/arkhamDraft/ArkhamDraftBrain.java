@@ -13,6 +13,7 @@ public class ArkhamDraftBrain implements Brain{
     private Drafter drafter;
     private Drafter newDrafter;
     private CardBox masterCardBox;
+    public boolean changedFlag = false;
     private final SettingsManager settingsManager;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -332,6 +333,16 @@ public class ArkhamDraftBrain implements Brain{
     @Override
     public SettingsManager getSettingsManager() {
         return settingsManager;
+    }
+
+    @Override
+    public void setChangedFlag(boolean newFlag) {
+        this.changedFlag = newFlag;
+    }
+
+    @Override
+    public boolean getChangedFlag() {
+        return changedFlag;
     }
 
     @Override

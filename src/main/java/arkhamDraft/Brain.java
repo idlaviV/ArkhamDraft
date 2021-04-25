@@ -76,5 +76,9 @@ public interface Brain {
 
     SettingsManager getSettingsManager();
 
+    void setChangedFlag(boolean newFlag);
+
+    boolean getChangedFlag();
+
     //void guiClosesNewDraftDeckDialog();
 }

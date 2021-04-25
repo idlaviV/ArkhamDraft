@@ -304,13 +304,6 @@ public class Card {
         return compareIntegers(faction1, faction2);
     };
 
-    private static final Comparator<Card> codeComp = (card1, card2) -> {
-        Integer code1 = Integer.parseInt(card1.getCode());
-        Integer code2 = Integer.parseInt(card2.getCode());
-        return compareIntegers(code1, code2);
-    };
-
-
     private static Integer compareIntegers(Integer i1, Integer i2) {
         if (i1 == null && i2 == null) return 0;
         if (i1 == null) return -1;
@@ -356,26 +349,16 @@ public class Card {
         }
 
         int compare = factionComp.thenComparing(xpC.thenComparing(nameComp)).compare(this, c);
-        if (this.code == "04242" && c.getCode() == "60314") {
-            System.out.println("moment!");
-        }
 
-        return compare ==0; //TODO: das löst nicht das SlipAwayproblem
+        return compare == 0;
     }
 
     public int hashCode() {
-        if (code == "03009") {
-            System.out.println("Moment");
-        }
         String xpString = "";
-        String factionString = "";
         if (xp != null) {
             xpString += xp;
         }
-        if (faction_code != null) {
-            factionString = faction_code;
-        }
-        String identifier = factionString + name + xpString;
+        String identifier = faction_code + real_name + subname + xpString;
         return identifier.hashCode();
     }
 
