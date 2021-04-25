@@ -2,7 +2,6 @@ package arkhamDraft.UI;
 
 import arkhamDraft.Brain;
 import arkhamDraft.CardFilter;
-import arkhamDraft.UI.workerPool.CloseNewDraftDeckDialogWorker;
 import arkhamDraft.UI.workerPool.DeleteWorker;
 import arkhamDraft.UI.workerPool.FinalizeDraftDeckWorker;
 
@@ -71,7 +70,6 @@ public class NewDraftDeckDialog extends JDialog {
 
             @Override
             public void windowClosed(WindowEvent e) {
-                //new CloseNewDraftDeckDialogWorker(brain);
             }
 
             @Override

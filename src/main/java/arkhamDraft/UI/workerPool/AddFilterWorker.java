@@ -10,7 +10,7 @@ public class AddFilterWorker extends AbstractWorker {
     private final Runnable addFilterFromUserSelection;
 
     public AddFilterWorker(Brain brain, Runnable updateFilterListFromBrain, Consumer<Integer> updateCurrentCardsFiltered, Runnable addFilterFromUserSelection) {
-        super(brain);
+        super(brain, false);
         this.updateFilterListFromBrain = updateFilterListFromBrain;
         this.updateCurrentCardsFiltered = updateCurrentCardsFiltered;
         this.addFilterFromUserSelection = addFilterFromUserSelection;
@@ -23,7 +23,7 @@ public class AddFilterWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() {
+    protected Boolean backgroundTask() {
         addFilterFromUserSelection.run();
         return true;
     }

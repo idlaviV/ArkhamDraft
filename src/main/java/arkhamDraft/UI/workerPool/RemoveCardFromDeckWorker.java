@@ -9,7 +9,7 @@ public class RemoveCardFromDeckWorker extends AbstractWorker {
     private final CardCheckBoxList deckList;
 
     public RemoveCardFromDeckWorker(Brain brain, Runnable updateAllPanels, CardCheckBoxList deckList) {
-        super(brain);
+        super(brain, false);
         this.updateAllPanels = updateAllPanels;
         this.deckList = deckList;
     }
@@ -20,7 +20,7 @@ public class RemoveCardFromDeckWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
         brain.guiDiscardFromDraftedDeck(deckList.getCheckedCards());
         return true;
     }

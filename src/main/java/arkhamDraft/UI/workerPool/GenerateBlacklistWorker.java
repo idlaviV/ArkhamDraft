@@ -6,7 +6,7 @@ public class GenerateBlacklistWorker extends AbstractWorker {
     private final SettingsManager settingsManager;
 
     public GenerateBlacklistWorker(SettingsManager settingsManager) {
-        super(null);
+        super(null, false);
         this.settingsManager = settingsManager;
     }
 
@@ -16,7 +16,7 @@ public class GenerateBlacklistWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
         settingsManager.generateDefaultBlacklist();
         return true;
     }

@@ -6,7 +6,7 @@ public class DeleteWorker extends AbstractWorker {
     private final Runnable draftingBoxWasDiscarded;
 
     public DeleteWorker(Brain brain, Runnable draftingBoxWasDiscarded) {
-        super(brain);
+        super(brain, false);
         this.draftingBoxWasDiscarded = draftingBoxWasDiscarded;
     }
 
@@ -16,7 +16,7 @@ public class DeleteWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
         brain.guiDeleteDeck();
         return true;
     }

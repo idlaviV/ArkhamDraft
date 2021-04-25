@@ -8,13 +8,13 @@ public class AddFromSideBoardWorker extends AbstractWorker {
     private final Runnable updatePanels;
 
     public AddFromSideBoardWorker(Brain brain, CardCheckBoxList sideboardList, Runnable updatePanels) {
-        super(brain);
+        super(brain, false);
         this.sideboardList = sideboardList;
         this.updatePanels = updatePanels;
     }
 
     @Override
-    protected Boolean doInBackground() {
+    protected Boolean backgroundTask() {
         brain.guiAddFromSideboard(sideboardList.getCheckedCards());
         return true;
     }

@@ -10,14 +10,14 @@ public class AddSideboardWorker extends AbstractWorker {
     private final Runnable printCardsToSideboardPanel;
 
     public AddSideboardWorker(Brain brain, CardCheckBoxList draftedCardsList, Runnable printCardsToDraftPanel, Runnable printCardsToSideboardPanel) {
-        super(brain);
+        super(brain, false);
         this.draftedCardsList = draftedCardsList;
         this.printCardsToDraftPanel = printCardsToDraftPanel;
         this.printCardsToSideboardPanel = printCardsToSideboardPanel;
     }
 
     @Override
-    protected Boolean doInBackground() {
+    protected Boolean backgroundTask() {
         brain.guiAddToSideboard(draftedCardsList.getCheckedCards());
         return true;
     }

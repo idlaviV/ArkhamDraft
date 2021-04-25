@@ -13,6 +13,7 @@ public class Drafter {
     private Deck draftedCards = new Deck();
     private Deck deck = new Deck();
     private final Deck sideboard = new Deck();
+    private boolean deckChangedFlag = false;
 
     private final boolean secondCore;
     private ArrayList<CardFilter> filterList = new ArrayList<>(); //only used by gui
@@ -23,10 +24,11 @@ public class Drafter {
         this.secondCore = secondCore;
     }
 
-    public Drafter(CardBox ownedCards, boolean secondCore, Deck deck) {
+    public Drafter(CardBox ownedCards, boolean secondCore, Deck deck, boolean changedDeckFlag) {
         this.ownedCardBox = ownedCards;
         this.secondCore = secondCore;
         this.deck = deck;
+        this.deckChangedFlag = changedDeckFlag;
     }
 
     public void initializeCardAddition(){
@@ -80,6 +82,7 @@ public class Drafter {
 
     public void addCardToDeckFromDraftedCards(Card card) {
         addCardFromDeckToDeck(draftedCards, deck, card);
+        deckChangedFlag = true;
     }
 
     public void addCardToSideboard(Card card) {
@@ -88,6 +91,7 @@ public class Drafter {
 
     public void addCardToDeckFromSideboard(Card card) {
         addCardFromDeckToDeck(sideboard, deck, card);
+        deckChangedFlag = true;
     }
 
     private void addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, int index) {
@@ -107,6 +111,7 @@ public class Drafter {
 
     public void addCardFromDraftToDeck(Card card, int index) {
         addCardFromDeckToDeck(draftedCards, deck, card, index);
+        deckChangedFlag = true;
     }
 
     public void addCardFromDraftToSide(Card card, int index) {
@@ -115,6 +120,7 @@ public class Drafter {
 
     public void addCardFromSideToDeck(Card card, int index) {
         addCardFromDeckToDeck(sideboard, deck, card, index);
+        deckChangedFlag = true;
     }
 
     private void addCardFromDeckToDeck(Deck fromDeck, Deck toDeck, Card card) {
@@ -133,6 +139,7 @@ public class Drafter {
 
     private void discardCardFromDeck(int index) {
         discardCardFromAnyDeck(deck, index);
+        deckChangedFlag = true;
     }
 
     private void discardCardFromAnyDeck(Deck deck, int index) {
@@ -206,10 +213,12 @@ public class Drafter {
 
     public void addCardsToDeck(List<Card> cards) {
         deck.addCards(cards);
+        deckChangedFlag = true;
     }
 
     public void disposeDeck() {
         deck = new Deck();
+        deckChangedFlag = false;
     }
 
     public void clear() {
@@ -229,10 +238,11 @@ public class Drafter {
         return deck.getSize();
     }
 
-    public void updateFromNewDrafter(DraftingBox draftingBox, Deck deck) {
+    public void updateFromNewDrafter(DraftingBox draftingBox, Deck deck, boolean newDeckChangedFlag) {
         clear();
         this.draftingBox = draftingBox;
         this.deck = deck;
+        deckChangedFlag = newDeckChangedFlag;
     }
 
     public DraftingBox getDraftingBox() {
@@ -250,5 +260,9 @@ public class Drafter {
                 + "/"
                 + sideboard.getSize()
                 + "}";
+    }
+
+    public boolean getChangedFlag() {
+        return deckChangedFlag;
     }
 }

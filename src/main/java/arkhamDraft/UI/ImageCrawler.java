@@ -81,7 +81,7 @@ public class ImageCrawler extends SwingWorker<Boolean, Void> {
     protected void done() {
         boolean status;
         try {
-            // Retrieve the return value of doInBackground.
+            // Retrieve the return value of backgroundTask.
             status = get();
             if (status) {
                 update();
@@ -91,7 +91,7 @@ public class ImageCrawler extends SwingWorker<Boolean, Void> {
             e.printStackTrace();
         } catch (ExecutionException e) {
             // This is thrown if we throw an exception
-            // from doInBackground.
+            // from backgroundTask.
             e.printStackTrace();
         }
     }

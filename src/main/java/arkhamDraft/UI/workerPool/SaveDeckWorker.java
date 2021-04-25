@@ -10,7 +10,7 @@ public class SaveDeckWorker extends AbstractWorker {
     private final File file;
 
     public SaveDeckWorker(Brain brain, File file) {
-        super(brain);
+        super(brain, false);
         this.file = file;
     }
 
@@ -20,7 +20,7 @@ public class SaveDeckWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
             brain.guiSaveDeck(file);
         return true;
     }

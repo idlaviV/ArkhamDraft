@@ -6,7 +6,7 @@ public class NewDraftWorker extends AbstractWorker {
     private final Runnable openDialog;
 
     public NewDraftWorker(Brain brain, Runnable openDialog) {
-        super(brain);
+        super(brain, true);
         this.openDialog = openDialog;
     }
 
@@ -16,7 +16,7 @@ public class NewDraftWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
         brain.guiCreateNewDeck();
         return true;
     }

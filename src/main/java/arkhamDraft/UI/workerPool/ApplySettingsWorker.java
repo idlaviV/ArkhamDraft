@@ -18,7 +18,7 @@ public class ApplySettingsWorker extends AbstractWorker {
 
 
     public ApplySettingsWorker(SettingsManager manager, boolean regularCards, boolean secondCore, TreePath[] checkedPaths, Consumer<Boolean> changesWereMaid) {
-        super(null);
+        super(null, false);
         this.manager = manager;
         this.regularCards = regularCards;
         this.secondCore = secondCore;
@@ -32,7 +32,7 @@ public class ApplySettingsWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
         manager.toggleRegular(regularCards);
         manager.toggleSecondCore(secondCore);
         updateOwnedPacks();

@@ -8,14 +8,14 @@ public class DraftCardsWorker extends AbstractWorker {
     private final Runnable updateLabelCurrentNumberOfCardsInDraftingDeck;
 
     public DraftCardsWorker(Brain brain, int numberOfDraftedCards, Runnable printCardsToDraftPanel, Runnable updateLabelCurrentNumberOfCardsInDraftingDeck) {
-        super(brain);
+        super(brain, false);
         this.numberOfDraftedCards = numberOfDraftedCards;
         this.printCardsToDraftPanel = printCardsToDraftPanel;
         this.updateLabelCurrentNumberOfCardsInDraftingDeck = updateLabelCurrentNumberOfCardsInDraftingDeck;
     }
 
     @Override
-    protected Boolean doInBackground() {
+    protected Boolean backgroundTask() {
         brain.guiDraftCardsNew(numberOfDraftedCards);
         return true;
     }

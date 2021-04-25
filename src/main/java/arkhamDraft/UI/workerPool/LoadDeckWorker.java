@@ -13,7 +13,7 @@ public class LoadDeckWorker extends AbstractWorker {
     private final Runnable updateOtherPanels;
 
     public LoadDeckWorker(Brain brain, File file, Runnable printCardsToDeckPanel, Runnable enablers, Runnable updatePanelsAfterwards) {
-        super(brain);
+        super(brain, true);
         this.file = file;
         this.printCardsToDeckPanel = printCardsToDeckPanel;
         this.enablers = enablers;
@@ -29,7 +29,7 @@ public class LoadDeckWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
         brain.guiOpensNewDraftDeckDialog();
         brain.guiFinalizeDraftDeck();
         brain.disposeDeck();

@@ -12,7 +12,7 @@ public class SortDeckWorker extends AbstractWorker {
     private final Runnable updateDeckPanel;
 
     public SortDeckWorker(Brain brain, JComboBox<String> sortComboBox, Runnable updateDeckPanel) {
-        super(brain);
+        super(brain, false);
         this.sortComboBox = sortComboBox;
         this.updateDeckPanel = updateDeckPanel;
     }
@@ -24,7 +24,7 @@ public class SortDeckWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() {
+    protected Boolean backgroundTask() {
         brain.sortDeck((String) Objects.requireNonNull(sortComboBox.getSelectedItem()));
         return true;
     }

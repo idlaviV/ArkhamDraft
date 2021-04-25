@@ -8,13 +8,13 @@ public class RedraftWorker extends AbstractWorker {
     private final Runnable printCardsToDraftPanel;
 
     public RedraftWorker(Brain brain, CardCheckBoxList draftedCardsList, Runnable printCardsToDraftPanel) {
-        super(brain);
+        super(brain, false);
         this.draftedCardsList = draftedCardsList;
         this.printCardsToDraftPanel = printCardsToDraftPanel;
     }
 
     @Override
-    protected Boolean doInBackground() {
+    protected Boolean backgroundTask() {
         brain.guiRedraft(draftedCardsList.getCheckedCards());
         return true;
     }

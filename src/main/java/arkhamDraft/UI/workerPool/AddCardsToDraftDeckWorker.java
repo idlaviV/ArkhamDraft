@@ -12,7 +12,7 @@ public class AddCardsToDraftDeckWorker extends AbstractWorker {
     private final Supplier<SwingWorker<Integer, Void>> addCards;
 
     public AddCardsToDraftDeckWorker(Brain brain, HintTextField valueSelector, Runnable dispose, Supplier<SwingWorker<Integer, Void>> addCards) {
-        super(brain);
+        super(brain, false);
         this.valueSelector = valueSelector;
         this.dispose = dispose;
         this.addCards = addCards;
@@ -26,7 +26,7 @@ public class AddCardsToDraftDeckWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() {
+    protected Boolean backgroundTask() {
         brain.guiLeavesFilterCardsDialog();
         return true;
     }

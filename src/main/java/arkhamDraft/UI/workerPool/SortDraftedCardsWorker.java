@@ -10,7 +10,7 @@ public class SortDraftedCardsWorker extends AbstractWorker {
     private final Runnable updateDraftingAndSideboardPanel;
 
     public SortDraftedCardsWorker(Brain brain, JComboBox<String> sortComboBox, Runnable updateDraftingAndSideboardPanel) {
-        super(brain);
+        super(brain, false);
         this.sortComboBox = sortComboBox;
         this.updateDraftingAndSideboardPanel = updateDraftingAndSideboardPanel;
     }
@@ -21,7 +21,7 @@ public class SortDraftedCardsWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
         brain.sortDraftedCards((String) Objects.requireNonNull(sortComboBox.getSelectedItem()));
         return true;
     }

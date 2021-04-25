@@ -12,7 +12,7 @@ public class DragAndDropWorker extends AbstractWorker {
     private final Runnable updateAllPanels;
 
     public DragAndDropWorker(Brain brain, CardPanel from, CardPanel to, Card card, int row, Runnable updateAllPanels) {
-        super(brain);
+        super(brain, false);
         this.from = from;
         this.to = to;
         this.card = card;
@@ -26,7 +26,7 @@ public class DragAndDropWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
         if (brain.guiInsertCardFromPanelToPanel(from, to, card, row)) {
             return true;
         } else {

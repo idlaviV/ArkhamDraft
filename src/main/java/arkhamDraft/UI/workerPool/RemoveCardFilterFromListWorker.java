@@ -12,7 +12,7 @@ public class RemoveCardFilterFromListWorker extends AbstractWorker {
     private final Consumer<Integer> updateCurrentCardsFiltered;
 
     public RemoveCardFilterFromListWorker(Brain brain, CardFilter cardFilter, Runnable revalidate, Runnable repaint, Consumer<Integer> updateCurrentCardsFiltered) {
-        super(brain);
+        super(brain, false);
         this.cardFilter = cardFilter;
         this.revalidate = revalidate;
         this.repaint = repaint;
@@ -27,7 +27,7 @@ public class RemoveCardFilterFromListWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
         brain.removeCardFilterFromList(cardFilter);
         return true;
     }

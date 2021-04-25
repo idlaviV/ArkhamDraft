@@ -8,7 +8,7 @@ public class DiscardFromSideBoardWorker extends AbstractWorker {
     private final Runnable printCardsToSideboardPanel;
 
     public DiscardFromSideBoardWorker(Brain brain, CardCheckBoxList sideBoardList, Runnable printCardsToSideboardPanel) {
-        super(brain);
+        super(brain, false);
         this.sideBoardList = sideBoardList;
         this.printCardsToSideboardPanel = printCardsToSideboardPanel;
     }
@@ -19,7 +19,7 @@ public class DiscardFromSideBoardWorker extends AbstractWorker {
     }
 
     @Override
-    protected Boolean doInBackground() throws Exception {
+    protected Boolean backgroundTask() throws Exception {
         brain.guiDiscardFromSideboard(sideBoardList.getCheckedCards());
         return true;
     }

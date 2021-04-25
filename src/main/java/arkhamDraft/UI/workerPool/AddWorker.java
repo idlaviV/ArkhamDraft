@@ -9,14 +9,14 @@ public class AddWorker extends AbstractWorker {
     private final Runnable printCardsToDeckPanel;
 
     public AddWorker(Brain brain, CardCheckBoxList draftedCardsList, Runnable printCardsToDraftPanel, Runnable printCardsToDeckPanel) {
-        super(brain);
+        super(brain, false);
         this.draftedCardsList = draftedCardsList;
         this.printCardsToDraftPanel = printCardsToDraftPanel;
         this.printCardsToDeckPanel = printCardsToDeckPanel;
     }
 
     @Override
-    protected Boolean doInBackground() {
+    protected Boolean backgroundTask() {
         brain.guiAddToDeck(draftedCardsList.getCheckedCards());
         return true;
     }

@@ -13,7 +13,6 @@ public class ArkhamDraftBrain implements Brain{
     private Drafter drafter;
     private Drafter newDrafter;
     private CardBox masterCardBox;
-    public boolean changedFlag = false;
     private final SettingsManager settingsManager;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -109,13 +108,13 @@ public class ArkhamDraftBrain implements Brain{
     public void guiFinalizeDraftDeck() {
         newDrafter.finalizeDraft();
         //startDraft();
-        drafter.updateFromNewDrafter(newDrafter.getDraftingBox(), newDrafter.getDeck());
+        drafter.updateFromNewDrafter(newDrafter.getDraftingBox(), newDrafter.getDeck(), newDrafter.getChangedFlag());
     }
 
     /*wird geöffnet wenn Deck erweitert wird*/
     public void guiOpensNewDraftDeckDialog() {
         startDraft();
-        newDrafter = new Drafter(settingsManager.getOwnedCards(masterCardBox), settingsManager.getSecondCore(), drafter.getDeck());
+        newDrafter = new Drafter(settingsManager.getOwnedCards(masterCardBox), settingsManager.getSecondCore(), drafter.getDeck(), drafter.getChangedFlag());
     }
 
     public void loadFilterList(File file, Supplier<SwingWorker<Integer, Void>> addCards) {
@@ -336,13 +335,11 @@ public class ArkhamDraftBrain implements Brain{
     }
 
     @Override
-    public void setChangedFlag(boolean newFlag) {
-        this.changedFlag = newFlag;
-    }
-
-    @Override
     public boolean getChangedFlag() {
-        return changedFlag;
+        if (drafter == null) {
+            return false;
+        }
+        return drafter.getChangedFlag();
     }
 
     @Override
