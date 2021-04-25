@@ -350,7 +350,33 @@ public class Card {
 
         // typecast o to Complex so that we can compare data members
         Card c = (Card) o;
-        return codeComp.compare(this, c) == 0;
+
+        if (code.equals(c.getCode())) {
+            return true;
+        }
+
+        int compare = factionComp.thenComparing(xpC.thenComparing(nameComp)).compare(this, c);
+        if (this.code == "04242" && c.getCode() == "60314") {
+            System.out.println("moment!");
+        }
+
+        return compare ==0; //TODO: das löst nicht das SlipAwayproblem
+    }
+
+    public int hashCode() {
+        if (code == "03009") {
+            System.out.println("Moment");
+        }
+        String xpString = "";
+        String factionString = "";
+        if (xp != null) {
+            xpString += xp;
+        }
+        if (faction_code != null) {
+            factionString = faction_code;
+        }
+        String identifier = factionString + name + xpString;
+        return identifier.hashCode();
     }
 
     private static String rewriteValues(List<String> values) {
