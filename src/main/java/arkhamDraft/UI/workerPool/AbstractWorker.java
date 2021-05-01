@@ -1,9 +1,11 @@
 package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
-import arkhamDraft.UI.SavePromptDialog;
+import arkhamDraft.UI.SaveActionListener;
+import arkhamDraft.UI.SavePromptAsker;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.util.concurrent.ExecutionException;
 
 public abstract class AbstractWorker extends SwingWorker<Boolean, Void> {
@@ -39,24 +41,21 @@ public abstract class AbstractWorker extends SwingWorker<Boolean, Void> {
 
     protected Boolean doInBackground() throws Exception {
         if (checkChangedFlag && brain.getChangedFlag()) {
-            System.out.println("Something changed");
-            SavePromptDialog dialog = new SavePromptDialog();
-            dialog.setVisible(true);
-            System.out.println("Entering checkDialog");
-            checkDialog(dialog);
+            int promptValue = SavePromptAsker.promptUser();
+            if (promptValue == SavePromptAsker.SAVE_NO) {
+                return backgroundTask();
+            }
+            if (promptValue == SavePromptAsker.CANCEL) {
+                return false;
+            }
+            if (promptValue == SavePromptAsker.SAVE_YES) {
+                System.out.println("User wants to Save");
+                return backgroundTask();
+            }
         }
         return backgroundTask();
     }
 
-    private void checkDialog(SavePromptDialog dialog) throws InterruptedException {
-        while (!dialog.hasFeedback()) {
-            System.out.println("wait");
-            Thread.sleep(1000);
-        }
-        int promptResult = dialog.getPromptResult();
-        dialog.dispose();
-        System.out.println(promptResult);
-    }
 
     protected abstract Boolean backgroundTask() throws Exception;
 }
