@@ -39,10 +39,23 @@ public abstract class AbstractWorker extends SwingWorker<Boolean, Void> {
 
     protected Boolean doInBackground() throws Exception {
         if (checkChangedFlag && brain.getChangedFlag()) {
+            System.out.println("Something changed");
             SavePromptDialog dialog = new SavePromptDialog();
             dialog.setVisible(true);
+            System.out.println("Entering checkDialog");
+            checkDialog(dialog);
         }
         return backgroundTask();
+    }
+
+    private void checkDialog(SavePromptDialog dialog) throws InterruptedException {
+        while (!dialog.hasFeedback()) {
+            System.out.println("wait");
+            Thread.sleep(1000);
+        }
+        int promptResult = dialog.getPromptResult();
+        dialog.dispose();
+        System.out.println(promptResult);
     }
 
     protected abstract Boolean backgroundTask() throws Exception;

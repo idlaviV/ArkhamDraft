@@ -4,6 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SavePromptDialog extends JDialog {
+    private boolean hasFinished = false;
+    private int promptResult = DEFAULT;
+    static int DEFAULT = 0;
+    static int SAVE_YES = 1;
+    static int SAVE_NO = 2;
+    static int CANCEL = 3;
 
     public SavePromptDialog() {
         super();
@@ -33,16 +39,28 @@ public class SavePromptDialog extends JDialog {
 
     private Component initializeCancelButton() {
         JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener((e)->{
+            promptResult = CANCEL;
+            hasFinished = true;
+        });
         return cancelButton;
     }
 
     private Component initializeNoButton() {
         JButton noButton = new JButton("No");
+        noButton.addActionListener((e)->{
+            promptResult = SAVE_NO;
+            hasFinished = true;
+        });
         return noButton;
     }
 
     private Component initializeYesButton() {
         JButton yesButton = new JButton("Yes");
+        yesButton.addActionListener((e)->{
+            promptResult = SAVE_YES;
+            hasFinished = true;
+        });
         return yesButton;
     }
 
@@ -55,5 +73,13 @@ public class SavePromptDialog extends JDialog {
         textPanel.add(text1);
         textPanel.add(text2);
         return textPanel;
+    }
+
+    public boolean hasFeedback() {
+        return hasFinished;
+    }
+
+    public int getPromptResult() {
+        return promptResult;
     }
 }
