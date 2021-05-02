@@ -2,6 +2,7 @@ package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
 import arkhamDraft.UI.DeckSaver;
+import arkhamDraft.UI.MyFileChooser;
 import arkhamDraft.UI.SavePromptAsker;
 
 import javax.swing.*;
@@ -51,7 +52,7 @@ public abstract class AbstractWorker extends SwingWorker<Boolean, Void> {
                 return false;
             }
             if (promptValue == SavePromptAsker.SAVE_YES) {
-                if (DeckSaver.saveDeck(new JFileChooser(), parent, brain)) {
+                if (DeckSaver.saveDeck(new MyFileChooser(), parent, brain)) {
                     return backgroundTask();
                 }
                 return false;

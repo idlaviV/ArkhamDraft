@@ -171,6 +171,7 @@ public class ArkhamDraftBrain implements Brain{
                     }
                 }
             }
+            drafter.setChangeFlagToFalse();
         } catch (IOException e) {
             e.printStackTrace();
         }

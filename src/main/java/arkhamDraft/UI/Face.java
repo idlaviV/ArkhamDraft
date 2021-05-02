@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class Face extends JFrame {
@@ -29,7 +30,7 @@ public class Face extends JFrame {
     private EverythingDisablerAndReenabler sideboardPanelEnabler;
     private final ArrayList<Runnable> deckComponentEnablers = new ArrayList<>();
     private boolean draftEnabled = false;
-    private final JFileChooser fc = new JFileChooser();
+    private final JFileChooser fc = new MyFileChooser();
     private final ArrayList<Container> componentsToBeDisabled = new ArrayList<Container>();
     private final JLabel labelCurrentCardsInDraftingDeck = new JLabel();
     private final JLabel deckCountLabel = new JLabel("deck panel: 0");
@@ -46,6 +47,7 @@ public class Face extends JFrame {
         super();
         this.brain = brain;
         settingsDialog = new SettingsDialog(brain.getSettingsManager());
+        JOptionPane.setDefaultLocale(Locale.ENGLISH);
     }
 
 

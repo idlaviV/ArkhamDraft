@@ -5,8 +5,6 @@ import arkhamDraft.UI.workerPool.SaveDeckWorker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 public class DeckSaver {
@@ -20,6 +18,7 @@ public class DeckSaver {
             directory.mkdir();
         }
         fc.setCurrentDirectory(directory);
+
         int returnVal = fc.showSaveDialog(parent);
         boolean approved = (returnVal == JFileChooser.APPROVE_OPTION);
         if (approved) {

@@ -14,7 +14,7 @@ public class LoadDeckWorker extends AbstractWorker {
     private final Runnable updateOtherPanels;
 
     public LoadDeckWorker(Brain brain, Component parent, File file, Runnable printCardsToDeckPanel, Runnable enablers, Runnable updatePanelsAfterwards) {
-        super(brain, true, parent);
+        super(brain, false, parent);
         this.file = file;
         this.printCardsToDeckPanel = printCardsToDeckPanel;
         this.enablers = enablers;
