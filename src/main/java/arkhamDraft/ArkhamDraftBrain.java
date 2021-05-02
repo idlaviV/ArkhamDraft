@@ -153,6 +153,7 @@ public class ArkhamDraftBrain implements Brain{
             fileWriter.write(println+"\n");
         }
         fileWriter.close();
+        drafter.setChangeFlagToFalse();
     }
 
     @Override

@@ -2,6 +2,7 @@ package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
 
+import java.awt.*;
 import java.util.function.Consumer;
 
 public class AddFilterWorker extends AbstractWorker {
@@ -9,8 +10,8 @@ public class AddFilterWorker extends AbstractWorker {
     private final Consumer<Integer> updateCurrentCardsFiltered;
     private final Runnable addFilterFromUserSelection;
 
-    public AddFilterWorker(Brain brain, Runnable updateFilterListFromBrain, Consumer<Integer> updateCurrentCardsFiltered, Runnable addFilterFromUserSelection) {
-        super(brain, false);
+    public AddFilterWorker(Brain brain, Component parent, Runnable updateFilterListFromBrain, Consumer<Integer> updateCurrentCardsFiltered, Runnable addFilterFromUserSelection) {
+        super(brain, false, parent);
         this.updateFilterListFromBrain = updateFilterListFromBrain;
         this.updateCurrentCardsFiltered = updateCurrentCardsFiltered;
         this.addFilterFromUserSelection = addFilterFromUserSelection;

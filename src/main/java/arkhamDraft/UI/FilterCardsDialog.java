@@ -62,6 +62,7 @@ public class FilterCardsDialog extends JDialog {
         addCardsToDraftDeckButton.addActionListener(e -> {
             new AddCardsToDraftDeckWorker(
                     brain,
+                    this,
                     valueSelector,
                     this::dispose,
                     addCards
@@ -76,6 +77,7 @@ public class FilterCardsDialog extends JDialog {
         addFilterButton.setEnabled(false);
         addFilterButton.addActionListener(e -> new AddFilterWorker(
                 brain,
+                this,
                 this::updateFilterListFromBrain,
                 this::updateCurrentCardsFiltered,
                 this::addFilterFromUserSelection
@@ -246,7 +248,9 @@ public class FilterCardsDialog extends JDialog {
     }
 
     public void removeCardFilterFromList(CardFilter cardFilter) {
-        new RemoveCardFilterFromListWorker(brain,
+        new RemoveCardFilterFromListWorker(
+                brain,
+                this,
                 cardFilter,
                 this::revalidate,
                 this::repaint,

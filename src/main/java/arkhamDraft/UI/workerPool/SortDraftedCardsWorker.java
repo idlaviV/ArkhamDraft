@@ -3,6 +3,7 @@ package arkhamDraft.UI.workerPool;
 import arkhamDraft.Brain;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Objects;
 
 public class SortDraftedCardsWorker extends AbstractWorker {
@@ -10,7 +11,7 @@ public class SortDraftedCardsWorker extends AbstractWorker {
     private final Runnable updateDraftingAndSideboardPanel;
 
     public SortDraftedCardsWorker(Brain brain, JComboBox<String> sortComboBox, Runnable updateDraftingAndSideboardPanel) {
-        super(brain, false);
+        super(brain, false, null);
         this.sortComboBox = sortComboBox;
         this.updateDraftingAndSideboardPanel = updateDraftingAndSideboardPanel;
     }

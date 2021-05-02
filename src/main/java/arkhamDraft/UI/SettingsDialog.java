@@ -73,7 +73,7 @@ public class SettingsDialog extends JDialog {
     private Component initializeGenerateBlacklistButton() {
         JPanel generateBlacklistPanel = new JPanel();
         JButton generateBlacklistButton = new JButton("Generate Default Blacklist");
-        generateBlacklistButton.addActionListener(e -> new GenerateBlacklistWorker(settingsManager).execute());
+        generateBlacklistButton.addActionListener(e -> new GenerateBlacklistWorker(settingsManager, this).execute());
 
         generateBlacklistPanel.add(generateBlacklistButton);
         return generateBlacklistPanel;

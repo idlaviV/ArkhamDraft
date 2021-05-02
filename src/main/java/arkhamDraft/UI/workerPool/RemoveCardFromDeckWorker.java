@@ -3,13 +3,15 @@ package arkhamDraft.UI.workerPool;
 import arkhamDraft.Brain;
 import arkhamDraft.UI.CardCheckBoxList;
 
+import java.awt.*;
+
 public class RemoveCardFromDeckWorker extends AbstractWorker {
 
     private final Runnable updateAllPanels;
     private final CardCheckBoxList deckList;
 
-    public RemoveCardFromDeckWorker(Brain brain, Runnable updateAllPanels, CardCheckBoxList deckList) {
-        super(brain, false);
+    public RemoveCardFromDeckWorker(Brain brain, Component parent, Runnable updateAllPanels, CardCheckBoxList deckList) {
+        super(brain, false, parent);
         this.updateAllPanels = updateAllPanels;
         this.deckList = deckList;
     }

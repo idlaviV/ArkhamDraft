@@ -265,4 +265,8 @@ public class Drafter {
     public boolean getChangedFlag() {
         return deckChangedFlag;
     }
+
+    public void setChangeFlagToFalse() {
+        deckChangedFlag = false;
+    }
 }

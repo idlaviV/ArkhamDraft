@@ -9,10 +9,8 @@ import arkhamDraft.UI.workerPool.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -177,6 +175,7 @@ public class Face extends JFrame {
         }
         newDraftDeckButton.addActionListener(e -> new NewDraftWorker(
                 brain,
+                this,
                 this::openNewDraftDeckDialog
         ).execute());
         return newDraftDeckButton;
@@ -193,6 +192,7 @@ public class Face extends JFrame {
     private void runOpenNewDraftDeckDialog() {
         new OpenNewDraftDeckDialogWorker(
                 brain,
+                this,
                 this::openNewDraftDeckDialog
         ).execute();
     }
@@ -348,6 +348,7 @@ public class Face extends JFrame {
         JButton addSideboardButton = new JButton("To Sideboard");
         addSideboardButton.addActionListener(e -> new AddSideboardWorker(
                 brain,
+                this,
                 draftedCardsList,
                 this::printCardsToDraftPanel,
                 this::printCardsToSideboardPanel
@@ -360,6 +361,7 @@ public class Face extends JFrame {
         addButton.addActionListener(
                 e -> new AddWorker(
                         brain,
+                        this,
                         draftedCardsList,
                         this::printCardsToDraftPanel,
                         this::updateDeckPanel
@@ -372,6 +374,7 @@ public class Face extends JFrame {
         redraftButton.addActionListener(
                 e-> new RedraftWorker(
                         brain,
+                        this,
                         draftedCardsList,
                         this::printCardsToDraftPanel
                 ).execute()
@@ -384,6 +387,7 @@ public class Face extends JFrame {
         draftCardsButton.addActionListener(
             e -> new DraftCardsWorker(
                 brain,
+                    this,
                 spinnerModel.getNumber().intValue(),
                 this::printCardsToDraftPanel,
                 this::updateLabelCurrentCardsInDraftingDeck
@@ -425,6 +429,7 @@ public class Face extends JFrame {
         deckComponentEnablers.add(()->removeFromDeckButton.setEnabled(true));
         removeFromDeckButton.addActionListener(e -> new RemoveCardFromDeckWorker(
                 brain,
+                this,
                 this::updateAllPanels,
                 deckList
         ).execute());
@@ -442,37 +447,13 @@ public class Face extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        loadButton.addActionListener(e -> {
-            File directory = new File("./data/decks");
-            if (!directory.exists()) {
-                directory.mkdir();
-            }
-            fc.setCurrentDirectory(directory);
-            fc.setAcceptAllFileFilterUsed(false);
-            fc.setFileFilter(new FileFilter() {
-                @Override
-                public boolean accept(File f) {
-                    return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt");
-                }
-
-                @Override
-                public String getDescription() {
-                    return "Text Files (*.txt)";
-                }
-            });
-            int returnVal = fc.showOpenDialog(this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                new LoadDeckWorker(
-                        brain,
-                        file,
-                        this::updateDeckPanel,
-                        this::enableDeckComponents,
-                        this::updateDraftingAndSideboardPanel
-                ).execute();
-            }
-        });
+        loadButton.addActionListener(e-> new LoadButtonWorker(
+                brain,
+                this,
+                this::updateDeckPanel,
+                this::enableDeckComponents,
+                this::updateDraftingAndSideboardPanel
+        ).execute());
         return loadButton;
     }
 
@@ -499,20 +480,7 @@ public class Face extends JFrame {
         }
 
         saveButton.addActionListener(e -> {
-            File directory = new File("./data/decks");
-            if (!directory.exists()) {
-                directory.mkdir();
-            }
-            fc.setCurrentDirectory(directory);
-            int returnVal = fc.showSaveDialog(this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                String pathName = file.toPath().toString();
-                if (!pathName.endsWith(".txt")) {
-                    file = new File(pathName + ".txt");
-                }
-                new SaveDeckWorker(brain, file).execute();
-            }
+            DeckSaver.saveDeck(fc, this, brain);
         });
         return saveButton;
     }
@@ -568,6 +536,7 @@ public class Face extends JFrame {
         removeFromSideBoardButton.addActionListener(e ->
                 new DiscardFromSideBoardWorker(
                         brain,
+                        this,
                         sideboardList,
                         this::printCardsToSideboardPanel
                 ).execute());
@@ -579,6 +548,7 @@ public class Face extends JFrame {
         addFromSideBoardButton.addActionListener(e ->
                 new AddFromSideBoardWorker(
                         brain,
+                        this,
                         sideboardList,
                         this::updateAllPanels
                 ).execute());

@@ -5,6 +5,7 @@ import arkhamDraft.SettingsManager;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -18,7 +19,7 @@ public class ApplySettingsWorker extends AbstractWorker {
 
 
     public ApplySettingsWorker(SettingsManager manager, boolean regularCards, boolean secondCore, TreePath[] checkedPaths, Consumer<Boolean> changesWereMaid) {
-        super(null, false);
+        super(null, false, null);
         this.manager = manager;
         this.regularCards = regularCards;
         this.secondCore = secondCore;

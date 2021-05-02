@@ -167,6 +167,7 @@ public class NewDraftDeckDialog extends JDialog {
         finalizeDraftDeckButton.addActionListener(e -> {
                     new FinalizeDraftDeckWorker(
                             brain,
+                            this,
                             this::dispose,
                             updateAllPanels,
                             enableDraft
@@ -268,6 +269,7 @@ public class NewDraftDeckDialog extends JDialog {
         deleteButton.addActionListener(e->
                 new DeleteWorker(
                         brain,
+                        this,
                         this::draftingBoxWasDiscarded
                 ).execute());
         return deleteButton;

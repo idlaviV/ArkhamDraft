@@ -3,6 +3,7 @@ package arkhamDraft.UI.workerPool;
 import arkhamDraft.Brain;
 import arkhamDraft.CardFilter;
 
+import java.awt.*;
 import java.util.function.Consumer;
 
 public class RemoveCardFilterFromListWorker extends AbstractWorker {
@@ -11,8 +12,8 @@ public class RemoveCardFilterFromListWorker extends AbstractWorker {
     private final Runnable repaint;
     private final Consumer<Integer> updateCurrentCardsFiltered;
 
-    public RemoveCardFilterFromListWorker(Brain brain, CardFilter cardFilter, Runnable revalidate, Runnable repaint, Consumer<Integer> updateCurrentCardsFiltered) {
-        super(brain, false);
+    public RemoveCardFilterFromListWorker(Brain brain, Component parent, CardFilter cardFilter, Runnable revalidate, Runnable repaint, Consumer<Integer> updateCurrentCardsFiltered) {
+        super(brain, false, parent);
         this.cardFilter = cardFilter;
         this.revalidate = revalidate;
         this.repaint = repaint;

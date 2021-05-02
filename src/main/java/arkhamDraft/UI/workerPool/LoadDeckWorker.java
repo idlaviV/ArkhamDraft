@@ -2,6 +2,7 @@ package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
 
+import java.awt.*;
 import java.io.File;
 
 public class LoadDeckWorker extends AbstractWorker {
@@ -12,8 +13,8 @@ public class LoadDeckWorker extends AbstractWorker {
     private final Runnable enablers;
     private final Runnable updateOtherPanels;
 
-    public LoadDeckWorker(Brain brain, File file, Runnable printCardsToDeckPanel, Runnable enablers, Runnable updatePanelsAfterwards) {
-        super(brain, true);
+    public LoadDeckWorker(Brain brain, Component parent, File file, Runnable printCardsToDeckPanel, Runnable enablers, Runnable updatePanelsAfterwards) {
+        super(brain, true, parent);
         this.file = file;
         this.printCardsToDeckPanel = printCardsToDeckPanel;
         this.enablers = enablers;

@@ -2,6 +2,7 @@ package arkhamDraft.UI.workerPool;
 
 import arkhamDraft.Brain;
 
+import java.awt.*;
 import java.io.File;
 
 public class SaveDeckWorker extends AbstractWorker {
@@ -9,8 +10,8 @@ public class SaveDeckWorker extends AbstractWorker {
 
     private final File file;
 
-    public SaveDeckWorker(Brain brain, File file) {
-        super(brain, false);
+    public SaveDeckWorker(Brain brain, Component parent, File file) {
+        super(brain, false, parent);
         this.file = file;
     }
 

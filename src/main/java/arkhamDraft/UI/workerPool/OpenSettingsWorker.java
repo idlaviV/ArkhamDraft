@@ -3,10 +3,12 @@ package arkhamDraft.UI.workerPool;
 import arkhamDraft.Brain;
 import arkhamDraft.UI.SettingsDialog;
 
+import java.awt.*;
+
 public class OpenSettingsWorker extends AbstractWorker {
     private final SettingsDialog settingsDialog;
     public OpenSettingsWorker(Brain brain, SettingsDialog settingsDialog) {
-        super(brain, false);
+        super(brain, false, null);
         this.settingsDialog = settingsDialog;
     }
 
