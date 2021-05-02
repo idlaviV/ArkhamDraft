@@ -99,7 +99,7 @@ public class ImageCrawler extends SwingWorker<Boolean, Void> {
     protected void update() throws InterruptedException {
         for (int waited = 0; waited<10; waited++) {
             if (im == null) {
-                this.wait(100);
+                Thread.sleep(100);
             } else {
                 waited = 100;
                 previewLabel.setIcon(new ImageIcon(im));

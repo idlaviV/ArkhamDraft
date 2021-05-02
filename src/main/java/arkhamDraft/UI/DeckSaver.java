@@ -9,15 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class SaveActionListener implements ActionListener {
+public class SaveActionListener  {
     private final JFileChooser fc;
     private final Component parent;
     private final Brain brain;
 
-    public SaveActionListener(JFileChooser fc, Component parent, Brain brain) {
-        this.fc = fc;
-        this.parent = parent;
-        this.brain = brain;
+    private SaveActionListener() {
     }
 
 
