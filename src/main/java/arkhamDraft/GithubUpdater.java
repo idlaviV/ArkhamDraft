@@ -1,8 +1,5 @@
 package arkhamDraft;
 
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.ObjectInserter;
-
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -65,14 +62,34 @@ public class GithubUpdater {
     }
 
     public String getLocalHash() throws IOException {
-        return getGitHash(Files.readAllBytes(Paths.get("./ArkhamDraft.jar")));
+        Path localPath = Paths.get("./ArkhamDraft.jar");
+        try {
+            return getGitHash(Files.readAllBytes(localPath));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "N/A";
     }
 
-    public String getGitHash(byte[] data) {
-        ObjectInserter.Formatter f = new ObjectInserter.Formatter();
-        ObjectId id = f.idFor(OBJ_BLOB, data);
-        String hash = id.getName();
-        return hash;
+    public String getGitHash(byte[] data) throws IOException, NoSuchAlgorithmException {
+        ByteArrayOutputStream fullData = new ByteArrayOutputStream();
+        fullData.write("blob ".getBytes(StandardCharsets.US_ASCII));
+        fullData.write(Integer.toString(data.length).getBytes(StandardCharsets.US_ASCII));
+        fullData.write(0);
+        fullData.write(data);
+
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        byte[] digested = digest.digest(fullData.toByteArray());
+        StringBuilder output = new StringBuilder();
+        for (byte b : digested) {
+            StringBuilder newInt = new StringBuilder(Integer.toHexString(b & 0xFF));
+            while (newInt.length()<2) {
+                newInt.insert(0, "0");
+            }
+            output.append(newInt);
+        }
+        return output.toString();
+
     }
 
     private String readSHAFromFile(String necessaryResponse) {

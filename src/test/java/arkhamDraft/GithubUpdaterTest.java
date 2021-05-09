@@ -15,11 +15,11 @@ import static org.junit.Assert.*;
 
 public class GithubUpdaterTest {
 
-    public static final String SHA = "ea11b610b5336a5c91afc26049c5245243041d23";
+    public static final String SHA = "8d1099d4ef3544f4cc06a83431e1af9782ea311b";
     GithubUpdater updater;
 
     @Before
-    public void setup() throws IOException {
+    public void setup() {
         updater = new GithubUpdater("ArkhamDraft.jar?ref=maven","idlaviV/ArkhamDraft");
     }
 
