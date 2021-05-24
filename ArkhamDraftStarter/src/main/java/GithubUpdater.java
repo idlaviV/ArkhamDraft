@@ -1,25 +1,19 @@
-package arkhamDraft;
 
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
 
 public class GithubUpdater {
     private final String elementPath;
-    private final String githubRepoidentifier;
+    private final String githubRepoIdentifier;
     private final Path repoInfo = Paths.get("data/repoInfo.json");
 
     enum ParserState {
@@ -27,14 +21,14 @@ public class GithubUpdater {
         IN_SHA
     }
 
-    public GithubUpdater(String elementPath, String githubRepoidentifier) {
+    public GithubUpdater(String elementPath, String githubRepoIdentifier) {
         this.elementPath = elementPath;
-        this.githubRepoidentifier = githubRepoidentifier;
+        this.githubRepoIdentifier = githubRepoIdentifier;
     }
 
     public String getRemoteHash() throws IOException {
         String urlString =
-                "https://api.github.com/repos/" + githubRepoidentifier + "/contents/" + elementPath;
+                "https://api.github.com/repos/" + githubRepoIdentifier + "/contents/" + elementPath;
         String necessaryResponse;
 
         try (InputStream inputStream = new URL(urlString).openStream();
