@@ -41,18 +41,6 @@ public class Main {
             settingsManager.generateDefaultSettings();
         }
         settingsManager.updateSettings();
-
-        /*Test*/
-        GithubUpdater updater = new GithubUpdater("ArkhamDraft.jar?ref=maven","idlaviV/ArkhamDraft");
-        String remote = updater.getRemoteHash();
-        System.out.println("R:" + remote);
-        String local = updater.getLocalHash();
-        if (local.equals(remote)) {
-            System.out.println("Program is up to date");
-        } else {
-            System.out.println("Remote program is not the same.");
-            System.out.println("L:" + local);
-        }
     }
 
 
