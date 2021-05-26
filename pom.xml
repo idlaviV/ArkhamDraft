@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>arkham</groupId>
-    <artifactId>ArkhamDraftMaven</artifactId>
+    <artifactId>ArkhamDraft</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
