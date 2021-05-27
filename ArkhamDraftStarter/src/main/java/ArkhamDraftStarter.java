@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 
 public class ArkhamDraftStarter {
     private static final Path LOCAL_ARKHAM_DRAFT_PATH = Paths.get("ArkhamDraft.jar");
-    public static final String URL_GITHUB_ARKHAM_DRAFT = "https://github.com/idlaviV/ArkhamDraft/raw/maven/ArkhamDraft.jar";
+    public static final String URL_GITHUB_ARKHAM_DRAFT = "https://github.com/idlaviV/ArkhamDraft/raw/master/ArkhamDraft.jar";
 
     public void run() {
         File arkhamDraftJar = LOCAL_ARKHAM_DRAFT_PATH.toFile();
@@ -62,7 +62,7 @@ public class ArkhamDraftStarter {
     }
 
     private boolean checkForUpdate() {
-        GithubUpdater updater = new GithubUpdater("ArkhamDraft.jar?ref=maven","idlaviV/ArkhamDraft");
+        GithubUpdater updater = new GithubUpdater("ArkhamDraft.jar","idlaviV/ArkhamDraft");
         try {
             String localHash = updater.getLocalHash();
             String remoteHash = updater.getRemoteHash();
