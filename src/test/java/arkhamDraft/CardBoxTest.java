@@ -1,5 +1,6 @@
 package arkhamDraft;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -13,6 +14,7 @@ public class CardBoxTest {
     private CardBox testBox;
 
     @Test
+    @Ignore
     public void filterCardBoxWithoutNonGuardianByNonGuardian_ResultsInEmptyCardBox() {
         givenCardBoxWithGuardianCards();
 

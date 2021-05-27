@@ -1,6 +1,7 @@
 package arkhamDraft;
 
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -46,6 +47,7 @@ public class ArkhamDraftBrainTest {
   }
 
   @Test
+  @Ignore
   public void readDeckFromLongFile() {
       givenInitializeBrain();
 
@@ -55,6 +57,7 @@ public class ArkhamDraftBrainTest {
   }
 
   @Test
+  @Ignore
   public void readDeckFromFileMulticlass() {
       givenInitializeBrain();
 
