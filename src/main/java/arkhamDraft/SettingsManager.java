@@ -25,19 +25,16 @@ public class SettingsManager {
     public SettingsManager() {
     }
 
-    public void updateDatabaseFromAPI() throws MalformedURLException {
-        URL website = new URL("https://arkhamdb.com/api/public/cards/");
-        try (InputStream in = website.openStream()) {
+    public void updateDatabaseFromAPI() {
+        try {
+            URL website = new URL("https://arkhamdb.com/api/public/cards/");
+            InputStream in = website.openStream();
             Files.copy(in, Paths.get("data/cards.json"), StandardCopyOption.REPLACE_EXISTING);
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        website = new URL("https://arkhamdb.com/api/public/packs/");
-        try (InputStream in = website.openStream()) {
+            website = new URL("https://arkhamdb.com/api/public/packs/");
+            in = website.openStream();
             Files.copy(in, Paths.get("data/packs.json"), StandardCopyOption.REPLACE_EXISTING);
         } catch (java.io.IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

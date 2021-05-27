@@ -5,6 +5,7 @@ import arkhamDraft.Pack;
 import arkhamDraft.SettingsManager;
 import arkhamDraft.UI.workerPool.ApplySettingsWorker;
 import arkhamDraft.UI.workerPool.GenerateBlacklistWorker;
+import arkhamDraft.UI.workerPool.UpdateDatabaseWorker;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -64,10 +65,21 @@ public class SettingsDialog extends JDialog {
         gbc.gridy++;
         mainPanel.add(initializeGenerateBlacklistButton(), gbc);
         gbc.gridy++;
+        mainPanel.add(initializeUpdateButton(), gbc);
+        gbc.gridy++;
 
         mainPanel.add(initializeCloseButtonsPanel(), gbc);
         add(mainPanel);
         pack();
+    }
+
+    private Component initializeUpdateButton() {
+        JPanel updateDatabasePanel = new JPanel();
+        JButton updateDatabaseButton = new JButton("Update database");
+        updateDatabaseButton.addActionListener(e -> new UpdateDatabaseWorker(settingsManager, this).execute());
+
+        updateDatabasePanel.add(updateDatabaseButton);
+        return updateDatabasePanel;
     }
 
     private Component initializeGenerateBlacklistButton() {
