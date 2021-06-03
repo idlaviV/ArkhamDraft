@@ -1,16 +1,16 @@
 package arkhamDraft;
 
 public class TestCommons {
-    public static Card getDummyCardWithFaction(String factionName) {
-        return new Card(null, null, null, factionName, null, false, null, null, null, null, null, null);
+    public static Card getDummyCardWithFaction(String factionCode, String code) {
+        return new Card(null, null, null, factionCode, null, false, code, code, null, null, null, null);
     }
 
-    public static Card getDummyCardWithXP(int xpValue) {
-        return new Card(null, null, null, null, null, false, null, null, null, null, xpValue, null);
+    public static Card getDummyCardWithXP(int xpValue, String code) {
+        return new Card(null, null, null, null, null, false, code, code, null, null, xpValue, null);
     }
 
-    public static Card getDummyCardWithName(String name) {
-        return new Card(null, null, null, null, null, false, null, name, null, null, null, null);
+    public static Card getDummyCardWithName(String name, String code) {
+        return new Card(null, null, null, null, null, false, code, name, null, null, null, null);
     }
 
     public static Card getCardEmptyVessel() {

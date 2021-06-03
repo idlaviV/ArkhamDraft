@@ -54,8 +54,8 @@ public class DraftingBoxTest {
 
     private void givenInitializeCardBoxWithFourCards() {
         Card[] cards = new Card[]{
-                TestCommons.getDummyCardWithName("TestCard1"),
-                TestCommons.getDummyCardWithName("TestCard2")
+                TestCommons.getDummyCardWithName("TestCard1", "0"),
+                TestCommons.getDummyCardWithName("TestCard2", "1")
         };
         CardBox cardBox = new CardBox(cards);
         testBox.addCards(cardBox);

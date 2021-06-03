@@ -48,6 +48,10 @@ public class CardBox {
         return cards.stream().anyMatch(c -> c.equals(cardSearch));
     }
 
+    public Optional<Card> searchForCode(String code) {
+        return cards.stream().findFirst().filter(card -> code.equals(card.getCode()));
+    }
+
     public List<Card> findAllCardsWithGivenTraits(String wholeName, String subName, int xp, int cardinality){
         List<Card> physicalCards = new ArrayList<>();
         for (Card card : cards) {

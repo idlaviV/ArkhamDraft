@@ -14,7 +14,6 @@ public class CardBoxTest {
     private CardBox testBox;
 
     @Test
-    @Ignore
     public void filterCardBoxWithoutNonGuardianByNonGuardian_ResultsInEmptyCardBox() {
         givenCardBoxWithGuardianCards();
 
@@ -98,15 +97,15 @@ public class CardBoxTest {
 
     private void givenCardBoxWithGuardianCards() {
         Card[] setOfCards = new Card[]{
-                TestCommons.getDummyCardWithFaction("GUARDIAN"),
-                TestCommons.getDummyCardWithFaction("GUARDIAN")};
+                TestCommons.getDummyCardWithFaction("GUARDIAN", "0"),
+                TestCommons.getDummyCardWithFaction("GUARDIAN", "1")};
         testBox = new CardBox(setOfCards);
     }
 
     private void givenCardBoxWithGuardianAndOneSeekerCards() {
         Card[] setOfCards = new Card[]{
-                TestCommons.getDummyCardWithFaction("GUARDIAN"),
-                TestCommons.getDummyCardWithFaction("SEEKER")
+                TestCommons.getDummyCardWithFaction("GUARDIAN", "0"),
+                TestCommons.getDummyCardWithFaction("SEEKER", "1")
         };
         testBox = new CardBox(setOfCards);
     }
@@ -114,7 +113,7 @@ public class CardBoxTest {
     private void givenCardBoxWithRainbowXP() {
         Card[] setOfCards = new Card[6];
         for (int i =0; i<=5; i++) {
-            setOfCards[i] = TestCommons.getDummyCardWithXP(i);
+            setOfCards[i] = TestCommons.getDummyCardWithXP(i, "0");
         }
         testBox = new CardBox(setOfCards);
     }
