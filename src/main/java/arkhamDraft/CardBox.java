@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 public class CardBox {
     private Set<Card> cards = new HashSet<>();
+    private Map<String, Card> dictionary = new HashMap<>();
 
     private final ArrayList<CardFilter> generatingFilters = new ArrayList<>();
 
@@ -46,10 +47,6 @@ public class CardBox {
 
     public boolean containsCard(Card cardSearch) {
         return cards.stream().anyMatch(c -> c.equals(cardSearch));
-    }
-
-    public Optional<Card> searchForCode(String code) {
-        return cards.stream().findFirst().filter(card -> code.equals(card.getCode()));
     }
 
     public List<Card> findAllCardsWithGivenTraits(String wholeName, String subName, int xp, int cardinality){

@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -113,7 +114,7 @@ public class CardBoxTest {
     private void givenCardBoxWithRainbowXP() {
         Card[] setOfCards = new Card[6];
         for (int i =0; i<=5; i++) {
-            setOfCards[i] = TestCommons.getDummyCardWithXP(i, "0");
+            setOfCards[i] = TestCommons.getDummyCardWithXP(i, String.valueOf(i));
         }
         testBox = new CardBox(setOfCards);
     }

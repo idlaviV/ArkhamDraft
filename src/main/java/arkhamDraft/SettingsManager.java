@@ -42,7 +42,7 @@ public class SettingsManager {
         Gson gson = new Gson();
         File jsonCards = new File("./data/cards.json");
         FileReader fileReader = new FileReader(jsonCards);
-        CardBox masterCardBox = new CardBox(gson.fromJson(fileReader, Card[].class));
+        CardBox masterCardBox = new MasterCardBox(gson.fromJson(fileReader, Card[].class));
         fileReader.close();
         File jsonPacks = new File("./data/packs.json");
         FileReader fileReaderPacks = new FileReader(jsonPacks);
