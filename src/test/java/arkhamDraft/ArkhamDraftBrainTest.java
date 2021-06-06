@@ -17,15 +17,22 @@ public class ArkhamDraftBrainTest {
   @Mock
   private SettingsManager manager;
 
-
   @Test
+  public void readDeckFromArkhamDB() {
+      givenInitializeBrain();
+
+      whenReadDeckFromArkhamDBiD("1214048");
+
+      thenReadDeckFromLongFile();
+  }
+
+    @Test
     public void readDeckFromFile() {
       givenInitializeBrain();
 
       whenReadDeckFromFile();
 
       thenReadDeckFromFIle();
-
   }
 
   @Test
@@ -47,7 +54,6 @@ public class ArkhamDraftBrainTest {
   }
 
   @Test
-  @Ignore
   public void readDeckFromLongFile() {
       givenInitializeBrain();
 
@@ -85,6 +91,10 @@ public class ArkhamDraftBrainTest {
 
     private void thenReadDeckFromFIle() {
         assertEquals(1, testBrain.getDraftedDeck().getSize());
+    }
+
+    private void whenReadDeckFromArkhamDBiD(String id) {
+        testBrain.loadDeckFromArkhamDBiD(id);
     }
 
     private void whenReadDeckFromFileMulticlass() {

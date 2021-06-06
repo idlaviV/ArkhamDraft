@@ -16,30 +16,37 @@ import java.util.stream.Collectors;
 
 public class JSONDeckReader {
     private final String id;
-    private final CardBox masterCardBox;
+    private final MasterCardBox masterCardBox;
     private URL remote;
 
-    public JSONDeckReader(String id, CardBox masterCardBox) {
+    public JSONDeckReader(String id, MasterCardBox masterCardBox) {
         this.id = id;
         this.masterCardBox = masterCardBox;
         constructURL();
     }
 
-    public List<String> getIDs() {
+    public List<String> getCodes() {
         Gson gson = new Gson();
         Map<?, ?> map = gson.fromJson(downloadJSON(), Map.class);
         Map<String, Double> idMap = (Map<String, Double>) map.get("slots");
-        List<String> idList = new ArrayList<>();
+        List<String> codeList = new ArrayList<>();
         for (String key : idMap.keySet()) {
             int n = idMap.get(key).intValue();
             for (int i = 0; i<n; i++) {
-                idList.add(key);
+                codeList.add(key);
             }
         }
-        return idList;
+        return codeList;
     }
 
-    //TODO: implement buildDeckFromJsonList
+    public List<Card> buildCardListFromJsonList() {
+        List<Card> cardList = new ArrayList<>();
+        List<String> codeList = getCodes();
+        for (String cardCode : codeList) {
+            cardList.add(masterCardBox.findCardByCode(cardCode));
+        }
+        return cardList;
+    }
 
     private BufferedReader downloadJSON() {
         try {

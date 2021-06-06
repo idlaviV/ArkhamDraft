@@ -35,7 +35,7 @@ public class TestCommons {
 
     public static Card[] getSmallCardBase() {
         return new Card[] {
-                new Card("tfa", "The Forgotten Age",  "Asset", "rogue", null, false, "04026", "Decorated Skull", "Doom Begets Doom", 0, 3, 2),
+                new Card("tfa", "The Forgotten Age",  "Asset", "rogue", null, false, "53005", "Decorated Skull", "Doom Begets Doom", 0, 3, 2),
                 new Card("rttfa", "Return to the Forgotten Age", "Asset", "neutral", null, false, "53012", "Dendromorphosis", "\"Natural\" Transformation",null, null, 1),
                 new Card("jac", "Jacqueline Fine",  "Asset", "mystic", null, false, "60407", "Azure Flame", null, 3,0, 2),
                 new Card("jac", "Jacqueline Fine", "Asset", "mystic", null, false, "60425", "Azure Flame", null, 3,3, 2),
@@ -61,6 +61,9 @@ public class TestCommons {
                 new Card("ptc", "The Path to Carcosa", "Treachery", "neutral", null, false, "03015", "Angered Spirits", null, null, null, 1),
                 new Card("fgg", "For the Greater Good","Asset", "guardian", null, false, "05192", "Enchanted Blade", null, 3, 3, 2),
                 new Card("fgg", "For the Greater Good", "Asset", "mystic", null, false, "05193", "Enchanted Blade", null, 3, 3, 2),
+                new Card("gota", "Guardians of the Abyss", "Asset", "neutral", null, false, "83058", "Summoned Nightgaunt", "Gift from Nodens", 4, 0, 1),
+                new Card("gota", "Guardians of the Abyss", "Asset", "neutral", null, false, "83055", "John & Jessie Burke", "Relentless in Pursuit", 4, 0, 1),
+                new Card("rttfa", "Return to the Forgotten Age", "Asset", "neutral", null, false, "53037", "Veda Whitsley", "Skilled Botanist", 1, 0, 1),
                 getCardOpenGate(),
                 getCardEmptyVessel(),
                 getCardGuts(),

@@ -10,6 +10,8 @@ public interface Brain {
 
     boolean guiInsertCardFromPanelToPanel(CardPanel from, CardPanel to, Card card, int position);
 
+    void loadDeckFromArkhamDBiD(String id);
+
     void guiOpensNewDraftDeckDialog();
 
     void updateFromJson () throws IOException;

@@ -285,6 +285,14 @@ public class ArkhamDraftBrain implements Brain{
 
     }
 
+    public void loadDeckFromArkhamDBiD(String id) {
+        JSONDeckReader jsonDeckReader = new JSONDeckReader(id, masterCardBox);
+        guiOpensNewDraftDeckDialog();
+        guiFinalizeDraftDeck();
+        disposeDeck();
+        drafter.addCardsToDeck(jsonDeckReader.buildCardListFromJsonList());
+    }
+
     public void guiDeleteDeck() {
         newDrafter.discardDraftingBox();
     }

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class MasterCardBox extends CardBox {
 
-    Map<String, Card> codeToCardMap = new HashMap<>();
+    private Map<String, Card> codeToCardMap = new HashMap<>();
 
     public MasterCardBox(Card[] cards) {
         super(cards);

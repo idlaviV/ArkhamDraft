@@ -1,6 +1,5 @@
 package arkhamDraft;
 
-import jdk.management.resource.ResourceRequestDeniedException;
 import org.junit.Test;
 
 import java.util.List;
@@ -13,7 +12,7 @@ public class JSONDeckReaderTest {
     @Test
     public void readJSONFromID() {
         givenIDWithoutCardBox();
-        List<String> cards = reader.getIDs();
+        List<String> cards = reader.getCodes();
         assertEquals(39, cards.size());
     }
 
