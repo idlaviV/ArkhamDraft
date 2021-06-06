@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 
 public class Face extends JFrame {
@@ -123,6 +124,7 @@ public class Face extends JFrame {
 
         menuButtonPanel.add(initializeNewDraftDeckButton());
         menuButtonPanel.add(initializeLoadButton());
+        menuButtonPanel.add(initializeLoadRemoteButton());
         menuButtonPanel.add(initializeSaveButton());
         menuButtonPanel.add(initializeStartDraftButton());
         menuButtonPanel.add(initializeSettingsButton());
@@ -132,32 +134,23 @@ public class Face extends JFrame {
         return menuButtonPanel;
     }
 
+    private Component initializeLoadRemoteButton() {
+        JButton loadRemoteButton = new JButton();
+        loadButtonIcon(loadRemoteButton, "Actions-document-open-remote-icon.png");
+        loadRemoteButton.addActionListener(getLoadRemoteButtonActionListener());
+        return loadRemoteButton;
+    }
+
     private Component initializeSettingsButton() {
         JButton settingsButton = new JButton();
-        try {
-            Image img = ImageIO.read(getClass().getResource("/icons/Categories-preferences-system-icon.png"));
-            settingsButton.setIcon(new ImageIcon(img));
-            settingsButton.setMargin(new Insets(0, 0, 0, 0));
-            settingsButton.setBorder(null);
-            settingsButton.setContentAreaFilled(false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadButtonIcon(settingsButton, "Categories-preferences-system-icon.png");
         settingsButton.addActionListener(getOpenSettingsButtonActionListener());
         return settingsButton;
     }
 
     private Component initializeStartDraftButton() {
         JButton startDraftButton = new JButton();
-        try {
-            Image img = ImageIO.read(getClass().getResource("/icons/Categories-applications-games-icon.png"));
-            startDraftButton.setIcon(new ImageIcon(img));
-            startDraftButton.setMargin(new Insets(0, 0, 0, 0));
-            startDraftButton.setBorder(null);
-            startDraftButton.setContentAreaFilled(false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadButtonIcon(startDraftButton, "Categories-applications-games-icon.png");
         startDraftButton.addActionListener(getStartDraftActionListener());
         startDraftButton.setEnabled(false);
         deckComponentEnablers.add(() -> startDraftButton.setEnabled(true));
@@ -166,15 +159,7 @@ public class Face extends JFrame {
 
     private Component initializeNewDraftDeckButton() {
         JButton newDraftDeckButton = new JButton();
-        try {
-            Image img = ImageIO.read(getClass().getResource("/icons/Mimetypes-application-x-zerosize-icon.png"));
-            newDraftDeckButton.setIcon(new ImageIcon(img));
-            newDraftDeckButton.setMargin(new Insets(0, 0, 0, 0));
-            newDraftDeckButton.setBorder(null);
-            newDraftDeckButton.setContentAreaFilled(false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadButtonIcon(newDraftDeckButton, "Mimetypes-application-x-zerosize-icon.png");
         newDraftDeckButton.addActionListener(e -> new NewDraftWorker(
                 brain,
                 this,
@@ -183,12 +168,62 @@ public class Face extends JFrame {
         return newDraftDeckButton;
     }
 
+    private void loadButtonIcon(JButton button, String iconName) {
+        try {
+            Image img = ImageIO.read(getClass().getResource(String.format("/icons/%s", iconName)));
+            button.setIcon(new ImageIcon(img));
+            button.setMargin(new Insets(0, 0, 0, 0));
+            button.setBorder(null);
+            button.setContentAreaFilled(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private ActionListener getStartDraftActionListener() {
         return (e -> runOpenNewDraftDeckDialog());
     }
 
     private ActionListener getOpenSettingsButtonActionListener() {
         return (e -> new OpenSettingsWorker(brain, settingsDialog).execute());
+    }
+
+    private ActionListener getLoadRemoteButtonActionListener() {
+        return (e -> {
+            Object value = JOptionPane.showInputDialog(
+                    this,
+                    "Please pick an ArkhamDB-id.",
+                    "Load deck from ArkhamDB",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    null,
+                    "id"
+            );
+            String userInput = checkIfArkhamDBdeckIdIsValid(value);
+            if (userInput != null) {
+                System.out.println(userInput);
+            }
+        });
+    }
+
+    private String checkIfArkhamDBdeckIdIsValid(Object value) {
+        if (value == null) {
+            return null;
+        }
+        String userInput = (String) value;
+        if (userInput.matches("\\d\\d\\d\\d\\d\\d\\d")) {
+            return userInput;
+        }
+        value = JOptionPane.showInputDialog(
+                this,
+                "Please input a legal id (e.g. 1234567)",
+                "Load deck from ArkhamDB",
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                null,
+                "id"
+        );
+        return checkIfArkhamDBdeckIdIsValid(value);
     }
 
     private void runOpenNewDraftDeckDialog() {
@@ -440,15 +475,7 @@ public class Face extends JFrame {
 
     private Component initializeLoadButton() {
         JButton loadButton = new JButton();
-        try {
-            Image img = ImageIO.read(getClass().getResource("/icons/actions-document-open-folder-icon.png"));
-            loadButton.setIcon(new ImageIcon(img));
-            loadButton.setMargin(new Insets(0, 0, 0, 0));
-            loadButton.setBorder(null);
-            loadButton.setContentAreaFilled(false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadButtonIcon(loadButton, "actions-document-open-folder-icon.png");
         loadButton.addActionListener(e-> new LoadButtonWorker(
                 brain,
                 this,
@@ -471,16 +498,7 @@ public class Face extends JFrame {
         JButton saveButton = new JButton();
         saveButton.setEnabled(false);
         deckComponentEnablers.add(() -> saveButton.setEnabled(true));
-        try {
-            Image img = ImageIO.read(getClass().getResource("/icons/actions-document-save-icon.png"));
-            saveButton.setIcon(new ImageIcon(img));
-            saveButton.setMargin(new Insets(0, 0, 0, 0));
-            saveButton.setBorder(null);
-            saveButton.setContentAreaFilled(false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        loadButtonIcon(saveButton, "actions-document-save-icon.png");
         saveButton.addActionListener(e -> {
             DeckSaver.saveDeck(fc, this, brain);
         });
