@@ -110,7 +110,7 @@ public class ArkhamDraftBrainTest {
     private void givenInitializeBrain() {
       SettingsManager manager = Mockito.mock(SettingsManager.class);
         try {
-            Mockito.when(manager.updateDatabaseFromJSON()).thenReturn(new CardBox(TestCommons.getSmallCardBase()));
+            Mockito.when(manager.updateDatabaseFromJSON()).thenReturn(new MasterCardBox(TestCommons.getSmallCardBase()));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -12,7 +12,7 @@ import static java.lang.Thread.sleep;
 public class ArkhamDraftBrain implements Brain{
     private Drafter drafter;
     private Drafter newDrafter;
-    private CardBox masterCardBox;
+    private MasterCardBox masterCardBox;
     private final SettingsManager settingsManager;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";

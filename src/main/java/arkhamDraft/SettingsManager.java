@@ -38,11 +38,11 @@ public class SettingsManager {
         }
     }
 
-    public CardBox updateDatabaseFromJSON() throws IOException {
+    public MasterCardBox updateDatabaseFromJSON() throws IOException {
         Gson gson = new Gson();
         File jsonCards = new File("./data/cards.json");
         FileReader fileReader = new FileReader(jsonCards);
-        CardBox masterCardBox = new MasterCardBox(gson.fromJson(fileReader, Card[].class));
+        MasterCardBox masterCardBox = new MasterCardBox(gson.fromJson(fileReader, Card[].class));
         fileReader.close();
         File jsonPacks = new File("./data/packs.json");
         FileReader fileReaderPacks = new FileReader(jsonPacks);
