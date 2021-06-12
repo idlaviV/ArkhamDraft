@@ -1,3 +1,5 @@
+import jdk.nashorn.internal.scripts.JO;
+
 import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,9 +15,12 @@ public class ArkhamDraftStarter {
     public static final String URL_GITHUB_ARKHAM_DRAFT = "https://github.com/idlaviV/ArkhamDraft/raw/master/ArkhamDraft.jar";
 
     public void run() {
+        if (checkForUpdateStarter()) {
+            tellUserThatStarterIsOutOfDate();
+        }
         File arkhamDraftJar = LOCAL_ARKHAM_DRAFT_PATH.toFile();
         if (arkhamDraftJar.exists()) {
-            if (checkForUpdate()) {
+            if (checkForUpdateMain()) {
                 if (askForUpdate()) {
                     downloadJar();
                 }
@@ -28,6 +33,17 @@ public class ArkhamDraftStarter {
             }
         }
         tryToRun();
+    }
+
+    private void tellUserThatStarterIsOutOfDate() {
+        JOptionPane.showMessageDialog(
+                null,
+                "This version of ArkhamDraftStarter is outdated.\n " +
+                        "Please consider downloading a newer version from\n" +
+                        "https://github.com/idlaviV/ArkhamDraft.",
+                "Starter outdated",
+                JOptionPane.WARNING_MESSAGE
+        );
     }
 
     private void tryToRun() {
@@ -61,8 +77,16 @@ public class ArkhamDraftStarter {
         ) == 0);
     }
 
-    private boolean checkForUpdate() {
-        GithubUpdater updater = new GithubUpdater("ArkhamDraft.jar","idlaviV/ArkhamDraft");
+    private boolean checkForUpdateStarter() {
+        return checkForUpdate(new GithubUpdater("ArkhamDraftStarter/ArkhamDraftStarter.jar", "idlaviV/ArkhamDraft", "./ArkhamDraftStarter.jar"));
+    }
+
+    private boolean checkForUpdateMain() {
+        GithubUpdater updater = new GithubUpdater("ArkhamDraft.jar","idlaviV/ArkhamDraft", "./ArkhamDraft.jar");
+        return checkForUpdate(updater);
+    }
+
+    private boolean checkForUpdate(GithubUpdater updater) {
         try {
             String localHash = updater.getLocalHash();
             String remoteHash = updater.getRemoteHash();

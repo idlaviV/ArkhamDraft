@@ -18,7 +18,7 @@ public class GithubUpdaterTest {
 
     @Before
     public void setup() {
-        updater = new GithubUpdater("ArkhamDraft.jar?ref=maven","idlaviV/ArkhamDraft");
+        updater = new GithubUpdater("ArkhamDraft.jar?ref=maven","idlaviV/ArkhamDraft", "./ArkhamDraft.jar");
     }
 
     @Test

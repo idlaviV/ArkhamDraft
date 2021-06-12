@@ -15,13 +15,15 @@ public class GithubUpdater {
     private final String elementPath;
     private final String githubRepoIdentifier;
     private final Path repoInfo = Paths.get("data/repoInfo.json");
+    private final String localPath;
 
     enum ParserState {
         BEFORE_SHA,
         IN_SHA
     }
 
-    public GithubUpdater(String elementPath, String githubRepoIdentifier) {
+    public GithubUpdater(String elementPath, String githubRepoIdentifier, String localPath) {
+        this.localPath = localPath;
         this.elementPath = elementPath;
         this.githubRepoIdentifier = githubRepoIdentifier;
     }
@@ -56,7 +58,7 @@ public class GithubUpdater {
     }
 
     public String getLocalHash() throws IOException {
-        Path localPath = Paths.get("./ArkhamDraft.jar");
+        Path localPath = Paths.get(this.localPath);
         try {
             return getGitHash(Files.readAllBytes(localPath));
         } catch (NoSuchAlgorithmException e) {
