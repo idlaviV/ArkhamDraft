@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 public class GithubUpdater {
     private final String elementPath;
     private final String githubRepoIdentifier;
-    private final Path repoInfo = Paths.get("data/repoInfo.json");
     private final String localPath;
 
     enum ParserState {

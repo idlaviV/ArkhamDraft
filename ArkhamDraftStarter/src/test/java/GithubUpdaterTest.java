@@ -2,23 +2,19 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
 
-import static org.junit.Assert.*;
 
 public class GithubUpdaterTest {
 
-    public static final String SHA = "8d1099d4ef3544f4cc06a83431e1af9782ea311b";
+    public static final String SHA = "cd7cedba48c887708aed34e04972304a8de09b1b";//If tests dont work, first update this to the sha of https://api.github.com/repos/idlaviV/ArkhamDraft/contentsArkhamDraft.jar.
     GithubUpdater updater;
 
     @Before
     public void setup() {
-        updater = new GithubUpdater("ArkhamDraft.jar?ref=maven","idlaviV/ArkhamDraft", "./ArkhamDraft.jar");
+        updater = new GithubUpdater("ArkhamDraft.jar","idlaviV/ArkhamDraft", "./ArkhamDraft.jar");
     }
 
     @Test
