@@ -3,16 +3,14 @@ package arkhamDraft;
 import com.google.gson.Gson;
 import jdk.management.resource.ResourceRequestDeniedException;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 public class JSONDeckReader {
     private final String id;
@@ -27,14 +25,16 @@ public class JSONDeckReader {
 
     public List<String> getCodes() {
         Gson gson = new Gson();
-        Map<?, ?> map = gson.fromJson(downloadJSON(), Map.class);
-        Map<String, Double> idMap = (Map<String, Double>) map.get("slots");
+        Map<String, Double> idMap;
+        BufferedReader reader = downloadJSON();
+        Map<?, ?> map = gson.fromJson(reader, Map.class);
+        idMap = (Map<String, Double>) map.get("slots");
         List<String> codeList = new ArrayList<>();
         for (String key : idMap.keySet()) {
             int n = idMap.get(key).intValue();
-            for (int i = 0; i<n; i++) {
-                codeList.add(key);
-            }
+                for (int i = 0; i<n; i++) {
+                    codeList.add(key);
+                }
         }
         return codeList;
     }
@@ -43,17 +43,33 @@ public class JSONDeckReader {
         List<Card> cardList = new ArrayList<>();
         List<String> codeList = getCodes();
         for (String cardCode : codeList) {
-            cardList.add(masterCardBox.findCardByCode(cardCode));
+            Card card = masterCardBox.findCardByCode(cardCode);
+            if (card != null) {
+                cardList.add(card);
+            }
         }
         return cardList;
     }
 
     private BufferedReader downloadJSON() {
         try {
-            return new BufferedReader(new InputStreamReader(remote.openStream()));
+            BufferedInputStream biStream = new BufferedInputStream(remote.openStream());
+            biStream.mark(0);
+            byte[] b = new byte[6];
+            biStream.read(b, 0, 6);
+            if (new String(b, StandardCharsets.UTF_8).equals("{\"id\":")) {
+                biStream.reset();
+                return new BufferedReader(new InputStreamReader(biStream));
+            } else {
+                throw wrongInputException(null);
+            }
         } catch (IOException e) {
-            throw new ResourceRequestDeniedException(String.format("ID %s could not be read.", id), e);
+           throw wrongInputException(e);
         }
+    }
+
+    private RuntimeException wrongInputException(Exception e) {
+        return new ResourceRequestDeniedException(String.format("ID %s could not be read.", id), e);
     }
 
     private void constructURL() {

@@ -189,21 +189,14 @@ public class Face extends JFrame {
     }
 
     private ActionListener getLoadRemoteButtonActionListener() {
-        return (e -> {
-            Object value = JOptionPane.showInputDialog(
-                    this,
-                    "Please pick an ArkhamDB-id.",
-                    "Load deck from ArkhamDB",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    "id"
-            );
-            String userInput = checkIfArkhamDBdeckIdIsValid(value);
-            if (userInput != null) {
-                System.out.println(userInput);
-            }
-        });
+        return (e -> new LoadRemoteDeckWorker(
+                brain,
+                this,
+                this::checkIfArkhamDBdeckIdIsValid,
+                this::updateDeckPanel,
+                this::enableDeckComponents,
+                this::updateDraftingAndSideboardPanel
+        ).execute());
     }
 
     private String checkIfArkhamDBdeckIdIsValid(Object value) {

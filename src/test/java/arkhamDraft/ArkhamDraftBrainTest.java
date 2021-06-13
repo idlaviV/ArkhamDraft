@@ -26,8 +26,18 @@ public class ArkhamDraftBrainTest {
       thenReadDeckFromLongFile();
   }
 
-    @Test
-    public void readDeckFromFile() {
+  @Test
+  public void readDeckFromIllegalArkhamDB() {
+      givenInitializeBrain();
+
+      whenReadDeckFromArkhamDBiD("0000000");
+
+      thenDeckWasChanged(false);
+  }
+
+
+  @Test
+  public void readDeckFromFile() {
       givenInitializeBrain();
 
       whenReadDeckFromFile();
@@ -91,6 +101,10 @@ public class ArkhamDraftBrainTest {
 
     private void thenReadDeckFromFIle() {
         assertEquals(1, testBrain.getDraftedDeck().getSize());
+    }
+
+    private void thenDeckWasChanged(boolean b) {
+        assertEquals(b, testBrain.getChangedFlag());
     }
 
     private void whenReadDeckFromArkhamDBiD(String id) {

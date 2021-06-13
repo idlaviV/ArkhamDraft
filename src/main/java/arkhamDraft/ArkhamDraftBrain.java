@@ -1,5 +1,7 @@
 package arkhamDraft;
 
+import jdk.management.resource.ResourceRequestDeniedException;
+
 import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -285,12 +287,18 @@ public class ArkhamDraftBrain implements Brain{
 
     }
 
-    public void loadDeckFromArkhamDBiD(String id) {
+    public boolean loadDeckFromArkhamDBiD(String id) {
         JSONDeckReader jsonDeckReader = new JSONDeckReader(id, masterCardBox);
-        guiOpensNewDraftDeckDialog();
-        guiFinalizeDraftDeck();
-        disposeDeck();
-        drafter.addCardsToDeck(jsonDeckReader.buildCardListFromJsonList());
+        try {
+            List<Card> remoteDeck = jsonDeckReader.buildCardListFromJsonList();
+            guiOpensNewDraftDeckDialog();
+            guiFinalizeDraftDeck();
+            disposeDeck();
+            drafter.addCardsToDeck(remoteDeck);
+            return true;
+        } catch (ResourceRequestDeniedException e) {
+            return false;
+        }
     }
 
     public void guiDeleteDeck() {
