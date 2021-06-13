@@ -25,7 +25,6 @@ public class LoadRemoteDeckWorker extends AbstractWorker{
     @Override
     protected void update() {
         if (loadSuccessful) {
-            System.out.println("Load successful");
             printCardsToDeckPanel.run();
             enablers.run();
             updateOtherPanels.run();

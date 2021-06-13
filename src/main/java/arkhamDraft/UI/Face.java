@@ -427,24 +427,43 @@ public class Face extends JFrame {
     }
 
     private Component initializeDeckPanel(){
-        JPanel deckPanel = new JPanel();
+        JPanel deckPanel = new JPanel(new GridBagLayout());
         //deckPanel.setPreferredSize(DIMENSION_DECK_PANEL);
-        BoxLayout mgr = new BoxLayout(deckPanel, BoxLayout.PAGE_AXIS);
-        deckPanel.setLayout(mgr);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 3;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.fill = GridBagConstraints.BOTH;
         deckPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        deckPanel.add(deckCountLabel);
+        deckPanel.add(deckCountLabel, gbc);
+        gbc.gridy++;
         deckList = new CardCheckBoxList(this::previewCardFromDatabase, brain, CardPanel.DECK, this::updateAllPanels);
         JScrollPane deckScrollPane = new JScrollPane(deckList.getTable());
         deckScrollPane.setPreferredSize(DIMENSION_SCROLL_PANE_DECK);
-        deckPanel.add(deckScrollPane);
+        deckPanel.add(deckScrollPane, gbc);
+        gbc.gridy++;
 
         JPanel deckButtonPanel = new JPanel();
         deckButtonPanel.add(initializeRemoveFromDeckButton());
         deckButtonPanel.add(initializeSortDeckButton());
 
-        deckPanel.add(deckButtonPanel);
+        deckPanel.add(deckButtonPanel, gbc);
+
+        gbc.gridy++;
+        deckPanel.add(initializeDeckErrorLogPanel(), gbc);
 
         return deckPanel;
+    }
+
+    private Component initializeDeckErrorLogPanel() {
+        JPanel deckErrorLogPanel = new JPanel();
+        deckErrorLogPanel.add(new JPanel());
+        //Todo
+        return deckErrorLogPanel;
     }
 
     private Component initializeSortComboBox() {
